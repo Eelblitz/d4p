@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Product - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .delete-container {
+        max-width: 500px;
+        margin: 3rem auto;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .delete-container h2 {
+        color: #c0392b;
+        margin-bottom: 1rem;
+    }
+    
+    .warning-message {
+        background-color: #fadbd8;
+        border-left: 4px solid #c0392b;
+        color: #c0392b;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .product-info {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .product-info p {
+        margin: 0.5rem 0;
+        color: #2c3e50;
+    }
+    
+    .product-info strong {
+        color: #2c3e50;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+    }
+    
+    .btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        transition: all 0.3s;
+    }
+    
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+    }
+    
+    .btn-danger:hover {
+        background-color: #c0392b;
+    }
+    
+    .btn-secondary {
+        background-color: #95a5a6;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #7f8c8d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'products:list' %}">Products</a> / 
+    <a href="{% url 'products:seller_dashboard' %}">Dashboard</a> / 
+    Delete Product
+</div>
+
+<div class="delete-container">
+    <h2>⚠️ Delete Product</h2>
+    
+    <div class="warning-message">
+        <strong>Warning:</strong> This action cannot be undone. Deleting a product will also delete all associated images and ratings.
+    </div>
+    
+    <div class="product-info">
+        <p><strong>Product Name:</strong> {{ product.name }}</p>
+        <p><strong>Category:</strong> {{ product.get_category_display }}</p>
+        <p><strong>Status:</strong> {% if product.is_active %}Active{% else %}Inactive{% endif %}</p>
+        <p><strong>Created:</strong> {{ product.created_at|date:"M d, Y" }}</p>
+    </div>
+    
+    <p style="color: #c0392b; margin-bottom: 1.5rem;">
+        Are you sure you want to delete "<strong>{{ product.name }}</strong>"?
+    </p>
+    
+    <div class="action-buttons">
+        <form method="post" style="flex: 1;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" style="width: 100%;">Delete Permanently</button>
+        </form>
+        <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </div>
+</div>
+{% endblock %}

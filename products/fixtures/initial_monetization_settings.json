@@ -1,0 +1,14 @@
+[
+  {
+    "model": "products.monetizationsettings",
+    "pk": 1,
+    "fields": {
+      "platform_commission_percentage": "5.00",
+      "seller_payout_threshold": "1000000.00",
+      "promotion_enabled": true,
+      "verification_fee": "500000.00",
+      "marketplace_tax_percentage": "0.00",
+      "updated_at": "2026-04-04T00:00:00Z"
+    }
+  }
+]

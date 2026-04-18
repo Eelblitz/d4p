@@ -1,0 +1,13 @@
+# Core
+Django==5.2
+pillow==12.1.1
+python-decouple==3.8
+
+# PostgreSQL (install for production)
+# psycopg2-binary==2.9.9
+# dj-database-url==2.1.0
+
+# Utilities
+sqlparse==0.5.5
+tzdata==2025.3
+asgiref==3.11.1

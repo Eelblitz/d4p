@@ -1,0 +1,525 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .detail-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        margin-bottom: 2rem;
+    }
+    
+    .detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .product-images {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .main-image {
+        width: 100%;
+        max-height: 400px;
+        background-color: #f0f0f0;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+    
+    .main-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .thumbnails {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 0.5rem;
+    }
+    
+    .thumbnail {
+        width: 100%;
+        height: 80px;
+        background-color: #f0f0f0;
+        border-radius: 4px;
+        cursor: pointer;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: border-color 0.3s;
+    }
+    
+    .thumbnail img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .thumbnail:hover {
+        border-color: #3498db;
+    }
+    
+    .product-details {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .product-header {
+        margin-bottom: 1.5rem;
+    }
+    
+    .product-name {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .product-category {
+        display: inline-block;
+        background-color: #ecf0f1;
+        color: #7f8c8d;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    .rating-section {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+    }
+    
+    .rating-display {
+        font-size: 1.2rem;
+        color: #f39c12;
+        margin-bottom: 0.5rem;
+    }
+    
+    .rating-count {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
+    
+    .seller-info {
+        background-color: #ecf7fc;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+        border-left: 4px solid #3498db;
+    }
+    
+    .seller-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .seller-rating {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin-bottom: 0.5rem;
+    }
+    
+    .seller-contact {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+    }
+    
+    .seller-contact a {
+        color: #3498db;
+        text-decoration: none;
+    }
+    
+    .seller-contact a:hover {
+        text-decoration: underline;
+    }
+    
+    .contact-btn {
+        background-color: #27ae60;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 1rem;
+        transition: background-color 0.3s;
+    }
+    
+    .contact-btn:hover {
+        background-color: #229954;
+    }
+    
+    .description-section {
+        margin-bottom: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #ecf0f1;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+    
+    .description-text {
+        color: #555;
+        line-height: 1.6;
+    }
+    
+    .ratings-section {
+        padding-top: 1.5rem;
+        border-top: 1px solid #ecf0f1;
+    }
+    
+    .review {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+    
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+    
+    .review-user {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .review-date {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+    }
+    
+    .review-rating {
+        color: #f39c12;
+        margin-bottom: 0.5rem;
+    }
+    
+    .no-reviews {
+        color: #7f8c8d;
+        font-style: italic;
+    }
+    
+    .rating-form-container {
+        background-color: #f0f8ff;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        border-left: 4px solid #3498db;
+    }
+    
+    .your-rating-info {
+        background-color: white;
+        padding: 0.75rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        color: #2c3e50;
+        font-size: 0.95rem;
+    }
+    
+    .rating-form {
+        display: flex;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+    
+    .rating-form .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .rating-form .form-group label {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 0.25rem;
+    }
+    
+    .rating-form .form-group input[type="radio"] {
+        cursor: pointer;
+    }
+    
+    .rating-form .form-group ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .rating-form .form-group li {
+        margin: 0;
+    }
+    
+    .rating-form .form-group li label {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        cursor: pointer;
+        margin: 0;
+        font-size: 1.1rem;
+    }
+    
+    .rating-submit {
+        background-color: #3498db;
+        color: white;
+        padding: 0.75rem 1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: background-color 0.3s;
+        white-space: nowrap;
+    }
+    
+    .rating-submit:hover {
+        background-color: #2980b9;
+    }
+    
+    .login-to-rate {
+        background-color: #fff3cd;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        border-left: 4px solid #ffc107;
+        color: #856404;
+    }
+    
+    .login-to-rate p {
+        margin: 0;
+    }
+    
+    .login-to-rate a {
+        color: #be6800;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    
+    .login-to-rate a:hover {
+        text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .product-name {
+            font-size: 1.5rem;
+        }
+        
+        .main-image {
+            max-height: 300px;
+        }
+        
+        .rating-form {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        
+        .rating-submit {
+            align-self: start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'products:list' %}">Products</a> / {{ product.name }}
+</div>
+
+<div class="detail-container">
+    <div class="detail-grid">
+        <!-- Images Section -->
+        <div class="product-images">
+            <div class="main-image" id="mainImage">
+                {% if primary_image %}
+                    <img src="{{ primary_image.image.url }}" alt="{{ product.name }}" id="mainImg">
+                {% else %}
+                    <span style="color: #bbb;">No image available</span>
+                {% endif %}
+            </div>
+            {% if images.count > 1 %}
+                <div class="thumbnails">
+                    {% for image in images %}
+                        <div class="thumbnail" onclick="changeImage(this)">
+                            <img src="{{ image.image.url }}" alt="{{ product.name }}">
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Product Details Section -->
+        <div class="product-details">
+            <div class="product-header">
+                <h1 class="product-name">{{ product.name }}</h1>
+                <span class="product-category">{{ product.get_category_display }}</span>
+                <div style="margin-top: 1rem; font-size: 1.2rem; color: #2c3e50; font-weight: 600;">
+                    {% if product.price %}
+                        ₦{{ product.price|floatformat:2 }}
+                        {% if product.is_negotiable %}• Negotiable{% endif %}
+                    {% else %}
+                        Contact for price
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Rating Section -->
+            <div class="rating-section">
+                <div class="rating-display">
+                    {% if avg_rating > 0 %}
+                        ⭐ {{ avg_rating }}/5
+                    {% else %}
+                        No ratings yet
+                    {% endif %}
+                </div>
+                <div class="rating-count">
+                    {{ rating_count }} review{{ rating_count|pluralize }}
+                </div>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'products:report_product' product.id %}" style="font-size: 0.85rem; color: #e74c3c; text-decoration: none; margin-top: 0.5rem; display: inline-block;">🚨 Report Product</a>
+                {% endif %}
+            </div>
+            
+            <!-- Seller Info Section -->
+            <div class="seller-info">
+                <div class="seller-name">📦 Seller: {{ seller.username }}
+                    {% if seller.is_verified %}
+                        <span style="color: #f39c12; font-size: 0.9rem; margin-left: 0.5rem;">✨ Verified</span>
+                    {% endif %}
+                </div>
+                {% if seller_avg_rating > 0 %}
+                    <div class="seller-rating">
+                        ⭐ Seller Rating: {{ seller_avg_rating }}/5 ({{ seller_rating_count }} ratings)
+                    </div>
+                {% endif %}
+                <div class="seller-contact">
+                    WhatsApp: <a href="{% url 'products:track_contact_click' product.id %}?source=product_detail">{{ product.whatsapp_number }}</a>
+                </div>
+                <a href="{% url 'products:track_contact_click' product.id %}?source=product_detail" class="contact-btn">
+                    📞 Contact Seller via WhatsApp
+                </a>
+                {% if user.is_authenticated and user != seller %}
+                    <a href="{% url 'products:report_seller' seller.id %}" style="font-size: 0.85rem; color: #e74c3c; text-decoration: none; margin-top: 1rem; display: inline-block;">🚨 Report Seller</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Description Section -->
+    <div class="description-section">
+        <h2 class="section-title">Description</h2>
+        <div class="description-text">
+            {{ product.description|linebreaks }}
+        </div>
+    </div>
+    
+    <!-- Ratings Section -->
+    <div class="ratings-section">
+        <h2 class="section-title">Reviews</h2>
+        
+        <!-- Rating Form -->
+        {% if user.is_authenticated %}
+            <div class="rating-form-container">
+                {% if user_rating %}
+                    <div class="your-rating-info">
+                        <strong>Your Rating:</strong> {% for i in "x"|rjust:user_rating.score %}⭐{% endfor %} {{ user_rating.score }}/5
+                        {% if user_rating.comment %}
+                            <div style="margin-top: 0.5rem; color: #555;">“{{ user_rating.comment }}”</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <form method="post" action="{% url 'products:rate_product' product.id %}" class="rating-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ rating_form.score }}
+                    </div>
+                    <div class="form-group" style="width: 100%;">
+                        {{ rating_form.comment }}
+                    </div>
+                    <button type="submit" class="rating-submit">
+                        {% if user_rating %}
+                            Update Rating
+                        {% else %}
+                            Submit Rating
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+        {% else %}
+            <div class="login-to-rate">
+                <p><a href="{% url 'accounts:login' %}">Login</a> to rate this product</p>
+            </div>
+        {% endif %}
+        
+        <hr style="margin: 1.5rem 0;">
+        
+        <!-- Reviews List -->
+        {% if ratings %}
+            {% for rating in ratings %}
+                <div class="review">
+                    <div class="review-header">
+                        <span class="review-user">{{ rating.user.username }}</span>
+                        <span class="review-date">{{ rating.created_at|date:"M d, Y" }}</span>
+                    </div>
+                    <div class="review-rating">
+                        {% for i in "x"|rjust:rating.score %}⭐{% endfor %} {{ rating.score }}/5
+                    </div>
+                    {% if rating.comment %}
+                        <div class="review-comment">{{ rating.comment|linebreaksbr }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function changeImage(thumbnail) {
+    const img = thumbnail.querySelector('img');
+    const mainImg = document.getElementById('mainImg');
+    mainImg.src = img.src;
+    
+    // Update thumbnail border
+    document.querySelectorAll('.thumbnail').forEach(t => {
+        t.style.borderColor = 'transparent';
+    });
+    thumbnail.style.borderColor = '#3498db';
+}
+
+// Highlight first thumbnail on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const firstThumbnail = document.querySelector('.thumbnail');
+    if (firstThumbnail) {
+        firstThumbnail.style.borderColor = '#3498db';
+    }
+});
+</script>
+{% endblock %}

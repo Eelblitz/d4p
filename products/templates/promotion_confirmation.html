@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Promotion Confirmation - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .confirmation-container {
+        max-width: 680px;
+        margin: 3rem auto;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    }
+    .confirmation-container h1 {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+    }
+    .confirmation-card {
+        border: 1px solid #e0e4e8;
+        border-radius: 10px;
+        padding: 1.5rem;
+        background-color: #f7fbff;
+    }
+    .confirmation-card p {
+        margin: 0.75rem 0;
+        color: #516276;
+    }
+    .confirmation-card strong {
+        color: #2c3e50;
+    }
+    .btn-primary {
+        margin-top: 1.5rem;
+        display: inline-block;
+        padding: 0.95rem 1.5rem;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="confirmation-container">
+    <h1>Promotion Confirmed</h1>
+    <div class="confirmation-card">
+        <p><strong>Product:</strong> {{ transaction.product.name }}</p>
+        <p><strong>Plan:</strong> {{ transaction.plan.name }}</p>
+        <p><strong>Amount Paid:</strong> ₦{{ transaction.amount }}</p>
+        <p><strong>Status:</strong> {{ transaction.get_status_display }}</p>
+        <p><strong>Start Date:</strong> {{ transaction.starts_at|date:'N j, Y, P' }}</p>
+        <p><strong>End Date:</strong> {{ transaction.ends_at|date:'N j, Y, P' }}</p>
+        <p><strong>Payment Reference:</strong> {{ transaction.payment_reference }}</p>
+    </div>
+    <a href="{% url 'products:promote_product' %}" class="btn-primary">View Promotion Plans</a>
+</div>
+{% endblock %}

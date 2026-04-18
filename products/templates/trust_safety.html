@@ -1,0 +1,291 @@
+﻿{% extends "base.html" %}
+
+{% block title %}DM4PRICE - Trust & Safety{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .hero {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: #fff;
+        padding: 4rem 0;
+        margin: -2rem 0 3rem 0;
+        text-align: center;
+    }
+
+    .hero .hero-content {
+        max-width: 840px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        font-size: 1.25rem;
+        opacity: 0.95;
+        margin-bottom: 1.4rem;
+        line-height: 1.6;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 1rem 2rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    }
+
+    .section-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        text-align: center;
+        margin: 2.5rem 0 1rem;
+        font-weight: 700;
+    }
+
+    .section-desc {
+        text-align: center;
+        color: #7f8c8d;
+        max-width: 820px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+    }
+
+    .grid-4,
+    .grid-2 {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .grid-4 {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .value-prop,
+    .trusted-card,
+    .action-card,
+    .report-card {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 1.6rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #e0e4e8;
+    }
+
+    .value-prop:hover,
+    .trusted-card:hover,
+    .action-card:hover,
+    .report-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    }
+
+    .icon-circle {
+        width: 44px;
+        height: 44px;
+        border-radius: 999px;
+        background: #3498db;
+        color: #fff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .value-prop h3,
+    .trusted-card h3,
+    .action-card h3,
+    .report-card h3 {
+        color: #2c3e50;
+        margin-bottom: 0.6rem;
+        font-size: 1.15rem;
+    }
+
+    .value-prop p,
+    .trusted-card p,
+    .action-card p,
+    .report-card p {
+        color: #6b7d8b;
+        line-height: 1.6;
+        font-size: 0.97rem;
+    }
+
+    .note-block {
+        background: #ecf7fc;
+        border-left: 4px solid #27ae60;
+        padding: 1rem 1.2rem;
+        border-radius: 8px;
+        margin-top: 1.5rem;
+    }
+
+    .note-block p {
+        margin: 0;
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    @media (max-width: 1024px) {
+        .grid-4,
+        .grid-2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 760px) {
+        .grid-4,
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+
+        .hero h1 {
+            font-size: 2.25rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Stay Safe While You Shop</h1>
+        <p>dm4price safeguards your experience with verified sellers, real reviews, and proactive moderation so you can confidently compare prices and avoid scams.</p>
+        <a href="{% url 'products:list' %}" class="btn-primary">Browse Products</a>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">How dm4price Protects You</h2>
+    <p class="section-desc">Our platform is built with multiple layers of trust to minimize risk and highlight legitimate sellers.</p>
+    <div class="grid-4">
+        <div class="value-prop">
+            <div class="icon-circle"></div>
+            <h3>Verified Sellers</h3>
+            <p>Only approved sellers with verified identity and track records can list on dm4price.</p>
+        </div>
+        <div class="value-prop">
+            <div class="icon-circle"></div>
+            <h3>Ratings & Reviews</h3>
+            <p>Ratings from real buyers and product reviews expose quality and reliability instantly.</p>
+        </div>
+        <div class="value-prop">
+            <div class="icon-circle"></div>
+            <h3>Reporting System</h3>
+            <p>Report fraudulent or suspicious listings quickly. We act on every report.</p>
+        </div>
+        <div class="value-prop">
+            <div class="icon-circle"></div>
+            <h3>Admin Monitoring</h3>
+            <p>Continuous moderation ensures repeat offenders are blocked and unsafe product listings removed.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">How to Avoid Scams</h2>
+    <p class="section-desc">Stay alert with a few simple checks before purchasing.</p>
+    <div class="grid-2">
+        <div class="trusted-card">
+            <h3>Check ratings before buying</h3>
+            <p>Verify seller scores and read multiple recent reviews to ensure credibility.</p>
+        </div>
+        <div class="trusted-card">
+            <h3>Avoid unrealistic prices</h3>
+            <p>If a deal is too good to be true, compare with similar products before committing.</p>
+        </div>
+        <div class="trusted-card">
+            <h3>Communicate clearly with sellers</h3>
+            <p>Ask questions about condition, delivery, and return policies and keep it on-platform.</p>
+        </div>
+        <div class="trusted-card">
+            <h3>Report suspicious activity</h3>
+            <p>Submit reports directly from product or seller pages; fast reporting helps us protect everyone.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">Reporting System</h2>
+    <p class="section-desc">Here's what happens when you report a concern.</p>
+    <div class="grid-2">
+        <div class="report-card">
+            <h3>How to report</h3>
+            <p>Use the "Report" button on any product or seller page, choose a reason, and add quick details.</p>
+        </div>
+        <div class="report-card">
+            <h3>After you report</h3>
+            <p>Moderators review cases within 24 hours, often applying temporary restrictions during assessment.</p>
+        </div>
+        <div class="report-card">
+            <h3>Admin review</h3>
+            <p>Our team verifies evidence, interviews involved users, and enforces policies consistently.</p>
+        </div>
+        <div class="report-card">
+            <h3>Outcome communication</h3>
+            <p>Users receive status updates and enforcement summaries when cases are resolved.</p>
+        </div>
+    </div>
+</section>
+
+<section>
+    <h2 class="section-title">Action Against Bad Sellers</h2>
+    <p class="section-desc">Strong enforcement keeps the platform safe for honest buyers and sellers.</p>
+    <div class="grid-2">
+        <div class="action-card">
+            <h3>Sellers can be blocked</h3>
+            <p>Any seller failing policies is blocked and removed from search results instantly.</p>
+        </div>
+        <div class="action-card">
+            <h3>Products removed</h3>
+            <p>Fraudulent or misrepresented listings are delisted immediately and cant be republished.</p>
+        </div>
+        <div class="action-card">
+            <h3>Repeat offenders banned</h3>
+            <p>Repeat violations lead to permanent account ban and marketplace exclusion.</p>
+        </div>
+        <div class="action-card">
+            <h3>Trusted platform</h3>
+            <p>We maintain traceable records and provide feedback so you know action was taken.</p>
+        </div>
+    </div>
+</section>
+
+<section class="note-block">
+    <p>dm4price is committed to helping you compare prices, avoid scams, and buy safely.</p>
+</section>
+
+<section style="text-align:center; margin:2.5rem 0;">
+    <a href="{% url 'products:list' %}" class="btn-primary">Browse Products</a>
+</section>
+
+{% endblock %}

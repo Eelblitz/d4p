@@ -1,0 +1,694 @@
+{% extends "base.html" %}
+
+{% block title %}DM4PRICE - Trusted Marketplace for Smart Shoppers{% endblock %}
+
+{% block extra_styles %}
+<style>
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 4rem 0;
+        margin: -2rem 0 3rem 0;
+        text-align: center;
+    }
+    
+    .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 1rem;
+    }
+    
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        line-height: 1.2;
+    }
+    
+    .hero p {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        opacity: 0.95;
+        line-height: 1.6;
+    }
+    
+    .hero-ctas {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn-primary, .btn-secondary {
+        padding: 1rem 2rem;
+        font-size: 1.05rem;
+        font-weight: 600;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+    }
+    
+    .btn-secondary {
+        background-color: white;
+        color: #2c3e50;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #ecf0f1;
+        transform: translateY(-2px);
+    }
+    
+    /* Value Proposition Section */
+    .value-props {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+    
+    .value-prop {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .value-prop:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .value-prop-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .value-prop h3 {
+        color: #2c3e50;
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .value-prop p {
+        color: #7f8c8d;
+        line-height: 1.6;
+    }
+    
+    /* Section Title */
+    .section-title {
+        font-size: 2rem;
+        color: #2c3e50;
+        text-align: center;
+        margin: 3rem 0 2rem 0;
+        font-weight: 700;
+    }
+    
+    /* Features Section */
+    .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+    
+    .feature-card {
+        background-color: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid #3498db;
+    }
+    
+    .feature-card h4 {
+        color: #2c3e50;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+    }
+    
+    .feature-card p {
+        color: #555;
+        line-height: 1.6;
+        font-size: 0.95rem;
+    }
+    
+    /* How It Works */
+    .how-it-works {
+        background-color: #ecf7fc;
+        padding: 2rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+    }
+    
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .step {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 6px;
+        text-align: center;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    
+    .step-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background-color: #3498db;
+        color: white;
+        border-radius: 50%;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .step h4 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .step p {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* Trust Section */
+    .trust-section {
+        background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
+        padding: 2rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+        border-left: 4px solid #27ae60;
+    }
+    
+    .trust-item {
+        margin-bottom: 1.5rem;
+        padding-left: 2rem;
+        position: relative;
+    }
+    
+    .trust-item:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #27ae60;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+    
+    .trust-item h4 {
+        color: #2c3e50;
+        margin-bottom: 0.25rem;
+    }
+    
+    .trust-item p {
+        color: #555;
+        line-height: 1.5;
+        font-size: 0.95rem;
+    }
+    
+    /* Sellers Section */
+    .sellers-section {
+        background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+        padding: 2rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+    }
+    
+    .sellers-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2rem;
+        align-items: center;
+    }
+    
+    .sellers-benefits h3 {
+        color: #2c3e50;
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .benefit-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .benefit-list li {
+        color: #555;
+        padding: 0.75rem 0;
+        padding-left: 2rem;
+        position: relative;
+        line-height: 1.6;
+    }
+    
+    .benefit-list li:before {
+        content: "→";
+        position: absolute;
+        left: 0;
+        color: #e67e22;
+        font-weight: 700;
+    }
+    
+    .seller-cta {
+        margin-top: 1.5rem;
+    }
+    
+    /* Featured Products */
+    .featured-products {
+        margin: 3rem 0;
+    }
+    
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    
+    .product-card {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 180px;
+        background-color: #f0f0f0;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .product-info {
+        padding: 1rem;
+    }
+    
+    .product-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .product-rating {
+        color: #27ae60;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .seller-verified {
+        color: #27ae60;
+        font-size: 0.9rem;
+        margin-left: 0.5rem;
+    }
+    
+    .product-seller {
+        color: #7f8c8d;
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .product-link {
+        display: inline-block;
+        background-color: #3498db;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: background-color 0.3s;
+    }
+    
+    .product-link:hover {
+        background-color: #2980b9;
+    }
+    
+    /* Stats Section */
+    .stats-section {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+        text-align: center;
+    }
+    
+    .stat {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #3498db;
+        line-height: 1;
+    }
+    
+    .stat-label {
+        color: #7f8c8d;
+        margin-top: 0.5rem;
+        font-size: 0.95rem;
+    }
+    
+    /* Roadmap Section */
+    .roadmap {
+        background-color: #f8f9fa;
+        padding: 2rem;
+        border-radius: 8px;
+        margin: 2rem 0;
+    }
+    
+    .roadmap-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .roadmap-item {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 6px;
+        border-top: 3px solid #3498db;
+    }
+    
+    .roadmap-item h4 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .roadmap-item p {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+    
+    /* CTA Bar */
+    .final-cta {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: white;
+        padding: 2.5rem;
+        border-radius: 8px;
+        text-align: center;
+        margin: 3rem 0;
+    }
+    
+    .final-cta h2 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .final-cta p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        opacity: 0.95;
+    }
+    
+    .final-cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    @media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2rem;
+        }
+        
+        .hero p {
+            font-size: 1rem;
+        }
+        
+        .sellers-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+        }
+        
+        .hero-ctas, .final-cta-buttons {
+            flex-direction: column;
+        }
+        
+        .btn-primary, .btn-secondary {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero">
+    <div class="hero-content">
+        <h1>🛒 The Trusted Marketplace Layer for Smarter Buying Decisions</h1>
+        <p>Compare prices, discover verified sellers, and shop with confidence on a platform built for trust, transparency, and simplicity</p>
+        <div class="hero-ctas">
+            <a href="{% url 'products:list' %}" class="btn-primary">Browse Products</a>
+            <a href="{% url 'accounts:register' %}" class="btn-secondary">Become a Verified Seller</a>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Section -->
+<div class="stats-section">
+    <div class="stat">
+        <div class="stat-number">{{ total_products }}+</div>
+        <div class="stat-label">Active Products</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">{{ total_sellers }}+</div>
+        <div class="stat-label">Verified Sellers</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Moderated</div>
+    </div>
+</div>
+
+<!-- Value Proposition Section -->
+<h2 class="section-title">Why Choose DM4PRICE?</h2>
+<div class="value-props">
+    <div class="value-prop">
+        <div class="value-prop-icon">💰</div>
+        <h3>Real-Time Price Discovery</h3>
+        <p>Effortlessly compare product prices to ensure you are getting the best deal from multiple verified sellers.</p>
+    </div>
+    <div class="value-prop">
+        <div class="value-prop-icon">🛡️</div>
+        <h3>Anti-Scam Protection</h3>
+        <p>Shop securely with a robust system designed to help users avoid fraud through active ratings and reporting.</p>
+    </div>
+    <div class="value-prop">
+        <div class="value-prop-icon">💬</div>
+        <h3>Direct Connectivity</h3>
+        <p>Connect directly with sellers via WhatsApp to finalize your purchase quickly and safely.</p>
+    </div>
+</div>
+
+<!-- Key Features Section -->
+<h2 class="section-title">Platform Features</h2>
+<div class="features">
+    <div class="feature-card">
+        <h4>✅ Verified Seller Network</h4>
+        <p>Every seller undergoes an admin-controlled approval process before they can list products</p>
+    </div>
+    <div class="feature-card">
+        <h4>⭐ Transparent Rating System</h4>
+        <p>Make informed decisions by viewing 1–5 star ratings for both specific products and individual sellers</p>
+    </div>
+    <div class="feature-card">
+        <h4>🚨 Comprehensive Reporting</h4>
+        <p>Help keep the community safe by reporting suspicious products or sellers directly to our moderation team</p>
+    </div>
+    <div class="feature-card">
+        <h4>📸 Detailed Listings</h4>
+        <p>View high-quality images, clear descriptions, and categorized items to find exactly what you need</p>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="how-it-works">
+    <h2 class="section-title">How It Works</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h4>Search & Compare</h4>
+            <p>Browse various categories to find products and compare prices from different vendors</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h4>Verify Credibility</h4>
+            <p>Check the seller and product ratings provided by other community members</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h4>Connect via WhatsApp</h4>
+            <p>Click the direct contact link on any product to message the seller and complete your transaction</p>
+        </div>
+        <div class="step">
+            <div class="step-number">4</div>
+            <h4>Rate Your Experience</h4>
+            <p>After your purchase, leave a rating to help other buyers stay informed</p>
+        </div>
+    </div>
+</div>
+
+<!-- Trust & Security Section -->
+<h2 class="section-title">Trust & Security</h2>
+<div class="trust-section">
+    <div class="trust-item">
+        <h4>🔐 Admin Moderation</h4>
+        <p>Our team actively manages users, approves sellers, and handles all reports to maintain a clean marketplace</p>
+    </div>
+    <div class="trust-item">
+        <h4>🛡️ Safety Safeguards</h4>
+        <p>We implement auto-block logic for sellers with multiple unresolved reports and provide verified seller badges for extra peace of mind</p>
+    </div>
+    <div class="trust-item">
+        <h4>🚫 Abuse Control</h4>
+        <p>A dedicated reporting system allows for the deactivation of fraudulent products and the blocking of malicious actors</p>
+    </div>
+</div>
+
+<!-- Featured Products Section -->
+{% if featured_products %}
+<div class="featured-products">
+    <h2 class="section-title">Featured Products</h2>
+    <div class="products-grid">
+        {% for product in featured_products %}
+        <div class="product-card">
+            <div class="product-image">
+                {% if product.first_image %}
+                    <img src="{{ product.first_image.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <span style="color: #bbb;">No image</span>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <div class="product-name" title="{{ product.name }}">{{ product.name }}</div>
+                {% if product.avg_rating > 0 %}
+                    <div class="product-rating">⭐ {{ product.avg_rating }}/5 ({{ product.rating_count }})</div>
+                {% else %}
+                    <div class="product-rating">No ratings yet</div>
+                {% endif %}
+                <div class="product-seller">By {{ product.seller.username }}
+                    {% if product.seller.is_verified %}
+                        <span class="seller-verified">✳️ Verified</span>
+                    {% endif %}
+                </div>
+                <a href="{% url 'products:detail' product.id %}" class="product-link">View Details →</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div style="text-align: center; margin-top: 2rem;">
+        <a href="{% url 'products:list' %}" class="btn-primary">Browse All Products</a>
+    </div>
+</div>
+{% endif %}
+
+<!-- For Sellers Section -->
+<div class="sellers-section">
+    <div class="sellers-content">
+        <div class="sellers-benefits">
+            <h3>📈 Ready to Start Selling?</h3>
+            <ul class="benefit-list">
+                <li>Reach more buyers with a growing audience of smart shoppers</li>
+                <li>Build your brand and earn credibility through our rating system</li>
+                <li>Get a "Verified Seller" badge as a competitive advantage</li>
+                <li>Receive inquiries directly to your WhatsApp</li>
+                <li>Simple listing process with image uploads</li>
+                <li>Direct leads that streamline your sales process</li>
+            </ul>
+            <div class="seller-cta">
+                <a href="{% url 'accounts:register' %}" class="btn-primary">Register as Seller</a>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">💼</div>
+            <p style="color: #555; line-height: 1.8;">Join hundreds of verified sellers creating amazing opportunities on DM4PRICE. Your success is our success.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Roadmap Section -->
+<h2 class="section-title">Our Vision for the Future</h2>
+<div class="roadmap">
+    <div class="roadmap-items">
+        <div class="roadmap-item">
+            <h4>📍 Location-Based Discovery</h4>
+            <p>Soon, you'll be able to find the best deals specifically in your local area for faster transactions</p>
+        </div>
+        <div class="roadmap-item">
+            <h4>🤖 AI Scam Detection</h4>
+            <p>Advanced AI technology in development to automatically identify and flag potential fraudulent listings</p>
+        </div>
+        <div class="roadmap-item">
+            <h4>📱 Mobile Experience</h4>
+            <p>A dedicated mobile app and REST API in development to make price discovery even faster on the go</p>
+        </div>
+    </div>
+</div>
+
+<!-- Final CTA Section -->
+<div class="final-cta">
+    <h2>Ready to Shop Smart?</h2>
+    <p>Join thousands of users finding the best deals with confidence. Start browsing today!</p>
+    <div class="final-cta-buttons">
+        <a href="{% url 'products:list' %}" class="btn-primary">Browse Products Now</a>
+        <a href="{% url 'accounts:register' %}" class="btn-secondary">Create Account</a>
+    </div>
+</div>
+
+<div style="background-color: #ecf7fc; padding: 1.5rem; border-radius: 8px; margin: 2rem 0; text-align: center; color: #2c3e50;">
+    <strong style="font-size: 1.1rem;">dm4price: Reducing fraud, one smart decision at a time. 🔒</strong>
+</div>
+
+{% endblock %}

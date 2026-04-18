@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Email Verified - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .success-container {
+        max-width: 600px;
+        margin: 3rem auto;
+        background-color: white;
+        padding: 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .success-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        animation: bounce 0.6s ease-in-out;
+    }
+    
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    .success-title {
+        font-size: 2rem;
+        color: #27ae60;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .success-subtitle {
+        color: #7f8c8d;
+        margin-bottom: 2rem;
+        font-size: 1.05rem;
+    }
+    
+    .success-message {
+        background-color: #d5f4e6;
+        border-left: 4px solid #27ae60;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+    
+    .success-message h3 {
+        color: #27ae60;
+        margin-top: 0;
+    }
+    
+    .success-message p {
+        color: #2c3e50;
+        margin: 0.5rem 0 0 0;
+    }
+    
+    .account-details {
+        background-color: #ecf0f1;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+    
+    .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #bdc3c7;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    
+    .detail-value {
+        color: #7f8c8d;
+    }
+    
+    .next-steps {
+        background-color: #ecf7fc;
+        border-left: 4px solid #3498db;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+    
+    .next-steps h3 {
+        color: #3498db;
+        margin-top: 0;
+    }
+    
+    .next-steps ul {
+        margin: 1rem 0 0 1.5rem;
+        padding: 0;
+    }
+    
+    .next-steps li {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn {
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary {
+        background-color: #27ae60;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #229954;
+    }
+    
+    .btn-secondary {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #2980b9;
+    }
+    
+    .security-note {
+        background-color: #fef5e7;
+        border: 1px solid #ffc107;
+        padding: 1rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        color: #856404;
+        margin-top: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'products:list' %}">Home</a> / Email Verified
+</div>
+
+<div class="success-container">
+    <div class="success-icon">✅</div>
+    
+    <h1 class="success-title">Email Verified!</h1>
+    <p class="success-subtitle">Your email has been successfully verified</p>
+    
+    <div class="success-message">
+        <h3>🎉 Welcome to DM4PRICE!</h3>
+        <p>Your account is now fully activated and ready to use. You can now login to browse products, make purchases, and even become a seller!</p>
+    </div>
+    
+    <div class="account-details">
+        <div class="detail-row">
+            <span class="detail-label">Username:</span>
+            <span class="detail-value">{{ user.username }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">{{ user.email }}</span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Account Type:</span>
+            <span class="detail-value">
+                {% if user.is_seller %}
+                    Buyer & Seller
+                {% else %}
+                    Buyer
+                {% endif %}
+            </span>
+        </div>
+        <div class="detail-row">
+            <span class="detail-label">Status:</span>
+            <span class="detail-value">🟢 Active</span>
+        </div>
+    </div>
+    
+    <div class="next-steps">
+        <h3>📋 What's Next?</h3>
+        <ul>
+            <li><strong>Login to your account</strong> using your username and password</li>
+            <li><strong>Browse products</strong> from thousands of sellers</li>
+            <li><strong>Rate products and sellers</strong> to help the community</li>
+            {% if user.is_seller %}
+                <li><strong>Start listing products</strong> from your seller dashboard</li>
+            {% else %}
+                <li><strong>Become a seller</strong> - upgrade your account anytime</li>
+            {% endif %}
+        </ul>
+    </div>
+    
+    <div class="action-buttons">
+        <a href="{% url 'accounts:login' %}" class="btn btn-primary">🔑 Login Now</a>
+        <a href="{% url 'products:list' %}" class="btn btn-secondary">🛍️ Browse Products</a>
+    </div>
+    
+    <div class="security-note">
+        🔒 <strong>Security Tip:</strong> Never share your password with anyone. DM4PRICE staff will never ask for your password.
+    </div>
+</div>
+
+{% endblock %}

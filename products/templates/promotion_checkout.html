@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}Promotion Checkout - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .checkout-container {
+        max-width: 720px;
+        margin: 2rem auto;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+    .checkout-container h1 {
+        margin-bottom: 1rem;
+        color: #2c3e50;
+    }
+    .alert {
+        padding: 1rem 1.2rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        border: 1px solid #f39c12;
+        background: #fef5e7;
+        color: #9a5c0f;
+    }
+    .plan-summary, .product-selection, .checkout-actions {
+        margin-top: 1.5rem;
+    }
+    .plan-card {
+        padding: 1.3rem;
+        border-radius: 10px;
+        border: 1px solid #e0e4e8;
+        background-color: #f7fbff;
+    }
+    .plan-card h2 {
+        margin: 0;
+        font-size: 1.4rem;
+        color: #2c3e50;
+    }
+    .plan-card p {
+        margin: 0.4rem 0;
+        color: #566270;
+    }
+    .plan-price {
+        margin-top: 0.75rem;
+        font-size: 2rem;
+        color: #3498db;
+        font-weight: 700;
+    }
+    .product-list {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    .product-item {
+        padding: 1rem;
+        border-radius: 8px;
+        border: 1px solid #e0e4e8;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .product-item label {
+        width: 100%;
+        cursor: pointer;
+    }
+    .product-item input {
+        margin-right: 0.75rem;
+    }
+    .btn-primary {
+        padding: 0.95rem 1.5rem;
+        background-color: #3498db;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+    .btn-link {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <h1>Promotion Checkout</h1>
+
+    {% if monetization and not monetization.promotion_enabled %}
+        <div class="alert">
+            Promotions are currently disabled by the platform. Please check back later.
+        </div>
+    {% endif %}
+
+    {% if selected_plan %}
+        <div class="plan-summary">
+            <div class="plan-card">
+                <h2>{{ selected_plan.name }}</h2>
+                <p>{{ selected_plan.description }}</p>
+                <p class="plan-price">₦{{ selected_plan.price }} / {{ selected_plan.duration_days }} days</p>
+                <p>{{ selected_plan.features_list|length }} feature{{ selected_plan.features_list|length|pluralize }}</p>
+            </div>
+        </div>
+
+        {% if products.exists %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="plan_id" value="{{ selected_plan.id }}">
+                <div class="product-selection">
+                    <h3>Select a product to promote</h3>
+                    <div class="product-list">
+                        {% for product in products %}
+                        <label class="product-item">
+                            <input type="radio" name="product_id" value="{{ product.id }}" {% if forloop.first %}checked{% endif %}>
+                            <span>{{ product.name }} ({{ product.category }})</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="checkout-actions">
+                    <button type="submit" class="btn-primary">Complete Promotion Purchase</button>
+                </div>
+            </form>
+        {% else %}
+            <div class="alert">
+                You do not have any active products to promote yet. Add a product first and return to this page.
+            </div>
+            <a href="{% url 'products:list' %}" class="btn-link">Browse products</a>
+        {% endif %}
+    {% else %}
+        <div class="alert">
+            Please choose a promotion plan from the promotion page first.
+        </div>
+        <a href="{% url 'products:promote_product' %}" class="btn-link">View promotion plans</a>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,342 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .profile-container {
+        max-width: 600px;
+        margin: 2rem auto;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 2px solid #ecf0f1;
+    }
+    
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+        margin-right: 2rem;
+    }
+    
+    .profile-info h1 {
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 1.8rem;
+    }
+    
+    .profile-info p {
+        color: #7f8c8d;
+        margin: 0.5rem 0;
+    }
+    
+    .profile-section {
+        margin-bottom: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f5f5f5;
+    }
+    
+    .info-label {
+        color: #7f8c8d;
+        font-weight: 500;
+    }
+    
+    .info-value {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    
+    .status-active {
+        background-color: #d5f4e6;
+        color: #27ae60;
+    }
+    
+    .status-pending {
+        background-color: #fef5e7;
+        color: #f39c12;
+    }
+    
+    .status-inactive {
+        background-color: #fadbd8;
+        color: #c0392b;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+    
+    .btn-secondary {
+        background-color: #95a5a6;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #7f8c8d;
+    }
+    
+    .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+    }
+    
+    .btn-danger:hover {
+        background-color: #c0392b;
+    }
+    
+    .seller-note {
+        background-color: #ecf7fc;
+        border-left: 4px solid #3498db;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+    
+    .seller-note p {
+        margin: 0;
+        color: #2c3e50;
+    }
+    
+    .trust-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .trust-verified {
+        background-color: #d5f4e6;
+        color: #27ae60;
+    }
+    
+    .trust-unverified {
+        background-color: #fadbd8;
+        color: #c0392b;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .stat-card {
+        background-color: #ecf0f1;
+        padding: 1rem;
+        border-radius: 4px;
+        text-align: center;
+    }
+    
+    .stat-number {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #3498db;
+    }
+    
+    .stat-label {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-top: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'products:list' %}">Home</a> / Profile
+</div>
+
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-avatar">
+            {{ user.username|first|upper }}
+        </div>
+        <div class="profile-info">
+            <h1>{{ user.first_name|default:user.username }}</h1>
+            <p>@{{ user.username }}</p>
+            <p>{{ user.email }}</p>
+        </div>
+    </div>
+    
+    <div class="profile-section">
+        <h2 class="section-title">Account Information</h2>
+        
+        <div class="info-row">
+            <span class="info-label">Member Since:</span>
+            <span class="info-value">{{ user.date_joined|date:"M d, Y" }}</span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Last Login:</span>
+            <span class="info-value">
+                {% if user.last_login %}
+                    {{ user.last_login|date:"M d, Y \a\t H:i" }}
+                {% else %}
+                    Never
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Account Type:</span>
+            <span class="info-value">
+                {% if is_seller %}
+                    Buyer & Seller
+                {% else %}
+                    Buyer
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Email Verified:</span>
+            <span class="info-value">
+                {% if user.email_verified %}
+                    <span class="trust-badge trust-verified">✅ Verified</span>
+                {% else %}
+                    <span class="trust-badge trust-unverified">❌ Not Verified</span>
+                {% endif %}
+            </span>
+        </div>
+        
+        <div class="info-row">
+            <span class="info-label">Trust Score:</span>
+            <span class="info-value">{{ user.trust_score }}/100</span>
+        </div>
+        
+        {% if is_trusted %}
+            <div class="info-row">
+                <span class="info-label">Status:</span>
+                <span class="info-value">
+                    <span class="status-badge status-active">🟢 Trusted Member</span>
+                </span>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="profile-section">
+        <h2 class="section-title">Activity Statistics</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">{{ product_rating_count }}</div>
+                <div class="stat-label">Product Reviews</div>
+            </div>
+            {% if is_seller %}
+                <div class="stat-card">
+                    <div class="stat-number">{{ seller_rating_count }}</div>
+                    <div class="stat-label">Seller Ratings</div>
+                </div>
+            {% endif %}
+            <div class="stat-card">
+                <div class="stat-number">{{ blocked_users_count }}</div>
+                <div class="stat-label">Blocked Users</div>
+            </div>
+        </div>
+    </div>
+    
+    {% if is_seller %}
+        <div class="profile-section">
+            <h2 class="section-title">Seller Information</h2>
+            
+            <div class="seller-note">
+                <p>
+                    {% if seller_approved %}
+                        ✅ Your seller account is approved. You can list and sell products.
+                    {% else %}
+                        ⏳ Your seller account is pending approval. Admin team will review your request soon.
+                    {% endif %}
+                </p>
+            </div>
+            
+            <div class="info-row">
+                <span class="info-label">Seller Status:</span>
+                <span class="info-value">
+                    {% if seller_approved %}
+                        <span class="status-badge status-active">Approved ✓</span>
+                        {% if user.is_verified %}
+                            <span style="color: #f39c12; font-weight: 600; margin-left: 0.5rem;">✨ Verified Seller</span>
+                        {% endif %}
+                    {% else %}
+                        <span class="status-badge status-pending">Pending Review</span>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    {% endif %}
+    
+    <div class="action-buttons">
+        <a href="{% url 'products:list' %}" class="btn btn-primary">Browse Products</a>
+        {% if user.is_seller %}
+            <a href="{% url 'products:seller_dashboard' %}" class="btn btn-primary">Seller Dashboard</a>
+        {% endif %}
+        <form method="post" action="{% url 'accounts:logout' %}" style="flex: 1;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" style="width: 100%;">Logout</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

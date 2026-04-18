@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}Verify Your Email - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .verify-container {
+        max-width: 600px;
+        margin: 3rem auto;
+        background-color: white;
+        padding: 2.5rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    
+    .verify-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+    
+    .verify-title {
+        font-size: 1.8rem;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+    
+    .verify-subtitle {
+        color: #7f8c8d;
+        margin-bottom: 1.5rem;
+    }
+    
+    .verify-info {
+        background-color: #ecf7fc;
+        border-left: 4px solid #3498db;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        text-align: left;
+    }
+    
+    .verify-info h3 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .verify-steps {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .verify-steps li {
+        padding: 0.75rem 0;
+        color: #555;
+        border-bottom: 1px solid #d5e8f0;
+    }
+    
+    .verify-steps li:last-child {
+        border-bottom: none;
+    }
+    
+    .verify-steps strong {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+    
+    .verify-email-display {
+        background-color: #fff3cd;
+        border: 2px solid #ffc107;
+        padding: 1rem;
+        border-radius: 4px;
+        margin: 1.5rem 0;
+        font-weight: 600;
+        color: #856404;
+    }
+    
+    .console-info {
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+        margin-top: 1.5rem;
+        text-align: left;
+    }
+    
+    .console-info h4 {
+        margin-top: 0;
+        color: #2c3e50;
+        font-size: 0.95rem;
+    }
+    
+    .console-note {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        margin-top: 0.5rem;
+        padding: 0.75rem;
+        background-color: #ecf0f1;
+        border-left: 3px solid #95a5a6;
+        padding-left: 1rem;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .btn {
+        flex: 1;
+        min-width: 150px;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+    
+    .btn-primary {
+        background-color: #3498db;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: #2980b9;
+    }
+    
+    .btn-secondary {
+        background-color: #95a5a6;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #7f8c8d;
+    }
+    
+    .verification-link-box {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-top: 1.5rem;
+        text-align: left;
+    }
+    
+    .verification-link-box h4 {
+        margin-top: 0;
+        color: #2c3e50;
+    }
+    
+    .verification-link {
+        background-color: #ecf0f1;
+        padding: 0.75rem;
+        border-radius: 3px;
+        margin: 0.5rem 0;
+        font-size: 0.85rem;
+        word-break: break-all;
+        font-family: monospace;
+        color: #2c3e50;
+    }
+    
+    .copy-link {
+        display: inline-block;
+        margin-top: 0.5rem;
+        padding: 0.4rem 0.8rem;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 3px;
+        font-size: 0.85rem;
+        cursor: pointer;
+        text-decoration: none;
+    }
+    
+    .copy-link:hover {
+        background-color: #2980b9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'products:list' %}">Home</a> / Email Verification
+</div>
+
+<div class="verify-container">
+    <div class="verify-icon">📧</div>
+    
+    <h1 class="verify-title">Verify Your Email</h1>
+    <p class="verify-subtitle">Thanks for registering on DM4PRICE!</p>
+    
+    <div class="verify-info">
+        <h3>✅ Here's what you need to do:</h3>
+        <ol class="verify-steps">
+            <li>
+                <strong>Check your email inbox</strong> for a message from <strong>noreply@dm4price.com</strong>
+            </li>
+            <li>
+                <strong>Open the email</strong> and click the verification link
+            </li>
+            <li>
+                <strong>Your account is activated!</strong> You can then login to DM4PRICE
+            </li>
+        </ol>
+    </div>
+    
+    <div class="verify-email-display">
+        📨 Verification email sent to: <strong>{{ user_email }}</strong>
+    </div>
+    
+    <div class="console-info">
+        <h4>💻 For Testing/Development:</h4>
+        <p>
+            Since we're in development mode, the verification email is sent to the console (server output). 
+            Check the terminal where you started the Django server to see your verification link.
+        </p>
+        
+        {% if verification_link %}
+            <div class="verification-link-box">
+                <h4>Your Verification Link:</h4>
+                <div class="verification-link">
+                    {{ verification_link }}
+                </div>
+                <button class="copy-link" onclick="copyToClipboard('{{ verification_link }}')">
+                    📋 Copy Link
+                </button>
+            </div>
+        {% endif %}
+        
+        <div class="console-note">
+            <strong>🔍 To find the email:</strong> Look for the full email message in your terminal that starts with "Content-Type: text/plain"
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        {% if verification_link %}
+            <a href="{{ verification_link }}" class="btn btn-primary">✅ Verify Email Now</a>
+        {% endif %}
+        <a href="{% url 'accounts:login' %}" class="btn btn-secondary">Login</a>
+    </div>
+    
+    <p style="color: #7f8c8d; font-size: 0.9rem; margin-top: 2rem;">
+        ⏱️ Verification links expire in 24 hours. <a href="{% url 'accounts:resend_verification' %}" style="color: #3498db; font-weight: 600;">Request a new link</a> if needed.
+    </p>
+</div>
+
+<script>
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(function() {
+        alert('✅ Verification link copied to clipboard!');
+    }, function(err) {
+        console.error('Could not copy text: ', err);
+        alert('Could not copy to clipboard');
+    });
+}
+</script>
+
+{% endblock %}

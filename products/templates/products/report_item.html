@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block title %}Report {{ report_type }} - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .report-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        max-width: 600px;
+        margin: 2rem auto;
+    }
+    
+    .report-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    
+    .report-header h1 {
+        color: #e74c3c;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .report-header p {
+        color: #7f8c8d;
+        font-size: 1rem;
+    }
+    
+    .report-info {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        color: #856404;
+    }
+    
+    .report-info strong {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    .item-being-reported {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-bottom: 2rem;
+        border-left: 4px solid #3498db;
+    }
+    
+    .item-name {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-section {
+        margin-bottom: 2rem;
+    }
+    
+    .form-section label {
+        font-weight: 600;
+        color: #2c3e50;
+        display: block;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+    }
+    
+    .report-radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .report-radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        margin: 0;
+        font-weight: normal;
+        font-size: 0.95rem;
+    }
+    
+    .report-radio-group input[type="radio"] {
+        cursor: pointer;
+    }
+    
+    .form-section textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        resize: vertical;
+    }
+    
+    .form-section textarea:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+    
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    
+    .submit-btn {
+        background-color: #e74c3c;
+        color: white;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: background-color 0.3s;
+    }
+    
+    .submit-btn:hover {
+        background-color: #c0392b;
+    }
+    
+    .cancel-btn {
+        background-color: #95a5a6;
+        color: white;
+        padding: 0.75rem 2rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 500;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+    }
+    
+    .cancel-btn:hover {
+        background-color: #7f8c8d;
+    }
+    
+    .privacy-notice {
+        background-color: #ecf7fc;
+        border-left: 4px solid #3498db;
+        padding: 1rem;
+        border-radius: 4px;
+        margin-top: 2rem;
+        font-size: 0.9rem;
+        color: #2c3e50;
+    }
+    
+    .privacy-notice strong {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .report-container {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+        
+        .report-header h1 {
+            font-size: 1.5rem;
+        }
+        
+        .form-actions {
+            flex-direction: column;
+        }
+        
+        .submit-btn, .cancel-btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="report-container">
+    <div class="report-header">
+        <h1>🚨 Report {{ report_type }}</h1>
+        <p>Help us keep DM4PRICE safe for everyone</p>
+    </div>
+    
+    <div class="report-info">
+        <strong>Why report?</strong>
+        Your reports help our safety team identify and address violations. We take all reports seriously and investigate them promptly. Thank you for helping us maintain a safe marketplace.
+    </div>
+    
+    <!-- Item being reported -->
+    <div class="item-being-reported">
+        <div class="item-name">
+            {% if report_type == "Product" %}
+                📦 Product: {{ product.name }}
+            {% else %}
+                👤 Seller: {{ seller.username }}
+            {% endif %}
+        </div>
+        {% if report_type == "Product" %}
+            <div style="font-size: 0.9rem; color: #7f8c8d;">
+                Category: {{ product.get_category_display }}
+            </div>
+        {% endif %}
+    </div>
+    
+    <!-- Report form -->
+    <form method="post" class="report-form">
+        {% csrf_token %}
+        
+        <!-- Reason field -->
+        <div class="form-section">
+            {{ form.reason.label_tag }}
+            <div class="report-radio-group">
+                {% for radio in form.reason %}
+                    {{ radio }}
+                {% endfor %}
+            </div>
+            {% if form.reason.errors %}
+                <div style="color: #e74c3c; font-size: 0.9rem; margin-top: 0.5rem;">
+                    {% for error in form.reason.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Description field -->
+        <div class="form-section">
+            {{ form.description.label_tag }}
+            {{ form.description }}
+            {% if form.description.errors %}
+                <div style="color: #e74c3c; font-size: 0.9rem; margin-top: 0.5rem;">
+                    {% for error in form.description.errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Privacy notice -->
+        <div class="privacy-notice">
+            <strong>🔒 Your Privacy</strong>
+            Your identity is kept confidential. The {{ report_type|lower }} owner will not know who reported them.
+        </div>
+        
+        <!-- Form actions -->
+        <div class="form-actions">
+            <button type="submit" class="submit-btn">
+                ✓ Submit Report
+            </button>
+            <a href="javascript:history.back();" class="cancel-btn">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

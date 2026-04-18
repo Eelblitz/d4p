@@ -1,0 +1,377 @@
+{% extends "base.html" %}
+
+{% block title %}Seller Dashboard - DM4PRICE{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .dashboard-header,
+    .analytics-section,
+    .products-section {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-header h2,
+    .analytics-section h3,
+    .products-section h3 {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+    }
+
+    .stats-grid,
+    .analytics-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .stat-card {
+        color: white;
+        padding: 1.5rem;
+        border-radius: 8px;
+        text-align: center;
+        background: linear-gradient(135deg, #3498db, #2980b9);
+    }
+
+    .stat-active {
+        background: linear-gradient(135deg, #27ae60, #229954);
+    }
+
+    .stat-inactive {
+        background: linear-gradient(135deg, #e74c3c, #c0392b);
+    }
+
+    .stat-rating {
+        background: linear-gradient(135deg, #f39c12, #d68910);
+    }
+
+    .analytics-card {
+        background: #f8f9fa;
+        border: 1px solid #ecf0f1;
+        border-radius: 8px;
+        padding: 1.25rem;
+    }
+
+    .analytics-card strong,
+    .stat-value {
+        display: block;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+        color: inherit;
+    }
+
+    .analytics-card strong {
+        color: #2c3e50;
+    }
+
+    .stat-label,
+    .analytics-card span {
+        font-size: 0.95rem;
+        opacity: 0.95;
+        color: #566573;
+    }
+
+    .analytics-highlight {
+        background: linear-gradient(135deg, #fff8e1, #fef3c7);
+        border-left: 4px solid #f39c12;
+        padding: 1rem 1.25rem;
+        border-radius: 8px;
+        color: #5d4037;
+    }
+
+    .analytics-highlight strong {
+        color: #2c3e50;
+    }
+
+    .action-buttons,
+    .action-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn,
+    .action-links a {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 600;
+        display: inline-block;
+        transition: all 0.3s;
+    }
+
+    .btn-primary,
+    .edit-link {
+        background-color: #3498db;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #95a5a6;
+        color: white;
+    }
+
+    .image-link {
+        background-color: #f39c12;
+        color: white;
+    }
+
+    .delete-link {
+        background-color: #e74c3c;
+        color: white;
+    }
+
+    .products-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .products-table thead {
+        background-color: #ecf0f1;
+        border-bottom: 2px solid #bdc3c7;
+    }
+
+    .products-table th,
+    .products-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #ecf0f1;
+        vertical-align: top;
+    }
+
+    .products-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .product-name {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 0.35rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .status-active {
+        background-color: #d5f4e6;
+        color: #27ae60;
+    }
+
+    .status-inactive {
+        background-color: #fadbd8;
+        color: #c0392b;
+    }
+
+    .status-promoted {
+        background-color: #fff3cd;
+        color: #8a5a00;
+    }
+
+    .rating-display {
+        color: #f39c12;
+        font-weight: 600;
+    }
+
+    .metric-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+        color: #566573;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #7f8c8d;
+    }
+
+    .empty-state p {
+        margin-bottom: 1rem;
+    }
+
+    @media (max-width: 768px) {
+        .stats-grid,
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .products-table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .action-buttons,
+        .action-links {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="breadcrumb">
+    <a href="{% url 'products:list' %}">Products</a> / Seller Dashboard
+</div>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <h2>Seller Dashboard
+            {% if user.is_verified %}
+                <span style="color: #f39c12; font-size: 0.7em; margin-left: 1rem;">Verified Seller</span>
+            {% endif %}
+        </h2>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_products }}</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            <div class="stat-card stat-active">
+                <div class="stat-value">{{ active_products }}</div>
+                <div class="stat-label">Active Listings</div>
+            </div>
+            <div class="stat-card stat-inactive">
+                <div class="stat-value">{{ inactive_products }}</div>
+                <div class="stat-label">Inactive Listings</div>
+            </div>
+            <div class="stat-card stat-rating">
+                <div class="stat-value">{{ seller_avg_rating }}</div>
+                <div class="stat-label">Seller Rating ({{ seller_rating_count }})</div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <a href="{% url 'products:add_product' %}" class="btn btn-primary">+ Add New Product</a>
+            <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">View Profile</a>
+        </div>
+    </div>
+
+    <div class="analytics-section">
+        <h3>Engagement Analytics</h3>
+        <div class="analytics-grid">
+            <div class="analytics-card">
+                <strong>{{ total_views }}</strong>
+                <span>Total product views</span>
+            </div>
+            <div class="analytics-card">
+                <strong>{{ total_contact_clicks }}</strong>
+                <span>WhatsApp contact clicks</span>
+            </div>
+            <div class="analytics-card">
+                <strong>{{ overall_ctr }}%</strong>
+                <span>Overall click-through rate</span>
+            </div>
+            <div class="analytics-card">
+                <strong>{{ promoted_product_count }}</strong>
+                <span>Currently promoted products</span>
+            </div>
+            <div class="analytics-card">
+                <strong>{{ promoted_views }}</strong>
+                <span>Views on promoted listings</span>
+            </div>
+            <div class="analytics-card">
+                <strong>{{ promoted_ctr }}%</strong>
+                <span>Promoted listing CTR</span>
+            </div>
+        </div>
+
+        {% if top_performing_product %}
+            <div class="analytics-highlight">
+                <strong>Top performer:</strong> {{ top_performing_product.name }} generated {{ top_performing_product.contact_click_count }} contact click{{ top_performing_product.contact_click_count|pluralize }} from {{ top_performing_product.view_count }} view{{ top_performing_product.view_count|pluralize }}.
+            </div>
+        {% else %}
+            <div class="analytics-highlight">
+                <strong>No engagement data yet.</strong> Share listings and start collecting product views and contact clicks to measure which items convert best.
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="products-section">
+        <h3>Your Products</h3>
+
+        {% if seller_products %}
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Status</th>
+                        <th>Rating</th>
+                        <th>Images</th>
+                        <th>Analytics</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in seller_products %}
+                        <tr>
+                            <td>
+                                <div class="product-name">{{ product.name }}</div>
+                                <div style="color: #7f8c8d; margin-top: 0.35rem;">{{ product.get_category_display }}</div>
+                            </td>
+                            <td>
+                                <span class="status-badge {% if product.is_active %}status-active{% else %}status-inactive{% endif %}">
+                                    {% if product.is_active %}Active{% else %}Inactive{% endif %}
+                                </span>
+                                {% if product.is_promoted %}
+                                    <div style="margin-top: 0.5rem;">
+                                        <span class="status-badge status-promoted">Boosted</span>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if product.rating_count > 0 %}
+                                    <span class="rating-display">Star {{ product.avg_rating }}/5 ({{ product.rating_count }})</span>
+                                {% else %}
+                                    <span style="color: #7f8c8d;">No ratings</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span style="background-color: #ecf0f1; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.9rem;">
+                                    {{ product.image_count }} image{{ product.image_count|pluralize }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="metric-stack">
+                                    <span>{{ product.view_count }} view{{ product.view_count|pluralize }}</span>
+                                    <span>{{ product.contact_click_count }} contact click{{ product.contact_click_count|pluralize }}</span>
+                                    <span>CTR {{ product.ctr }}%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-links">
+                                    <a href="{% url 'products:edit_product' product.id %}" class="edit-link">Edit</a>
+                                    <a href="{% url 'products:product_images' product.id %}" class="image-link">Images</a>
+                                    <a href="{% url 'products:delete_product' product.id %}" class="delete-link">Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="empty-state">
+                <p>You haven't added any products yet.</p>
+                <a href="{% url 'products:add_product' %}" class="btn btn-primary">Create Your First Product</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
