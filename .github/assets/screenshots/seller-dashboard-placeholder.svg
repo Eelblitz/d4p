@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#F4F7FB"/>
+  <rect x="64" y="56" width="1152" height="608" rx="28" fill="white"/>
+  <rect x="96" y="100" width="1088" height="120" rx="24" fill="#16324F"/>
+  <rect x="96" y="258" width="250" height="132" rx="22" fill="#EAF4FF"/>
+  <rect x="376" y="258" width="250" height="132" rx="22" fill="#EAF9F0"/>
+  <rect x="656" y="258" width="250" height="132" rx="22" fill="#FFF7E3"/>
+  <rect x="936" y="258" width="250" height="132" rx="22" fill="#FBECEC"/>
+  <rect x="96" y="430" width="1088" height="186" rx="24" fill="#F7FAFC" stroke="#D6E4F0"/>
+  <rect x="96" y="648" width="560" height="18" rx="9" fill="#7B8EA2"/>
+  <text x="96" y="618" fill="#16324F" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Replace with seller dashboard screenshot</text>
+  <text x="96" y="146" fill="#EAF4FF" font-family="Segoe UI, Arial, sans-serif" font-size="34" font-weight="700">Analytics, CTR, and product performance go here</text>
+</svg>

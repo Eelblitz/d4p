@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#F4F7FB"/>
+  <rect x="64" y="56" width="1152" height="608" rx="28" fill="white"/>
+  <rect x="64" y="56" width="1152" height="120" rx="28" fill="#16324F"/>
+  <circle cx="118" cy="116" r="14" fill="#4CC9F0"/>
+  <rect x="152" y="98" width="192" height="36" rx="10" fill="#E6F4FF"/>
+  <rect x="96" y="220" width="520" height="42" rx="12" fill="#16324F"/>
+  <rect x="96" y="282" width="454" height="24" rx="12" fill="#7B8EA2"/>
+  <rect x="96" y="342" width="210" height="52" rx="18" fill="#1D8FE1"/>
+  <rect x="96" y="434" width="336" height="182" rx="22" fill="#F7FAFC" stroke="#D6E4F0"/>
+  <rect x="472" y="434" width="336" height="182" rx="22" fill="#F7FAFC" stroke="#D6E4F0"/>
+  <rect x="848" y="434" width="336" height="182" rx="22" fill="#F7FAFC" stroke="#D6E4F0"/>
+  <text x="96" y="404" fill="#16324F" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Replace with DM4PRICE homepage screenshot</text>
+  <text x="96" y="644" fill="#7B8EA2" font-family="Segoe UI, Arial, sans-serif" font-size="24">Recommended capture: hero, trust value prop, and boosted discovery section</text>
+</svg>

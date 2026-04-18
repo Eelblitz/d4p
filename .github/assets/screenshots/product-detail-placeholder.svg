@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" fill="none">
+  <rect width="1280" height="720" fill="#F4F7FB"/>
+  <rect x="64" y="56" width="1152" height="608" rx="28" fill="white"/>
+  <rect x="96" y="104" width="520" height="416" rx="24" fill="#F7FAFC" stroke="#D6E4F0"/>
+  <rect x="668" y="104" width="460" height="48" rx="12" fill="#16324F"/>
+  <rect x="668" y="176" width="180" height="34" rx="16" fill="#EAF3FA"/>
+  <rect x="668" y="236" width="210" height="32" rx="10" fill="#1D8FE1"/>
+  <rect x="668" y="300" width="400" height="114" rx="22" fill="#F2FBF7" stroke="#BFE5D0"/>
+  <rect x="668" y="438" width="290" height="56" rx="18" fill="#1FAF63"/>
+  <rect x="96" y="554" width="1032" height="26" rx="12" fill="#16324F"/>
+  <rect x="96" y="598" width="840" height="18" rx="9" fill="#7B8EA2"/>
+  <text x="96" y="650" fill="#16324F" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Replace with product detail screenshot</text>
+  <text x="96" y="684" fill="#7B8EA2" font-family="Segoe UI, Arial, sans-serif" font-size="24">Recommended capture: pricing, seller trust, reviews, and WhatsApp CTA</text>
+</svg>

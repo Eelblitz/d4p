@@ -2,10 +2,13 @@
 Django==5.2
 pillow==12.1.1
 python-decouple==3.8
+whitenoise==6.12.0
 
-# PostgreSQL (install for production)
-# psycopg2-binary==2.9.9
-# dj-database-url==2.1.0
+# Production / deployment
+dj-database-url==3.1.2
+psycopg2-binary==2.9.11
+gunicorn==25.3.0
+uvicorn==0.44.0
 
 # Utilities
 sqlparse==0.5.5
