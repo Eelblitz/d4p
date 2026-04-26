@@ -1,4 +1,5 @@
 import json
+from unittest.mock import patch
 
 from django.test import TestCase
 from django.urls import reverse
@@ -480,17 +481,52 @@ class PromotionCheckoutTests(TestCase):
         response = self.client.get(reverse('products:promotion_checkout'), follow=True)
         self.assertRedirects(response, reverse('accounts:profile'))
 
-    def test_purchase_creates_transaction_and_redirects(self):
+    @patch('products.views.PaystackClient.initialize_transaction')
+    def test_purchase_creates_transaction_and_redirects_to_paystack(self, mock_initialize_transaction):
+        mock_initialize_transaction.return_value = {
+            'access_code': 'access-123',
+            'authorization_url': 'https://checkout.paystack.com/pay/promo',
+        }
         self.client.force_login(self.seller)
         response = self.client.post(
             reverse('products:promotion_checkout'),
-            {'product_id': self.product.id, 'plan_id': self.plan.id},
-            follow=True
+            {'product_id': self.product.id, 'plan_id': self.plan.id}
         )
         self.assertEqual(PromotionTransaction.objects.count(), 1)
         t = PromotionTransaction.objects.first()
-        self.assertEqual(t.status, 'completed')
-        self.assertRedirects(response, reverse('products:promotion_confirmation', args=[t.id]))
+        self.assertEqual(t.status, 'processing')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://checkout.paystack.com/pay/promo')
+
+    @patch('products.views.PaystackClient.verify_transaction')
+    def test_callback_completes_transaction_after_successful_payment(self, mock_verify_transaction):
+        transaction = PromotionTransaction.objects.create(
+            user=self.seller,
+            product=self.product,
+            plan=self.plan,
+            amount=self.plan.price,
+            status='processing',
+            payment_reference='PMT-REF-123',
+            channels=['ussd', 'bank_transfer'],
+        )
+        mock_verify_transaction.return_value = {
+            'status': 'success',
+            'gateway_response': 'Approved',
+        }
+
+        self.client.force_login(self.seller)
+        response = self.client.get(
+            reverse('products:promotion_payment_callback'),
+            {'reference': transaction.payment_reference},
+        )
+
+        transaction.refresh_from_db()
+        self.assertEqual(transaction.status, 'completed')
+        self.assertIsNotNone(transaction.paid_at)
+        self.assertIsNotNone(transaction.starts_at)
+        self.assertIsNotNone(transaction.ends_at)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, reverse('products:promotion_confirmation', args=[transaction.id]))
 
     def test_promotion_disabled_returns_error(self):
         MonetizationSettings.objects.create(

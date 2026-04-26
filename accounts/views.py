@@ -1,3 +1,6 @@
+import hashlib
+from decimal import Decimal
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -7,8 +10,45 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.db.models import Avg, Count, Q
 from django.utils import timezone
-from .models import User, UserReport
-from .forms import CustomUserCreationForm, CustomAuthenticationForm
+from django.urls import reverse
+
+from products.models import MonetizationSettings
+from integrations.paystack import PaystackClient, PaystackError
+from integrations.prembly import PremblyClient, PremblyError
+
+from .models import User, UserReport, SellerVerificationPayment
+from .forms import CustomUserCreationForm, CustomAuthenticationForm, NINVerificationForm
+
+
+def get_verification_settings():
+    return MonetizationSettings.objects.first()
+
+
+def get_verification_fee():
+    settings_obj = get_verification_settings()
+    if settings_obj:
+        return settings_obj.verification_fee
+    return Decimal('0.00')
+
+
+def seller_requires_verification_payment():
+    return get_verification_fee() > 0
+
+
+def seller_is_ready_for_approval(user):
+    if user.nin_verification_status != User.NINVerificationStatus.VERIFIED:
+        return False
+    if seller_requires_verification_payment() and not user.has_completed_seller_verification_payment():
+        return False
+    return True
+
+
+def build_callback_url(request, route_name, *args):
+    return request.build_absolute_uri(reverse(route_name, args=args))
+
+
+def mask_nin(last4):
+    return f'*******{last4}' if last4 else 'Not submitted'
 
 
 @require_http_methods(["GET", "POST"])
@@ -168,7 +208,9 @@ def profile(request):
     user = request.user
     seller_rating_count = user.seller_ratings.count() if user.is_seller else 0
     product_rating_count = user.given_ratings.count()
-    
+    verification_fee = get_verification_fee()
+    latest_payment = user.seller_verification_payments.first()
+
     context = {
         'user': user,
         'is_seller': user.is_seller,
@@ -177,8 +219,182 @@ def profile(request):
         'product_rating_count': product_rating_count,
         'is_trusted': user.is_trusted(),
         'blocked_users_count': user.blocked_users.count(),
+        'nin_form': NINVerificationForm(),
+        'nin_masked': mask_nin(user.nin_last4),
+        'verification_fee': verification_fee,
+        'seller_requires_verification_payment': seller_requires_verification_payment(),
+        'has_completed_seller_verification_payment': user.has_completed_seller_verification_payment(),
+        'seller_is_ready_for_approval': seller_is_ready_for_approval(user),
+        'latest_seller_payment': latest_payment,
     }
     return render(request, 'accounts/profile.html', context)
+
+
+@login_required(login_url='accounts:login')
+@require_http_methods(["POST"])
+def verify_nin(request):
+    """Verify a seller's NIN using Prembly before approval."""
+    if not request.user.is_seller:
+        messages.error(request, 'Only seller accounts can submit NIN verification.')
+        return redirect('accounts:profile')
+
+    form = NINVerificationForm(request.POST)
+    if not form.is_valid():
+        for errors in form.errors.values():
+            for error in errors:
+                messages.error(request, error)
+        return redirect('accounts:profile')
+
+    nin_number = form.cleaned_data['nin_number']
+    client = PremblyClient()
+    request.user.nin_verification_status = User.NINVerificationStatus.PENDING
+    request.user.save(update_fields=['nin_verification_status'])
+
+    try:
+        payload = client.verify_nin_basic(nin_number)
+    except PremblyError as exc:
+        request.user.nin_verification_status = User.NINVerificationStatus.FAILED
+        request.user.nin_failure_reason = str(exc)
+        request.user.save(update_fields=['nin_verification_status', 'nin_failure_reason'])
+        messages.error(request, str(exc))
+        return redirect('accounts:profile')
+
+    verification = payload.get('verification', {})
+    nin_data = payload.get('nin_data', {})
+    verification_status = verification.get('status')
+    if verification_status != 'VERIFIED':
+        request.user.nin_verification_status = User.NINVerificationStatus.FAILED
+        request.user.nin_failure_reason = payload.get('detail', 'NIN verification failed.')
+        request.user.save(update_fields=['nin_verification_status', 'nin_failure_reason'])
+        messages.error(request, request.user.nin_failure_reason)
+        return redirect('accounts:profile')
+
+    full_name = ' '.join(
+        value for value in [
+            nin_data.get('firstname', '').strip(),
+            nin_data.get('middlename', '').strip(),
+            nin_data.get('surname', '').strip(),
+        ] if value
+    )
+    request.user.nin_verification_status = User.NINVerificationStatus.VERIFIED
+    request.user.nin_hash = hashlib.sha256(nin_number.encode('utf-8')).hexdigest()
+    request.user.nin_last4 = nin_number[-4:]
+    request.user.nin_verification_reference = verification.get('reference', '')
+    request.user.nin_verification_provider = 'prembly'
+    request.user.nin_verified_at = timezone.now()
+    request.user.nin_full_name = full_name
+    request.user.nin_failure_reason = ''
+    request.user.save(
+        update_fields=[
+            'nin_verification_status',
+            'nin_hash',
+            'nin_last4',
+            'nin_verification_reference',
+            'nin_verification_provider',
+            'nin_verified_at',
+            'nin_full_name',
+            'nin_failure_reason',
+        ]
+    )
+    messages.success(request, 'Your NIN has been verified successfully. You can continue your seller approval steps.')
+    return redirect('accounts:profile')
+
+
+@login_required(login_url='accounts:login')
+@require_http_methods(["POST"])
+def start_seller_verification_payment(request):
+    """Initialize Paystack payment for seller verification fees."""
+    if not request.user.is_seller:
+        messages.error(request, 'Only sellers can start seller verification payments.')
+        return redirect('accounts:profile')
+
+    if request.user.seller_approved:
+        messages.info(request, 'Your seller account is already approved.')
+        return redirect('accounts:profile')
+
+    fee = get_verification_fee()
+    if fee <= 0:
+        messages.info(request, 'Seller verification fee is currently disabled.')
+        return redirect('accounts:profile')
+
+    reference = f'SVP-{timezone.now().strftime("%Y%m%d%H%M%S")}-{request.user.id}'
+    payment = SellerVerificationPayment.objects.create(
+        user=request.user,
+        amount=fee,
+        status='pending',
+        payment_reference=reference,
+        channels=['ussd', 'bank_transfer'],
+        notes='Seller verification payment initialized',
+    )
+
+    client = PaystackClient()
+    callback_url = build_callback_url(request, 'accounts:seller_verification_payment_callback')
+    try:
+        paystack_data = client.initialize_transaction(
+            email=request.user.email,
+            amount_kobo=int(fee * 100),
+            reference=reference,
+            callback_url=callback_url,
+            channels=['ussd', 'bank_transfer'],
+            metadata={
+                'purpose': 'seller_verification',
+                'user_id': request.user.id,
+                'payment_reference': reference,
+            },
+        )
+    except PaystackError as exc:
+        payment.status = 'failed'
+        payment.notes = str(exc)
+        payment.save(update_fields=['status', 'notes', 'updated_at'])
+        messages.error(request, str(exc))
+        return redirect('accounts:profile')
+
+    payment.access_code = paystack_data.get('access_code', '')
+    payment.authorization_url = paystack_data.get('authorization_url', '')
+    payment.status = 'processing'
+    payment.save(update_fields=['access_code', 'authorization_url', 'status', 'updated_at'])
+    return redirect(payment.authorization_url)
+
+
+@require_http_methods(["GET"])
+def seller_verification_payment_callback(request):
+    """Verify Paystack callback for seller verification payment."""
+    reference = request.GET.get('reference', '').strip()
+    if not reference:
+        messages.error(request, 'Missing payment reference.')
+        return redirect('accounts:profile')
+
+    payment = get_object_or_404(SellerVerificationPayment, payment_reference=reference)
+    client = PaystackClient()
+    try:
+        verification = client.verify_transaction(reference)
+    except PaystackError as exc:
+        payment.status = 'failed'
+        payment.notes = str(exc)
+        payment.save(update_fields=['status', 'notes', 'updated_at'])
+        messages.error(request, str(exc))
+        return redirect('accounts:profile')
+
+    payment_status = verification.get('status')
+    payment.notes = verification.get('gateway_response', payment.notes)
+    if payment_status == 'success':
+        payment.status = 'completed'
+        payment.paid_at = timezone.now()
+        messages.success(request, 'Seller verification payment completed successfully.')
+        update_fields = ['status', 'paid_at', 'notes', 'updated_at']
+    elif payment_status in ['pending', 'processing', 'ongoing']:
+        payment.status = 'processing'
+        messages.info(request, 'Your payment is still being processed. Check again shortly.')
+        update_fields = ['status', 'notes', 'updated_at']
+    else:
+        payment.status = 'failed'
+        messages.error(request, 'Seller verification payment was not successful.')
+        update_fields = ['status', 'notes', 'updated_at']
+
+    payment.save(update_fields=update_fields)
+    if request.user.is_authenticated and request.user.id == payment.user_id:
+        return redirect('accounts:profile')
+    return redirect('accounts:login')
 
 
 @login_required(login_url='accounts:login')
@@ -290,6 +506,13 @@ def admin_dashboard(request):
     total_sellers = User.objects.filter(is_seller=True).count()
     pending_seller_count = pending_sellers.count()
     reported_users_count = User.objects.filter(reports_received__is_resolved=False).distinct().count()
+
+    for seller in pending_sellers:
+        seller.has_completed_payment = seller.has_completed_seller_verification_payment()
+        seller.ready_for_approval = seller_is_ready_for_approval(seller)
+
+    for seller in approved_sellers:
+        seller.has_completed_payment = seller.has_completed_seller_verification_payment()
     
     context = {
         'pending_sellers': pending_sellers,
@@ -297,6 +520,8 @@ def admin_dashboard(request):
         'blocked_users': blocked_users,
         'pending_reports': pending_reports,
         'unverified_users': unverified_users,
+        'verification_fee': get_verification_fee(),
+        'seller_requires_verification_payment': seller_requires_verification_payment(),
         'stats': {
             'total_users': total_users,
             'total_sellers': total_sellers,
@@ -315,6 +540,12 @@ def admin_dashboard(request):
 def approve_seller(request, user_id):
     """Approve a seller application"""
     user = get_object_or_404(User, pk=user_id, is_seller=True)
+    if not seller_is_ready_for_approval(user):
+        if user.nin_verification_status != User.NINVerificationStatus.VERIFIED:
+            messages.error(request, f'{user.username} must complete NIN verification before approval.')
+        else:
+            messages.error(request, f'{user.username} must complete the seller verification payment before approval.')
+        return redirect('accounts:admin_dashboard')
     user.seller_approved = True
     user.save()
     messages.success(request, f'✅ {user.username} has been approved as a seller!')

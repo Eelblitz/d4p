@@ -5,284 +5,197 @@
 {% block extra_styles %}
 <style>
     .admin-dashboard {
-        background-color: white;
-        border-radius: 8px;
+        background: white;
+        border-radius: 12px;
         padding: 2rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
     }
-    
+
     .dashboard-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 1rem;
         margin-bottom: 2rem;
         padding-bottom: 1rem;
-        border-bottom: 2px solid #ecf0f1;
+        border-bottom: 1px solid #e7edf2;
     }
-    
+
     .dashboard-header h1 {
-        font-size: 2rem;
-        color: #2c3e50;
         margin: 0;
+        color: #22313f;
+        font-size: 2rem;
     }
-    
+
+    .dashboard-link {
+        color: #1d7ddc;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 1rem;
         margin-bottom: 2rem;
     }
-    
+
     .stat-card {
-        background: linear-gradient(135deg, #3498db, #2980b9);
+        padding: 1.25rem;
+        border-radius: 12px;
         color: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        background: linear-gradient(135deg, #1d7ddc, #0d5ea8);
     }
-    
-    .stat-number {
-        font-size: 2.5rem;
-        font-weight: bold;
-        margin-bottom: 0.5rem;
-    }
-    
-    .stat-label {
-        font-size: 0.95rem;
-        opacity: 0.9;
-    }
-    
+
     .stat-card.warning {
-        background: linear-gradient(135deg, #f39c12, #e67e22);
+        background: linear-gradient(135deg, #e29d16, #ba7800);
     }
-    
-    .stat-card.danger {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-    }
-    
+
     .stat-card.success {
-        background: linear-gradient(135deg, #27ae60, #229954);
+        background: linear-gradient(135deg, #239b56, #176b39);
     }
-    
+
+    .stat-card.danger {
+        background: linear-gradient(135deg, #d84b3c, #a83326);
+    }
+
+    .stat-number {
+        font-size: 2.2rem;
+        font-weight: 800;
+    }
+
     .section {
-        margin-bottom: 3rem;
+        margin-bottom: 2.5rem;
     }
-    
+
     .section-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 1.5rem;
+        font-size: 1.35rem;
+        color: #22313f;
+        margin-bottom: 1rem;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid #3498db;
+        border-bottom: 1px solid #e7edf2;
     }
-    
+
     .table-wrapper {
         overflow-x: auto;
     }
-    
+
     table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 1rem;
+        min-width: 860px;
     }
-    
+
     thead {
-        background-color: #34495e;
+        background: #22313f;
         color: white;
     }
-    
-    th {
-        padding: 1rem;
-        text-align: left;
-        font-weight: 600;
-    }
-    
+
+    th,
     td {
-        padding: 1rem;
-        border-bottom: 1px solid #ecf0f1;
+        padding: 0.9rem 0.85rem;
+        text-align: left;
+        border-bottom: 1px solid #edf2f7;
+        vertical-align: top;
     }
-    
+
     tbody tr:hover {
-        background-color: #f5f5f5;
+        background: #fafcfe;
     }
-    
+
     .badge {
         display: inline-block;
-        padding: 0.35rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
         white-space: nowrap;
     }
-    
+
     .badge-pending {
-        background-color: #fff3cd;
-        color: #856404;
+        background: #fff4dd;
+        color: #9f6a00;
     }
-    
-    .badge-approved {
-        background-color: #d5f4e6;
-        color: #27ae60;
-    }
-    
-    .badge-blocked {
-        background-color: #fadbd8;
-        color: #c0392b;
-    }
-    
+
+    .badge-approved,
     .badge-verified {
-        background-color: #d5f4e6;
-        color: #27ae60;
+        background: #dff5e7;
+        color: #20744a;
     }
-    
+
+    .badge-blocked,
     .badge-unverified {
-        background-color: #fadbd8;
-        color: #c0392b;
+        background: #fde7e3;
+        color: #b23b2a;
     }
-    
-    .badge-fraud {
-        background-color: #c0392b;
-        color: white;
-    }
-    
-    .badge-harassment {
-        background-color: #e74c3c;
-        color: white;
-    }
-    
-    .badge-spam {
-        background-color: #95a5a6;
-        color: white;
-    }
-    
-    .action-buttons {
-        display: flex;
-        gap: 0.5rem;
-    }
-    
-    .btn-small {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s;
-    }
-    
-    .btn-approve {
-        background-color: #27ae60;
-        color: white;
-    }
-    
-    .btn-approve:hover {
-        background-color: #229954;
-    }
-    
-    .btn-reject {
-        background-color: #e74c3c;
-        color: white;
-    }
-    
-    .btn-reject:hover {
-        background-color: #c0392b;
-    }
-    
-    .btn-block {
-        background-color: #e67e22;
-        color: white;
-    }
-    
-    .btn-block:hover {
-        background-color: #d35400;
-    }
-    
-    .btn-resolve {
-        background-color: #3498db;
-        color: white;
-    }
-    
-    .btn-resolve:hover {
-        background-color: #2980b9;
-    }
-    
-    .btn-verify {
-        background-color: #f39c12;
-        color: white;
-    }
-    
-    .btn-verify:hover {
-        background-color: #d68910;
-    }
-    
-    .btn-unverify {
-        background-color: #95a5a6;
-        color: white;
-    }
-    
-    .btn-unverify:hover {
-        background-color: #7f8c8d;
-    }
-    
-    .empty-state {
-        text-align: center;
-        padding: 2rem;
-        color: #7f8c8d;
-        background-color: #f5f5f5;
-        border-radius: 4px;
-    }
-    
-    .empty-state-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-    
-    .form-inline {
-        display: inline;
-    }
-    
+
     .user-info {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.65rem;
     }
-    
+
     .user-avatar {
-        width: 32px;
-        height: 32px;
-        background-color: #3498db;
-        color: white;
+        width: 34px;
+        height: 34px;
         border-radius: 50%;
+        background: #1d7ddc;
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-weight: bold;
-        font-size: 0.85rem;
+        font-weight: 700;
+        flex-shrink: 0;
     }
-    
+
     .trust-score {
-        font-weight: 600;
-        padding: 0.25rem 0.5rem;
-        border-radius: 3px;
+        font-weight: 700;
+        padding: 0.3rem 0.55rem;
+        border-radius: 6px;
     }
-    
+
     .trust-good {
-        background-color: #d5f4e6;
-        color: #27ae60;
+        background: #dff5e7;
+        color: #20744a;
     }
-    
+
     .trust-medium {
-        background-color: #fff3cd;
-        color: #856404;
+        background: #fff4dd;
+        color: #9f6a00;
     }
-    
+
     .trust-bad {
-        background-color: #fadbd8;
-        color: #c0392b;
+        background: #fde7e3;
+        color: #b23b2a;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-small {
+        border: none;
+        border-radius: 8px;
+        padding: 0.45rem 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        color: white;
+    }
+
+    .btn-approve { background: #239b56; }
+    .btn-reject { background: #d84b3c; }
+    .btn-verify { background: #ba7800; }
+    .btn-unverify { background: #7f8c8d; }
+    .btn-resolve { background: #1d7ddc; }
+
+    .empty-state {
+        background: #fafcfe;
+        border: 1px dashed #d4dce3;
+        border-radius: 12px;
+        padding: 1.25rem;
+        color: #607080;
     }
 </style>
 {% endblock %}
@@ -290,41 +203,39 @@
 {% block content %}
 <div class="admin-dashboard">
     <div class="dashboard-header">
-        <h1>📊 Admin Dashboard</h1>
-        <a href="{% url 'admin:index' %}" style="color: #3498db; text-decoration: none; font-weight: 600;">Django Admin →</a>
+        <h1>Admin Dashboard</h1>
+        <a href="{% url 'admin:index' %}" class="dashboard-link">Open Django Admin</a>
     </div>
-    
-    <!-- Statistics -->
+
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-number">{{ stats.total_users }}</div>
-            <div class="stat-label">Total Users</div>
+            <div>Total Users</div>
         </div>
         <div class="stat-card warning">
             <div class="stat-number">{{ stats.pending_seller_count }}</div>
-            <div class="stat-label">Pending Seller Approvals</div>
+            <div>Pending Seller Approvals</div>
         </div>
         <div class="stat-card success">
             <div class="stat-number">{{ stats.total_sellers }}</div>
-            <div class="stat-label">Approved Sellers</div>
+            <div>Sellers</div>
         </div>
         <div class="stat-card danger">
             <div class="stat-number">{{ stats.reported_users_count }}</div>
-            <div class="stat-label">Users with Reports</div>
+            <div>Users with Reports</div>
         </div>
         <div class="stat-card danger">
             <div class="stat-number">{{ stats.blocked_users_count }}</div>
-            <div class="stat-label">Blocked Users</div>
+            <div>Blocked Users</div>
         </div>
         <div class="stat-card warning">
             <div class="stat-number">{{ stats.unverified_users_count }}</div>
-            <div class="stat-label">Email Unverified</div>
+            <div>Email Unverified</div>
         </div>
     </div>
-    
-    <!-- Pending Seller Approvals -->
+
     <div class="section">
-        <h2 class="section-title">⏳ Pending Seller Approvals ({{ pending_sellers.count }})</h2>
+        <h2 class="section-title">Pending Seller Approvals ({{ pending_sellers.count }})</h2>
         {% if pending_sellers %}
             <div class="table-wrapper">
                 <table>
@@ -333,9 +244,12 @@
                             <th>Username</th>
                             <th>Email</th>
                             <th>Joined</th>
-                            <th>Email Status</th>
+                            <th>Email</th>
+                            <th>NIN</th>
+                            <th>Fee</th>
+                            <th>Readiness</th>
                             <th>Products</th>
-                            <th>Trust Score</th>
+                            <th>Trust</th>
                             <th>Verified</th>
                             <th>Actions</th>
                         </tr>
@@ -353,9 +267,38 @@
                                 <td>{{ seller.date_joined|date:"M d, Y" }}</td>
                                 <td>
                                     {% if seller.email_verified %}
-                                        <span class="badge badge-verified">✅ Verified</span>
+                                        <span class="badge badge-verified">Verified</span>
                                     {% else %}
-                                        <span class="badge badge-unverified">❌ Unverified</span>
+                                        <span class="badge badge-unverified">Unverified</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if seller.nin_verification_status == 'verified' %}
+                                        <span class="badge badge-verified">Verified</span>
+                                    {% elif seller.nin_verification_status == 'pending' %}
+                                        <span class="badge badge-pending">Pending</span>
+                                    {% elif seller.nin_verification_status == 'failed' %}
+                                        <span class="badge badge-blocked">Failed</span>
+                                    {% else %}
+                                        <span class="badge badge-unverified">Not submitted</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if seller_requires_verification_payment %}
+                                        {% if seller.has_completed_payment %}
+                                            <span class="badge badge-approved">Paid</span>
+                                        {% else %}
+                                            <span class="badge badge-pending">NGN {{ verification_fee }} outstanding</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge badge-approved">Not required</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if seller.ready_for_approval %}
+                                        <span class="badge badge-approved">Ready</span>
+                                    {% else %}
+                                        <span class="badge badge-pending">Pending checks</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ seller.product_count }}</td>
@@ -370,28 +313,28 @@
                                 </td>
                                 <td>
                                     {% if seller.is_verified %}
-                                        <span class="badge badge-verified">✨ Verified</span>
+                                        <span class="badge badge-verified">Verified Seller</span>
                                     {% else %}
-                                        <span class="badge badge-unverified">-</span>
+                                        <span class="badge badge-pending">Not marked</span>
                                     {% endif %}
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <form method="post" action="{% url 'accounts:approve_seller' seller.id %}" class="form-inline">
+                                        <form method="post" action="{% url 'accounts:approve_seller' seller.id %}">
                                             {% csrf_token %}
-                                            <button type="submit" class="btn-small btn-approve">✅ Approve</button>
+                                            <button type="submit" class="btn-small btn-approve">Approve</button>
                                         </form>
-                                        <form method="post" action="{% url 'accounts:toggle_seller_verified' seller.id %}" class="form-inline">
+                                        <form method="post" action="{% url 'accounts:toggle_seller_verified' seller.id %}">
                                             {% csrf_token %}
                                             {% if seller.is_verified %}
-                                                <button type="submit" class="btn-small btn-unverify">✨ Unverify</button>
+                                                <button type="submit" class="btn-small btn-unverify">Unverify</button>
                                             {% else %}
-                                                <button type="submit" class="btn-small btn-verify">✨ Verify</button>
+                                                <button type="submit" class="btn-small btn-verify">Mark Verified</button>
                                             {% endif %}
                                         </form>
-                                        <form method="post" action="{% url 'accounts:reject_seller' seller.id %}" class="form-inline" onsubmit="return confirm('Reject this seller application?');">
+                                        <form method="post" action="{% url 'accounts:reject_seller' seller.id %}" onsubmit="return confirm('Reject this seller application?');">
                                             {% csrf_token %}
-                                            <button type="submit" class="btn-small btn-reject">❌ Reject</button>
+                                            <button type="submit" class="btn-small btn-reject">Reject</button>
                                         </form>
                                     </div>
                                 </td>
@@ -401,16 +344,12 @@
                 </table>
             </div>
         {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">✅</div>
-                <p>No pending seller approvals. All applications have been reviewed!</p>
-            </div>
+            <div class="empty-state">No pending seller approvals right now.</div>
         {% endif %}
     </div>
 
-    <!-- Approved Sellers -->
     <div class="section">
-        <h2 class="section-title">✅ Approved Sellers ({{ approved_sellers.count }})</h2>
+        <h2 class="section-title">Approved Sellers ({{ approved_sellers.count }})</h2>
         {% if approved_sellers %}
             <div class="table-wrapper">
                 <table>
@@ -421,6 +360,8 @@
                             <th>Joined</th>
                             <th>Products</th>
                             <th>Ratings</th>
+                            <th>NIN</th>
+                            <th>Fee</th>
                             <th>Verified</th>
                             <th>Actions</th>
                         </tr>
@@ -437,22 +378,40 @@
                                 <td>{{ seller.email }}</td>
                                 <td>{{ seller.date_joined|date:"M d, Y" }}</td>
                                 <td>{{ seller.product_count }}</td>
-                                <td>{{ seller.avg_rating }}</td>
+                                <td>{{ seller.avg_rating|default:"-" }}</td>
+                                <td>
+                                    {% if seller.nin_verification_status == 'verified' %}
+                                        <span class="badge badge-verified">Verified</span>
+                                    {% else %}
+                                        <span class="badge badge-pending">{{ seller.get_nin_verification_status_display }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if seller_requires_verification_payment %}
+                                        {% if seller.has_completed_payment %}
+                                            <span class="badge badge-approved">Paid</span>
+                                        {% else %}
+                                            <span class="badge badge-pending">Outstanding</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge badge-approved">Not required</span>
+                                    {% endif %}
+                                </td>
                                 <td>
                                     {% if seller.is_verified %}
-                                        <span class="badge badge-verified">✨ Verified</span>
+                                        <span class="badge badge-verified">Verified Seller</span>
                                     {% else %}
-                                        <span class="badge badge-unverified">-</span>
+                                        <span class="badge badge-pending">Not marked</span>
                                     {% endif %}
                                 </td>
                                 <td>
                                     <div class="action-buttons">
-                                        <form method="post" action="{% url 'accounts:toggle_seller_verified' seller.id %}" class="form-inline">
+                                        <form method="post" action="{% url 'accounts:toggle_seller_verified' seller.id %}">
                                             {% csrf_token %}
                                             {% if seller.is_verified %}
-                                                <button type="submit" class="btn-small btn-unverify">✨ Unverify</button>
+                                                <button type="submit" class="btn-small btn-unverify">Unverify</button>
                                             {% else %}
-                                                <button type="submit" class="btn-small btn-verify">✨ Verify</button>
+                                                <button type="submit" class="btn-small btn-verify">Mark Verified</button>
                                             {% endif %}
                                         </form>
                                     </div>
@@ -463,16 +422,12 @@
                 </table>
             </div>
         {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">👥</div>
-                <p>No approved sellers yet!</p>
-            </div>
+            <div class="empty-state">No approved sellers yet.</div>
         {% endif %}
     </div>
-    
-    <!-- Pending Reports -->
+
     <div class="section">
-        <h2 class="section-title">🚨 Pending User Reports ({{ pending_reports.count }})</h2>
+        <h2 class="section-title">Pending User Reports ({{ pending_reports.count }})</h2>
         {% if pending_reports %}
             <div class="table-wrapper">
                 <table>
@@ -489,37 +444,15 @@
                     <tbody>
                         {% for report in pending_reports %}
                             <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <div class="user-avatar">{{ report.reporter.username|first|upper }}</div>
-                                        {{ report.reporter.username }}
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="user-info">
-                                        <div class="user-avatar">{{ report.reported_user.username|first|upper }}</div>
-                                        {{ report.reported_user.username }}
-                                    </div>
-                                </td>
-                                <td>
-                                    {% if report.reason == 'fraud' %}
-                                        <span class="badge badge-fraud">🚨 Fraud</span>
-                                    {% elif report.reason == 'harassment' %}
-                                        <span class="badge badge-harassment">⚠️ Harassment</span>
-                                    {% elif report.reason == 'spam' %}
-                                        <span class="badge badge-spam">📧 Spam</span>
-                                    {% else %}
-                                        <span class="badge">{{ report.get_reason_display }}</span>
-                                    {% endif %}
-                                </td>
+                                <td>{{ report.reporter.username }}</td>
+                                <td>{{ report.reported_user.username }}</td>
+                                <td>{{ report.get_reason_display }}</td>
                                 <td>{{ report.created_at|date:"M d, Y" }}</td>
+                                <td>{{ report.description|truncatewords:10 }}</td>
                                 <td>
-                                    <small style="color: #666;">{{ report.description|truncatewords:10 }}</small>
-                                </td>
-                                <td>
-                                    <form method="post" action="{% url 'accounts:resolve_report' report.id %}" class="form-inline">
+                                    <form method="post" action="{% url 'accounts:resolve_report' report.id %}">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn-small btn-resolve">✅ Resolve</button>
+                                        <button type="submit" class="btn-small btn-resolve">Resolve</button>
                                     </form>
                                 </td>
                             </tr>
@@ -528,16 +461,12 @@
                 </table>
             </div>
         {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">✅</div>
-                <p>No pending reports. Great community work!</p>
-            </div>
+            <div class="empty-state">No pending reports.</div>
         {% endif %}
     </div>
-    
-    <!-- Blocked Users -->
+
     <div class="section">
-        <h2 class="section-title">🚫 Blocked Users ({{ stats.blocked_users_count }})</h2>
+        <h2 class="section-title">Blocked Users ({{ stats.blocked_users_count }})</h2>
         {% if blocked_users %}
             <div class="table-wrapper">
                 <table>
@@ -545,43 +474,20 @@
                         <tr>
                             <th>Username</th>
                             <th>Email</th>
-                            <th>Reason Blocked</th>
-                            <th>Trust Score</th>
+                            <th>Trust</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for user in blocked_users %}
                             <tr>
-                                <td>
-                                    <div class="user-info">
-                                        <div class="user-avatar">{{ user.username|first|upper }}</div>
-                                        {{ user.username }}
-                                    </div>
-                                </td>
+                                <td>{{ user.username }}</td>
                                 <td>{{ user.email }}</td>
+                                <td>{{ user.trust_score }}</td>
                                 <td>
-                                    {% with report_count=user.reports_received.count %}
-                                        {% if report_count > 0 %}
-                                            <small>{{ report_count }} report(s)</small>
-                                        {% else %}
-                                            <small>Admin action</small>
-                                        {% endif %}
-                                    {% endwith %}
-                                </td>
-                                <td>
-                                    {% if user.trust_score >= 80 %}
-                                        <span class="trust-score trust-good">{{ user.trust_score }}</span>
-                                    {% elif user.trust_score >= 60 %}
-                                        <span class="trust-score trust-medium">{{ user.trust_score }}</span>
-                                    {% else %}
-                                        <span class="trust-score trust-bad">{{ user.trust_score }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <form method="post" action="{% url 'accounts:unblock_user_admin' user.id %}" class="form-inline" onsubmit="return confirm('Unblock this user?');">
+                                    <form method="post" action="{% url 'accounts:unblock_user_admin' user.id %}">
                                         {% csrf_token %}
-                                        <button type="submit" class="btn-small btn-approve">✅ Unblock</button>
+                                        <button type="submit" class="btn-small btn-approve">Unblock</button>
                                     </form>
                                 </td>
                             </tr>
@@ -590,16 +496,12 @@
                 </table>
             </div>
         {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">🟢</div>
-                <p>No blocked users currently.</p>
-            </div>
+            <div class="empty-state">No blocked users currently.</div>
         {% endif %}
     </div>
-    
-    <!-- Unverified Users -->
+
     <div class="section">
-        <h2 class="section-title">📧 Email Unverified Users ({{ stats.unverified_users_count }})</h2>
+        <h2 class="section-title">Email Unverified Users ({{ stats.unverified_users_count }})</h2>
         {% if unverified_users %}
             <div class="table-wrapper">
                 <table>
@@ -619,9 +521,9 @@
                                 <td>{{ user.date_joined|date:"M d, Y" }}</td>
                                 <td>
                                     {% if user.is_seller %}
-                                        <span class="badge badge-pending">🏪 Seller (Pending)</span>
+                                        <span class="badge badge-pending">Seller</span>
                                     {% else %}
-                                        <span class="badge">👤 Buyer</span>
+                                        <span class="badge badge-approved">Buyer</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -630,12 +532,8 @@
                 </table>
             </div>
         {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">✅</div>
-                <p>All users have verified their emails!</p>
-            </div>
+            <div class="empty-state">All users have verified their emails.</div>
         {% endif %}
     </div>
 </div>
-
 {% endblock %}

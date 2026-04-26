@@ -31,5 +31,6 @@ urlpatterns = [
     # Product promotion page
     path('promote/', views.promote_product, name='promote_product'),
     path('promote/checkout/', views.promotion_checkout, name='promotion_checkout'),
+    path('promote/checkout/callback/', views.promotion_payment_callback, name='promotion_payment_callback'),
     path('promote/confirmation/<int:transaction_id>/', views.promotion_confirmation, name='promotion_confirmation'),
 ]

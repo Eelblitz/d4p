@@ -5,86 +5,95 @@
 {% block extra_styles %}
 <style>
     .checkout-container {
-        max-width: 720px;
+        max-width: 760px;
         margin: 2rem auto;
-        background-color: white;
+        background: white;
         padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
     }
+
     .checkout-container h1 {
-        margin-bottom: 1rem;
-        color: #2c3e50;
+        margin: 0 0 1rem;
+        color: #22313f;
     }
+
     .alert {
         padding: 1rem 1.2rem;
-        border-radius: 8px;
-        margin-bottom: 1.5rem;
-        border: 1px solid #f39c12;
-        background: #fef5e7;
-        color: #9a5c0f;
-    }
-    .plan-summary, .product-selection, .checkout-actions {
-        margin-top: 1.5rem;
-    }
-    .plan-card {
-        padding: 1.3rem;
         border-radius: 10px;
-        border: 1px solid #e0e4e8;
-        background-color: #f7fbff;
+        margin-bottom: 1.25rem;
+        background: #fff4dd;
+        border: 1px solid #efcf8b;
+        color: #8d6200;
     }
+
+    .plan-card,
+    .payment-card,
+    .product-item {
+        border: 1px solid #e3eaf1;
+        border-radius: 12px;
+        padding: 1rem 1.15rem;
+        background: #fafcfe;
+    }
+
     .plan-card h2 {
-        margin: 0;
-        font-size: 1.4rem;
-        color: #2c3e50;
+        margin: 0 0 0.35rem;
+        color: #22313f;
     }
-    .plan-card p {
-        margin: 0.4rem 0;
-        color: #566270;
-    }
+
     .plan-price {
-        margin-top: 0.75rem;
         font-size: 2rem;
-        color: #3498db;
-        font-weight: 700;
+        font-weight: 800;
+        color: #1d7ddc;
+        margin: 0.7rem 0 0.2rem;
     }
+
+    .payment-card {
+        margin-top: 1rem;
+    }
+
+    .payment-card ul {
+        margin: 0.6rem 0 0;
+        padding-left: 1.2rem;
+        color: #536678;
+    }
+
     .product-list {
         display: grid;
         gap: 1rem;
         margin-top: 1rem;
     }
+
     .product-item {
-        padding: 1rem;
-        border-radius: 8px;
-        border: 1px solid #e0e4e8;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .product-item label {
-        width: 100%;
+        display: block;
         cursor: pointer;
     }
+
     .product-item input {
         margin-right: 0.75rem;
     }
+
+    .checkout-actions {
+        margin-top: 1.5rem;
+    }
+
     .btn-primary {
-        padding: 0.95rem 1.5rem;
-        background-color: #3498db;
-        color: #fff;
+        width: 100%;
+        padding: 0.95rem 1.2rem;
         border: none;
-        border-radius: 8px;
-        font-weight: 700;
+        border-radius: 10px;
+        background: #1d7ddc;
+        color: white;
+        font-weight: 800;
         cursor: pointer;
-        transition: background 0.3s;
     }
-    .btn-primary:hover {
-        background-color: #2980b9;
-    }
+
     .btn-link {
-        color: #3498db;
+        display: inline-block;
+        margin-top: 1rem;
+        color: #1d7ddc;
+        font-weight: 700;
         text-decoration: none;
-        font-weight: 600;
     }
 </style>
 {% endblock %}
@@ -100,43 +109,49 @@
     {% endif %}
 
     {% if selected_plan %}
-        <div class="plan-summary">
-            <div class="plan-card">
-                <h2>{{ selected_plan.name }}</h2>
-                <p>{{ selected_plan.description }}</p>
-                <p class="plan-price">₦{{ selected_plan.price }} / {{ selected_plan.duration_days }} days</p>
-                <p>{{ selected_plan.features_list|length }} feature{{ selected_plan.features_list|length|pluralize }}</p>
-            </div>
+        <div class="plan-card">
+            <h2>{{ selected_plan.name }}</h2>
+            <p>{{ selected_plan.description }}</p>
+            <p class="plan-price">NGN {{ selected_plan.price }}</p>
+            <p>{{ selected_plan.duration_days }} day{{ selected_plan.duration_days|pluralize }} of boosted visibility.</p>
+        </div>
+
+        <div class="payment-card">
+            <strong>Supported payment methods</strong>
+            <ul>
+                <li>Bank transfer through Paystack</li>
+                <li>USSD through supported Nigerian banks</li>
+            </ul>
         </div>
 
         {% if products.exists %}
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="plan_id" value="{{ selected_plan.id }}">
-                <div class="product-selection">
-                    <h3>Select a product to promote</h3>
-                    <div class="product-list">
-                        {% for product in products %}
+
+                <div class="product-list">
+                    {% for product in products %}
                         <label class="product-item">
                             <input type="radio" name="product_id" value="{{ product.id }}" {% if forloop.first %}checked{% endif %}>
-                            <span>{{ product.name }} ({{ product.category }})</span>
+                            <strong>{{ product.name }}</strong>
+                            <div>{{ product.category|title }}</div>
                         </label>
-                        {% endfor %}
-                    </div>
+                    {% endfor %}
                 </div>
+
                 <div class="checkout-actions">
-                    <button type="submit" class="btn-primary">Complete Promotion Purchase</button>
+                    <button type="submit" class="btn-primary">Continue to Secure Payment</button>
                 </div>
             </form>
         {% else %}
             <div class="alert">
                 You do not have any active products to promote yet. Add a product first and return to this page.
             </div>
-            <a href="{% url 'products:list' %}" class="btn-link">Browse products</a>
+            <a href="{% url 'products:add_product' %}" class="btn-link">Add a product</a>
         {% endif %}
     {% else %}
         <div class="alert">
-            Please choose a promotion plan from the promotion page first.
+            Choose a promotion plan first so we know which checkout to prepare.
         </div>
         <a href="{% url 'products:promote_product' %}" class="btn-link">View promotion plans</a>
     {% endif %}

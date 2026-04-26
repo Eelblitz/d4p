@@ -151,6 +151,7 @@ class PromotionPlan(models.Model):
 class PromotionTransaction(models.Model):
     STATUS_CHOICES = [
         ('pending', 'Pending'),
+        ('processing', 'Processing'),
         ('completed', 'Completed'),
         ('failed', 'Failed'),
     ]
@@ -161,6 +162,11 @@ class PromotionTransaction(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     payment_reference = models.CharField(max_length=255, blank=True, null=True)
+    access_code = models.CharField(max_length=255, blank=True)
+    authorization_url = models.URLField(blank=True)
+    channels = models.JSONField(default=list, blank=True)
+    provider = models.CharField(max_length=30, default='paystack')
+    paid_at = models.DateTimeField(null=True, blank=True)
     starts_at = models.DateTimeField(null=True, blank=True)
     ends_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

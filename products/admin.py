@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, ProductImage, ProductRating, SellerRating, ProductReport, SellerReport, PromotionPlan, PromotionTransaction, UserPromotionStatus, MonetizationSettings, ModerationAction, UserInteractionLog, AdminAuditLog
+from .models import Product, ProductEngagement, ProductImage, ProductRating, SellerRating, ProductReport, SellerReport, PromotionPlan, PromotionTransaction, UserPromotionStatus, MonetizationSettings, ModerationAction, UserInteractionLog, AdminAuditLog
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
@@ -87,14 +87,14 @@ class PromotionPlanAdmin(admin.ModelAdmin):
 
 @admin.register(PromotionTransaction)
 class PromotionTransactionAdmin(admin.ModelAdmin):
-    list_display = ['user', 'product', 'plan', 'amount', 'status', 'created_at']
+    list_display = ['user', 'product', 'plan', 'amount', 'status', 'provider', 'paid_at', 'created_at']
     list_filter = ['status', 'created_at', 'plan']
     search_fields = ['user__username', 'product__name', 'payment_reference']
     readonly_fields = ['created_at', 'updated_at']
     
     fieldsets = (
         ('Transaction Details', {
-            'fields': ('user', 'product', 'plan', 'amount', 'status', 'payment_reference')
+            'fields': ('user', 'product', 'plan', 'amount', 'status', 'payment_reference', 'provider', 'channels', 'access_code', 'authorization_url', 'paid_at')
         }),
         ('Promotion Timing', {
             'fields': ('starts_at', 'ends_at')
@@ -104,6 +104,14 @@ class PromotionTransactionAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
+@admin.register(ProductEngagement)
+class ProductEngagementAdmin(admin.ModelAdmin):
+    list_display = ['product', 'seller', 'viewer', 'event_type', 'source', 'created_at']
+    list_filter = ['event_type', 'source', 'created_at']
+    search_fields = ['product__name', 'seller__username', 'viewer__username', 'session_key']
+    readonly_fields = ['created_at']
 
 
 # ==================== ADMIN CONTROL INTERFACES ====================

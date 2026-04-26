@@ -224,6 +224,18 @@
                 </div>
             {% endif %}
         </div>
+
+        <div class="form-group">
+            {{ form.phone_number.label_tag }}
+            {{ form.phone_number }}
+            {% if form.phone_number.errors %}
+                <div class="errorlist">
+                    {% for error in form.phone_number.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
         
         <div class="form-group">
             {{ form.password1.label_tag }}

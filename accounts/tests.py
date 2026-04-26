@@ -1,9 +1,12 @@
+from unittest.mock import patch
+
+from django.contrib.auth import get_user_model
+from django.core import mail
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from django.core import mail
-from django.contrib.auth import get_user_model
 
-from accounts.models import UserReport
+from accounts.models import SellerVerificationPayment, UserReport
+from products.models import MonetizationSettings
 
 User = get_user_model()
 
@@ -123,6 +126,90 @@ class AccountViewTests(TestCase):
         self.assertContains(response, 'Verification email sent')
 
 
+class SellerVerificationFlowTests(TestCase):
+    def setUp(self):
+        self.seller = User.objects.create_user(
+            username='seller',
+            email='seller@example.com',
+            password='testpass123',
+            is_seller=True,
+        )
+        self.client.force_login(self.seller)
+
+    @patch('accounts.views.PremblyClient.verify_nin_basic')
+    def test_verify_nin_marks_user_verified(self, mock_verify_nin_basic):
+        mock_verify_nin_basic.return_value = {
+            'status': True,
+            'verification': {'status': 'VERIFIED', 'reference': 'NIN-REF-123'},
+            'nin_data': {
+                'firstname': 'Ada',
+                'middlename': 'N',
+                'surname': 'Okafor',
+            },
+        }
+
+        response = self.client.post(
+            reverse('accounts:verify_nin'),
+            {'nin_number': '12345678901'},
+            follow=True,
+        )
+
+        self.seller.refresh_from_db()
+        self.assertEqual(self.seller.nin_verification_status, User.NINVerificationStatus.VERIFIED)
+        self.assertEqual(self.seller.nin_last4, '8901')
+        self.assertEqual(self.seller.nin_verification_reference, 'NIN-REF-123')
+        self.assertEqual(self.seller.nin_full_name, 'Ada N Okafor')
+        self.assertNotEqual(self.seller.nin_hash, '')
+        self.assertEqual(response.status_code, 200)
+
+    @patch('accounts.views.PaystackClient.initialize_transaction')
+    def test_start_seller_verification_payment_redirects_to_paystack(self, mock_initialize_transaction):
+        MonetizationSettings.objects.create(
+            platform_commission_percentage='5.00',
+            seller_payout_threshold='1000.00',
+            promotion_enabled=True,
+            verification_fee='2500.00',
+            marketplace_tax_percentage='0.00',
+        )
+        mock_initialize_transaction.return_value = {
+            'access_code': 'access-123',
+            'authorization_url': 'https://checkout.paystack.com/pay/test',
+        }
+
+        response = self.client.post(reverse('accounts:start_seller_verification_payment'))
+
+        payment = SellerVerificationPayment.objects.get(user=self.seller)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.url, 'https://checkout.paystack.com/pay/test')
+        self.assertEqual(payment.status, 'processing')
+        self.assertEqual(payment.channels, ['ussd', 'bank_transfer'])
+
+    @patch('accounts.views.PaystackClient.verify_transaction')
+    def test_seller_payment_callback_marks_payment_completed(self, mock_verify_transaction):
+        payment = SellerVerificationPayment.objects.create(
+            user=self.seller,
+            amount='2500.00',
+            status='processing',
+            payment_reference='SVP-REF-123',
+            channels=['ussd', 'bank_transfer'],
+        )
+        mock_verify_transaction.return_value = {
+            'status': 'success',
+            'gateway_response': 'Approved',
+        }
+
+        response = self.client.get(
+            reverse('accounts:seller_verification_payment_callback'),
+            {'reference': payment.payment_reference},
+            follow=True,
+        )
+
+        payment.refresh_from_db()
+        self.assertEqual(payment.status, 'completed')
+        self.assertIsNotNone(payment.paid_at)
+        self.assertEqual(response.status_code, 200)
+
+
 class AdminControlTests(TestCase):
     def setUp(self):
         self.admin_user = User.objects.create_superuser(
@@ -178,8 +265,49 @@ class AdminControlTests(TestCase):
         self.assertEqual(response.context['pending_sellers'].count(), 1)
         self.assertEqual(response.context['stats']['total_users'], 6)
 
-    def test_approve_seller_sets_seller_approved(self):
+    def test_approve_seller_requires_verified_nin(self):
         response = self.client.post(reverse('accounts:approve_seller', args=[self.seller_applicant.id]), follow=True)
+        self.seller_applicant.refresh_from_db()
+        self.assertFalse(self.seller_applicant.seller_approved)
+        self.assertEqual(response.status_code, 200)
+
+    def test_approve_seller_requires_payment_when_fee_enabled(self):
+        MonetizationSettings.objects.create(
+            platform_commission_percentage='5.00',
+            seller_payout_threshold='1000.00',
+            promotion_enabled=True,
+            verification_fee='2500.00',
+            marketplace_tax_percentage='0.00',
+        )
+        self.seller_applicant.nin_verification_status = User.NINVerificationStatus.VERIFIED
+        self.seller_applicant.save(update_fields=['nin_verification_status'])
+
+        response = self.client.post(reverse('accounts:approve_seller', args=[self.seller_applicant.id]), follow=True)
+
+        self.seller_applicant.refresh_from_db()
+        self.assertFalse(self.seller_applicant.seller_approved)
+        self.assertEqual(response.status_code, 200)
+
+    def test_approve_seller_succeeds_after_nin_and_payment(self):
+        MonetizationSettings.objects.create(
+            platform_commission_percentage='5.00',
+            seller_payout_threshold='1000.00',
+            promotion_enabled=True,
+            verification_fee='2500.00',
+            marketplace_tax_percentage='0.00',
+        )
+        self.seller_applicant.nin_verification_status = User.NINVerificationStatus.VERIFIED
+        self.seller_applicant.save(update_fields=['nin_verification_status'])
+        SellerVerificationPayment.objects.create(
+            user=self.seller_applicant,
+            amount='2500.00',
+            status='completed',
+            payment_reference='SVP-READY-123',
+            channels=['ussd', 'bank_transfer'],
+        )
+
+        response = self.client.post(reverse('accounts:approve_seller', args=[self.seller_applicant.id]), follow=True)
+
         self.seller_applicant.refresh_from_db()
         self.assertTrue(self.seller_applicant.seller_approved)
         self.assertEqual(response.status_code, 200)

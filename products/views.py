@@ -6,9 +6,11 @@ from django.contrib import messages
 from django.db.models import Q, Avg, Count, Case, When, Value, IntegerField, OuterRef, Subquery, Exists, FloatField
 from django.db.models.functions import Coalesce
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
 from accounts.models import User
+from integrations.paystack import PaystackClient, PaystackError
 from .models import (
     Product,
     ProductRating,
@@ -98,6 +100,17 @@ def _log_product_engagement(request, product, event_type, source=''):
         source=source[:50],
     )
 
+
+def _parse_plan_features(plan):
+    try:
+        return json.loads(plan.features)
+    except (json.JSONDecodeError, TypeError):
+        return []
+
+
+def _build_product_callback_url(request, route_name, *args):
+    return request.build_absolute_uri(reverse(route_name, args=args))
+
 def homepage(request):
     """Display the DM4PRICE landing page"""
     featured_products = _product_queryset_with_market_signals(
@@ -122,15 +135,11 @@ def trust_safety(request):
 
 def promote_product(request):
     """Show product promotion plans and information"""
-    import json
     plans = PromotionPlan.objects.filter(is_active=True).order_by('display_order')
     
     # Parse features JSON for each plan
     for plan in plans:
-        try:
-            plan.features_list = json.loads(plan.features)
-        except (json.JSONDecodeError, TypeError):
-            plan.features_list = []
+        plan.features_list = _parse_plan_features(plan)
     
     context = {
         'plans': plans,
@@ -596,6 +605,7 @@ def promotion_checkout(request):
     plan_id = request.GET.get('plan') or request.POST.get('plan_id')
     if plan_id:
         selected_plan = get_object_or_404(PromotionPlan, pk=plan_id, is_active=True)
+        selected_plan.features_list = _parse_plan_features(selected_plan)
 
     products = Product.objects.filter(seller=request.user, is_active=True)
     monetization = MonetizationSettings.objects.first()
@@ -610,21 +620,45 @@ def promotion_checkout(request):
             messages.error(request, 'Promotions are currently disabled by the platform.')
             return redirect('products:promote_product')
 
-        now = timezone.now()
         transaction = PromotionTransaction.objects.create(
             user=request.user,
             product=product,
             plan=plan,
             amount=plan.price,
-            status='completed',
+            status='pending',
             payment_reference=f'PMT-{timezone.now().strftime("%Y%m%d%H%M%S")}-{product.id}',
-            starts_at=now,
-            ends_at=now + timedelta(days=plan.duration_days),
-            notes='Auto-completed promotion purchase',
+            channels=['ussd', 'bank_transfer'],
+            notes='Promotion payment initialized',
         )
 
-        messages.success(request, f'Your promotion purchase for {product.name} was successful.')
-        return redirect('products:promotion_confirmation', transaction_id=transaction.id)
+        client = PaystackClient()
+        callback_url = _build_product_callback_url(request, 'products:promotion_payment_callback')
+        try:
+            paystack_data = client.initialize_transaction(
+                email=request.user.email,
+                amount_kobo=int(plan.price * 100),
+                reference=transaction.payment_reference,
+                callback_url=callback_url,
+                channels=['ussd', 'bank_transfer'],
+                metadata={
+                    'purpose': 'promotion_payment',
+                    'transaction_id': transaction.id,
+                    'product_id': product.id,
+                    'plan_id': plan.id,
+                },
+            )
+        except PaystackError as exc:
+            transaction.status = 'failed'
+            transaction.notes = str(exc)
+            transaction.save(update_fields=['status', 'notes', 'updated_at'])
+            messages.error(request, str(exc))
+            return redirect('products:promotion_checkout')
+
+        transaction.access_code = paystack_data.get('access_code', '')
+        transaction.authorization_url = paystack_data.get('authorization_url', '')
+        transaction.status = 'processing'
+        transaction.save(update_fields=['access_code', 'authorization_url', 'status', 'updated_at'])
+        return redirect(transaction.authorization_url)
 
     context = {
         'products': products,
@@ -633,6 +667,55 @@ def promotion_checkout(request):
         'monetization': monetization,
     }
     return render(request, 'promotion_checkout.html', context)
+
+
+@require_http_methods(["GET"])
+def promotion_payment_callback(request):
+    """Verify Paystack callback before activating a promotion."""
+    reference = request.GET.get('reference', '').strip()
+    if not reference:
+        messages.error(request, 'Missing payment reference.')
+        return redirect('products:promote_product')
+
+    transaction = get_object_or_404(
+        PromotionTransaction.objects.select_related('plan', 'product'),
+        payment_reference=reference,
+    )
+    client = PaystackClient()
+    try:
+        verification = client.verify_transaction(reference)
+    except PaystackError as exc:
+        transaction.status = 'failed'
+        transaction.notes = str(exc)
+        transaction.save(update_fields=['status', 'notes', 'updated_at'])
+        messages.error(request, str(exc))
+        return redirect('products:promotion_checkout')
+
+    payment_status = verification.get('status')
+    transaction.notes = verification.get('gateway_response', transaction.notes)
+    if payment_status == 'success':
+        transaction.status = 'completed'
+        transaction.paid_at = timezone.now()
+        transaction.starts_at = timezone.now()
+        transaction.ends_at = transaction.starts_at + timedelta(days=transaction.plan.duration_days)
+        transaction.save(update_fields=['status', 'paid_at', 'starts_at', 'ends_at', 'notes', 'updated_at'])
+        messages.success(request, f'Your promotion purchase for {transaction.product.name} was successful.')
+        if request.user.is_authenticated and request.user.id == transaction.user_id:
+            return redirect('products:promotion_confirmation', transaction_id=transaction.id)
+        return redirect('accounts:login')
+
+    if payment_status in ['pending', 'processing', 'ongoing']:
+        transaction.status = 'processing'
+        transaction.save(update_fields=['status', 'notes', 'updated_at'])
+        messages.info(request, 'Your promotion payment is still processing. Please check again shortly.')
+    else:
+        transaction.status = 'failed'
+        transaction.save(update_fields=['status', 'notes', 'updated_at'])
+        messages.error(request, 'Promotion payment was not successful.')
+
+    if request.user.is_authenticated and request.user.id == transaction.user_id:
+        return redirect('products:promotion_checkout')
+    return redirect('accounts:login')
 
 
 @login_required(login_url='accounts:login')

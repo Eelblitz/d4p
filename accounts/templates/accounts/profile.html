@@ -5,202 +5,225 @@
 {% block extra_styles %}
 <style>
     .profile-container {
-        max-width: 600px;
+        max-width: 760px;
         margin: 2rem auto;
         background-color: white;
         padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
     }
-    
+
     .profile-header {
         display: flex;
         align-items: center;
+        gap: 1.5rem;
         margin-bottom: 2rem;
-        padding-bottom: 2rem;
-        border-bottom: 2px solid #ecf0f1;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #ecf0f1;
     }
-    
+
     .profile-avatar {
-        width: 80px;
-        height: 80px;
-        background: linear-gradient(135deg, #3498db, #2980b9);
+        width: 84px;
+        height: 84px;
         border-radius: 50%;
+        background: linear-gradient(135deg, #1d7ddc, #0d5ea8);
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: white;
         font-size: 2rem;
-        font-weight: bold;
-        margin-right: 2rem;
+        font-weight: 700;
+        flex-shrink: 0;
     }
-    
+
     .profile-info h1 {
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-        font-size: 1.8rem;
+        margin: 0 0 0.35rem;
+        color: #22313f;
+        font-size: 1.85rem;
     }
-    
+
     .profile-info p {
-        color: #7f8c8d;
-        margin: 0.5rem 0;
+        margin: 0.2rem 0;
+        color: #6b7b8c;
     }
-    
+
     .profile-section {
         margin-bottom: 2rem;
     }
-    
+
     .section-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: #2c3e50;
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #22313f;
         margin-bottom: 1rem;
         padding-bottom: 0.5rem;
         border-bottom: 1px solid #ecf0f1;
     }
-    
+
     .info-row {
         display: flex;
         justify-content: space-between;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid #f5f5f5;
-    }
-    
-    .info-label {
-        color: #7f8c8d;
-        font-weight: 500;
-    }
-    
-    .info-value {
-        color: #2c3e50;
-        font-weight: 600;
-    }
-    
-    .status-badge {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-    
-    .status-active {
-        background-color: #d5f4e6;
-        color: #27ae60;
-    }
-    
-    .status-pending {
-        background-color: #fef5e7;
-        color: #f39c12;
-    }
-    
-    .status-inactive {
-        background-color: #fadbd8;
-        color: #c0392b;
-    }
-    
-    .action-buttons {
-        display: flex;
         gap: 1rem;
-        margin-top: 2rem;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid #f2f4f5;
     }
-    
-    .btn {
-        flex: 1;
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
+
+    .info-label {
+        color: #708090;
         font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        text-align: center;
-        transition: all 0.3s;
     }
-    
-    .btn-primary {
-        background-color: #3498db;
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background-color: #2980b9;
-    }
-    
-    .btn-secondary {
-        background-color: #95a5a6;
-        color: white;
-    }
-    
-    .btn-secondary:hover {
-        background-color: #7f8c8d;
-    }
-    
-    .btn-danger {
-        background-color: #e74c3c;
-        color: white;
-    }
-    
-    .btn-danger:hover {
-        background-color: #c0392b;
-    }
-    
-    .seller-note {
-        background-color: #ecf7fc;
-        border-left: 4px solid #3498db;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-    }
-    
-    .seller-note p {
-        margin: 0;
-        color: #2c3e50;
-    }
-    
-    .trust-badge {
-        display: inline-block;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
+
+    .info-value {
+        color: #22313f;
         font-weight: 600;
-        font-size: 0.9rem;
+        text-align: right;
     }
-    
-    .trust-verified {
-        background-color: #d5f4e6;
-        color: #27ae60;
+
+    .status-badge,
+    .trust-badge,
+    .pill {
+        display: inline-block;
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 700;
     }
-    
-    .trust-unverified {
-        background-color: #fadbd8;
-        color: #c0392b;
+
+    .status-active,
+    .trust-verified,
+    .pill-success {
+        background-color: #dff5e7;
+        color: #20744a;
     }
-    
-    .stats-grid {
+
+    .status-pending,
+    .pill-warning {
+        background-color: #fff4dd;
+        color: #9f6a00;
+    }
+
+    .status-inactive,
+    .trust-unverified,
+    .pill-danger {
+        background-color: #fde7e3;
+        color: #b23b2a;
+    }
+
+    .stats-grid,
+    .verification-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
         gap: 1rem;
         margin-top: 1rem;
     }
-    
-    .stat-card {
-        background-color: #ecf0f1;
+
+    .stat-card,
+    .verification-card {
+        border: 1px solid #e8edf2;
+        border-radius: 10px;
         padding: 1rem;
-        border-radius: 4px;
-        text-align: center;
+        background: #fafcfe;
     }
-    
+
     .stat-number {
         font-size: 1.8rem;
-        font-weight: bold;
-        color: #3498db;
+        font-weight: 800;
+        color: #1d7ddc;
     }
-    
-    .stat-label {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-top: 0.5rem;
+
+    .stat-label,
+    .muted {
+        color: #708090;
+        font-size: 0.92rem;
+    }
+
+    .seller-note {
+        background-color: #eef6ff;
+        border-left: 4px solid #1d7ddc;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        color: #22313f;
+    }
+
+    .verification-card h3 {
+        margin: 0 0 0.45rem;
+        color: #22313f;
+        font-size: 1rem;
+    }
+
+    .verification-card p {
+        margin: 0.35rem 0;
+        color: #5e6e7e;
+    }
+
+    .inline-form {
+        margin-top: 0.9rem;
+    }
+
+    .inline-form input[type="text"] {
+        width: 100%;
+        padding: 0.8rem 0.95rem;
+        border: 1px solid #d4dce3;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        flex: 1;
+        min-width: 170px;
+        padding: 0.9rem 1.4rem;
+        border-radius: 8px;
+        border: none;
+        text-decoration: none;
+        text-align: center;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #1d7ddc;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #7f8c8d;
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: #d84b3c;
+        color: white;
+    }
+
+    .helper-list {
+        margin: 0.75rem 0 0;
+        padding-left: 1.2rem;
+        color: #5e6e7e;
+    }
+
+    @media (max-width: 640px) {
+        .profile-container {
+            padding: 1.25rem;
+        }
+
+        .profile-header,
+        .info-row {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .info-value {
+            text-align: left;
+        }
     }
 </style>
 {% endblock %}
@@ -212,26 +235,24 @@
 
 <div class="profile-container">
     <div class="profile-header">
-        <div class="profile-avatar">
-            {{ user.username|first|upper }}
-        </div>
+        <div class="profile-avatar">{{ user.username|first|upper }}</div>
         <div class="profile-info">
             <h1>{{ user.first_name|default:user.username }}</h1>
             <p>@{{ user.username }}</p>
             <p>{{ user.email }}</p>
         </div>
     </div>
-    
+
     <div class="profile-section">
         <h2 class="section-title">Account Information</h2>
-        
+
         <div class="info-row">
-            <span class="info-label">Member Since:</span>
+            <span class="info-label">Member Since</span>
             <span class="info-value">{{ user.date_joined|date:"M d, Y" }}</span>
         </div>
-        
+
         <div class="info-row">
-            <span class="info-label">Last Login:</span>
+            <span class="info-label">Last Login</span>
             <span class="info-value">
                 {% if user.last_login %}
                     {{ user.last_login|date:"M d, Y \a\t H:i" }}
@@ -240,44 +261,47 @@
                 {% endif %}
             </span>
         </div>
-        
+
         <div class="info-row">
-            <span class="info-label">Account Type:</span>
+            <span class="info-label">Account Type</span>
             <span class="info-value">
                 {% if is_seller %}
-                    Buyer & Seller
+                    Buyer and Seller
                 {% else %}
                     Buyer
                 {% endif %}
             </span>
         </div>
-        
+
         <div class="info-row">
-            <span class="info-label">Email Verified:</span>
+            <span class="info-label">Phone Number</span>
+            <span class="info-value">{{ user.phone_number|default:"Not provided" }}</span>
+        </div>
+
+        <div class="info-row">
+            <span class="info-label">Email Verified</span>
             <span class="info-value">
                 {% if user.email_verified %}
-                    <span class="trust-badge trust-verified">✅ Verified</span>
+                    <span class="trust-badge trust-verified">Verified</span>
                 {% else %}
-                    <span class="trust-badge trust-unverified">❌ Not Verified</span>
+                    <span class="trust-badge trust-unverified">Not verified</span>
                 {% endif %}
             </span>
         </div>
-        
+
         <div class="info-row">
-            <span class="info-label">Trust Score:</span>
+            <span class="info-label">Trust Score</span>
             <span class="info-value">{{ user.trust_score }}/100</span>
         </div>
-        
+
         {% if is_trusted %}
             <div class="info-row">
-                <span class="info-label">Status:</span>
-                <span class="info-value">
-                    <span class="status-badge status-active">🟢 Trusted Member</span>
-                </span>
+                <span class="info-label">Trust Status</span>
+                <span class="info-value"><span class="status-badge status-active">Trusted member</span></span>
             </div>
         {% endif %}
     </div>
-    
+
     <div class="profile-section">
         <h2 class="section-title">Activity Statistics</h2>
         <div class="stats-grid">
@@ -297,43 +321,129 @@
             </div>
         </div>
     </div>
-    
+
     {% if is_seller %}
         <div class="profile-section">
             <h2 class="section-title">Seller Information</h2>
-            
+
             <div class="seller-note">
-                <p>
-                    {% if seller_approved %}
-                        ✅ Your seller account is approved. You can list and sell products.
-                    {% else %}
-                        ⏳ Your seller account is pending approval. Admin team will review your request soon.
-                    {% endif %}
-                </p>
+                {% if seller_approved %}
+                    Your seller account is approved. You can list products and keep growing your storefront.
+                {% elif seller_is_ready_for_approval %}
+                    Your seller account has completed the required checks and is ready for admin approval.
+                {% else %}
+                    Complete your NIN verification{% if seller_requires_verification_payment %} and seller verification payment{% endif %} before admin approval.
+                {% endif %}
             </div>
-            
+
             <div class="info-row">
-                <span class="info-label">Seller Status:</span>
+                <span class="info-label">Seller Status</span>
                 <span class="info-value">
                     {% if seller_approved %}
-                        <span class="status-badge status-active">Approved ✓</span>
-                        {% if user.is_verified %}
-                            <span style="color: #f39c12; font-weight: 600; margin-left: 0.5rem;">✨ Verified Seller</span>
-                        {% endif %}
+                        <span class="status-badge status-active">Approved</span>
                     {% else %}
                         <span class="status-badge status-pending">Pending Review</span>
                     {% endif %}
+                    {% if user.is_verified %}
+                        <span class="pill pill-warning" style="margin-left: 0.5rem;">Verified Seller</span>
+                    {% endif %}
                 </span>
+            </div>
+
+            <div class="verification-grid">
+                <div class="verification-card">
+                    <h3>NIN Verification</h3>
+                    <p>
+                        {% if user.nin_verification_status == 'verified' %}
+                            <span class="pill pill-success">Verified</span>
+                        {% elif user.nin_verification_status == 'pending' %}
+                            <span class="pill pill-warning">Pending</span>
+                        {% elif user.nin_verification_status == 'failed' %}
+                            <span class="pill pill-danger">Failed</span>
+                        {% else %}
+                            <span class="pill pill-danger">Not submitted</span>
+                        {% endif %}
+                    </p>
+                    <p class="muted">Stored value: {{ nin_masked }}</p>
+                    {% if user.nin_full_name %}
+                        <p>Matched Name: {{ user.nin_full_name }}</p>
+                    {% endif %}
+                    {% if user.nin_verified_at %}
+                        <p>Verified At: {{ user.nin_verified_at|date:"M d, Y \a\t H:i" }}</p>
+                    {% endif %}
+                    {% if user.nin_failure_reason %}
+                        <p>{{ user.nin_failure_reason }}</p>
+                    {% endif %}
+
+                    {% if not seller_approved %}
+                        <form method="post" action="{% url 'accounts:verify_nin' %}" class="inline-form">
+                            {% csrf_token %}
+                            <input
+                                type="text"
+                                name="{{ nin_form.nin_number.name }}"
+                                value="{{ nin_form.nin_number.value|default:'' }}"
+                                maxlength="11"
+                                placeholder="Enter your 11-digit NIN"
+                            >
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Verify NIN</button>
+                        </form>
+                    {% endif %}
+                </div>
+
+                <div class="verification-card">
+                    <h3>Seller Verification Payment</h3>
+                    {% if seller_requires_verification_payment %}
+                        <p>Required Fee: NGN {{ verification_fee }}</p>
+                        <p>
+                            {% if has_completed_seller_verification_payment %}
+                                <span class="pill pill-success">Payment completed</span>
+                            {% elif latest_seller_payment and latest_seller_payment.status == 'processing' %}
+                                <span class="pill pill-warning">Payment processing</span>
+                            {% elif latest_seller_payment and latest_seller_payment.status == 'failed' %}
+                                <span class="pill pill-danger">Payment failed</span>
+                            {% else %}
+                                <span class="pill pill-danger">Payment not started</span>
+                            {% endif %}
+                        </p>
+                        <p class="muted">Supported methods: bank transfer and USSD via Paystack.</p>
+                        {% if latest_seller_payment %}
+                            <p>Reference: {{ latest_seller_payment.payment_reference }}</p>
+                        {% endif %}
+                        {% if not has_completed_seller_verification_payment and not seller_approved %}
+                            <form method="post" action="{% url 'accounts:start_seller_verification_payment' %}" class="inline-form">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">Pay Verification Fee</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <p><span class="pill pill-success">No fee required</span></p>
+                        <p class="muted">The platform is not charging a seller approval fee right now.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="verification-card" style="margin-top: 1rem;">
+                <h3>Approval Checklist</h3>
+                <ul class="helper-list">
+                    <li>NIN must be verified before your seller account can be approved.</li>
+                    {% if seller_requires_verification_payment %}
+                        <li>The seller verification fee must be completed with bank transfer or USSD.</li>
+                    {% endif %}
+                    <li>Once both checks are done, the admin team can approve your account.</li>
+                </ul>
+                {% if seller_is_ready_for_approval and not seller_approved %}
+                    <p style="margin-top: 1rem;"><span class="pill pill-success">Ready for admin approval</span></p>
+                {% endif %}
             </div>
         </div>
     {% endif %}
-    
-    <div class="action-buttons">
+
+    <div class="button-row">
         <a href="{% url 'products:list' %}" class="btn btn-primary">Browse Products</a>
         {% if user.is_seller %}
-            <a href="{% url 'products:seller_dashboard' %}" class="btn btn-primary">Seller Dashboard</a>
+            <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">Seller Dashboard</a>
         {% endif %}
-        <form method="post" action="{% url 'accounts:logout' %}" style="flex: 1;">
+        <form method="post" action="{% url 'accounts:logout' %}" style="flex: 1; min-width: 170px;">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger" style="width: 100%;">Logout</button>
         </form>

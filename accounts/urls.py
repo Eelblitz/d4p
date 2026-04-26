@@ -8,6 +8,9 @@ urlpatterns = [
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile, name='profile'),
+    path('profile/verify-nin/', views.verify_nin, name='verify_nin'),
+    path('profile/seller-payment/', views.start_seller_verification_payment, name='start_seller_verification_payment'),
+    path('profile/seller-payment/callback/', views.seller_verification_payment_callback, name='seller_verification_payment_callback'),
     
     # Email verification
     path('verify-email/<str:token>/', views.verify_email, name='verify_email'),

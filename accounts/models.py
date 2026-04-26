@@ -4,6 +4,12 @@ from django.utils import timezone
 import uuid
 
 class User(AbstractUser):
+    class NINVerificationStatus(models.TextChoices):
+        NOT_SUBMITTED = 'not_submitted', 'Not Submitted'
+        PENDING = 'pending', 'Pending'
+        VERIFIED = 'verified', 'Verified'
+        FAILED = 'failed', 'Failed'
+
     is_seller = models.BooleanField(default=False, db_index=True)
     seller_approved = models.BooleanField(default=False, db_index=True)
     is_verified = models.BooleanField(default=False)  # verified badge for sellers
@@ -16,6 +22,19 @@ class User(AbstractUser):
     
     phone_number = models.CharField(max_length=20, blank=True, null=True)
     phone_verified = models.BooleanField(default=False)
+    nin_verification_status = models.CharField(
+        max_length=20,
+        choices=NINVerificationStatus.choices,
+        default=NINVerificationStatus.NOT_SUBMITTED,
+        db_index=True,
+    )
+    nin_hash = models.CharField(max_length=64, blank=True)
+    nin_last4 = models.CharField(max_length=4, blank=True)
+    nin_verification_reference = models.CharField(max_length=255, blank=True)
+    nin_verification_provider = models.CharField(max_length=50, blank=True)
+    nin_verified_at = models.DateTimeField(blank=True, null=True)
+    nin_full_name = models.CharField(max_length=255, blank=True)
+    nin_failure_reason = models.CharField(max_length=255, blank=True)
     
     # User relationships
     blocked_users = models.ManyToManyField('self', symmetrical=False, related_name='blocked_by', blank=True)
@@ -69,6 +88,42 @@ class User(AbstractUser):
             )
         except Exception:
             pass
+
+    def has_completed_seller_verification_payment(self):
+        return self.seller_verification_payments.filter(status='completed').exists()
+
+    def meets_seller_approval_requirements(self):
+        if self.nin_verification_status != self.NINVerificationStatus.VERIFIED:
+            return False
+        return True
+
+
+class SellerVerificationPayment(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller_verification_payments')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending', db_index=True)
+    payment_reference = models.CharField(max_length=255, unique=True)
+    access_code = models.CharField(max_length=255, blank=True)
+    authorization_url = models.URLField(blank=True)
+    channels = models.JSONField(default=list, blank=True)
+    provider = models.CharField(max_length=30, default='paystack')
+    paid_at = models.DateTimeField(blank=True, null=True)
+    notes = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.user.username} - seller verification ({self.status})"
 
 
 class UserReport(models.Model):
