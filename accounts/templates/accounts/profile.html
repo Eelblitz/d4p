@@ -4,225 +4,268 @@
 
 {% block extra_styles %}
 <style>
-    .profile-container {
-        max-width: 760px;
-        margin: 2rem auto;
-        background-color: white;
-        padding: 2rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+    .profile-shell {
+        display: grid;
+        gap: 1.25rem;
+    }
+
+    .profile-hero,
+    .section-panel,
+    .stat-card,
+    .verification-card,
+    .seller-status-card,
+    .checklist-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+    }
+
+    .profile-hero,
+    .section-panel,
+    .seller-status-card,
+    .checklist-card {
+        padding: 1.35rem;
+    }
+
+    .profile-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+        gap: 1rem;
+    }
+
+    .profile-hero p,
+    .identity-card p,
+    .stat-card p,
+    .verification-card p,
+    .seller-status-card p,
+    .checklist-card p,
+    .data-row span:last-child {
+        color: var(--muted);
     }
 
     .profile-header {
         display: flex;
         align-items: center;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-        padding-bottom: 1.5rem;
-        border-bottom: 1px solid #ecf0f1;
+        gap: 1rem;
     }
 
     .profile-avatar {
         width: 84px;
         height: 84px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #1d7ddc, #0d5ea8);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        border-radius: 26px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        background: linear-gradient(135deg, rgba(68, 163, 255, 0.98), rgba(113, 240, 193, 0.88));
+        color: #07111f;
+        font-family: 'Space Grotesk', sans-serif;
         font-size: 2rem;
         font-weight: 700;
-        flex-shrink: 0;
+        box-shadow: 0 18px 44px rgba(68, 163, 255, 0.24);
     }
 
-    .profile-info h1 {
-        margin: 0 0 0.35rem;
-        color: #22313f;
-        font-size: 1.85rem;
+    .profile-title h1 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(1.85rem, 4vw, 2.5rem);
+        letter-spacing: -0.04em;
+        margin-bottom: 0.2rem;
     }
 
-    .profile-info p {
-        margin: 0.2rem 0;
-        color: #6b7b8c;
+    .profile-title p {
+        color: var(--muted);
     }
 
-    .profile-section {
-        margin-bottom: 2rem;
+    .identity-stack {
+        display: grid;
+        gap: 0.85rem;
+        align-content: start;
     }
 
-    .section-title {
-        font-size: 1.15rem;
-        font-weight: 700;
-        color: #22313f;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
-        border-bottom: 1px solid #ecf0f1;
+    .identity-card,
+    .stat-card,
+    .verification-card {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        box-shadow: none;
     }
 
-    .info-row {
+    .identity-card small,
+    .stat-card small,
+    .verification-card small,
+    .micro-label {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.74rem;
+    }
+
+    .identity-card strong,
+    .stat-card strong,
+    .verification-card strong,
+    .seller-status-card strong {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .identity-card strong,
+    .verification-card strong,
+    .seller-status-card strong {
+        font-size: 1.08rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .section-head {
         display: flex;
         justify-content: space-between;
         gap: 1rem;
-        padding: 0.8rem 0;
-        border-bottom: 1px solid #f2f4f5;
+        align-items: end;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
     }
 
-    .info-label {
-        color: #708090;
-        font-weight: 600;
+    .section-head p {
+        max-width: 620px;
+        color: var(--muted);
     }
 
-    .info-value {
-        color: #22313f;
-        font-weight: 600;
-        text-align: right;
-    }
-
-    .status-badge,
-    .trust-badge,
-    .pill {
-        display: inline-block;
-        padding: 0.4rem 0.8rem;
-        border-radius: 999px;
-        font-size: 0.85rem;
-        font-weight: 700;
-    }
-
-    .status-active,
-    .trust-verified,
-    .pill-success {
-        background-color: #dff5e7;
-        color: #20744a;
-    }
-
-    .status-pending,
-    .pill-warning {
-        background-color: #fff4dd;
-        color: #9f6a00;
-    }
-
-    .status-inactive,
-    .trust-unverified,
-    .pill-danger {
-        background-color: #fde7e3;
-        color: #b23b2a;
-    }
-
+    .data-grid,
     .stats-grid,
     .verification-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-        gap: 1rem;
-        margin-top: 1rem;
+        gap: 0.9rem;
     }
 
-    .stat-card,
-    .verification-card {
-        border: 1px solid #e8edf2;
-        border-radius: 10px;
-        padding: 1rem;
-        background: #fafcfe;
+    .data-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .stat-number {
-        font-size: 1.8rem;
-        font-weight: 800;
-        color: #1d7ddc;
-    }
-
-    .stat-label,
-    .muted {
-        color: #708090;
-        font-size: 0.92rem;
-    }
-
-    .seller-note {
-        background-color: #eef6ff;
-        border-left: 4px solid #1d7ddc;
-        padding: 1rem;
-        border-radius: 8px;
-        margin-bottom: 1rem;
-        color: #22313f;
-    }
-
-    .verification-card h3 {
-        margin: 0 0 0.45rem;
-        color: #22313f;
-        font-size: 1rem;
-    }
-
-    .verification-card p {
-        margin: 0.35rem 0;
-        color: #5e6e7e;
-    }
-
-    .inline-form {
-        margin-top: 0.9rem;
-    }
-
-    .inline-form input[type="text"] {
-        width: 100%;
-        padding: 0.8rem 0.95rem;
-        border: 1px solid #d4dce3;
-        border-radius: 8px;
-        font-size: 0.95rem;
-        margin-bottom: 0.75rem;
-    }
-
-    .button-row {
+    .data-row {
         display: flex;
+        justify-content: space-between;
         gap: 1rem;
-        margin-top: 2rem;
+        padding: 0.95rem 0;
+        border-bottom: 1px solid rgba(167, 193, 255, 0.08);
+    }
+
+    .data-row:last-child {
+        border-bottom: none;
+    }
+
+    .data-row span:first-child {
+        color: var(--text);
+        font-weight: 700;
+    }
+
+    .pill-row {
+        display: flex;
+        gap: 0.45rem;
         flex-wrap: wrap;
     }
 
-    .btn {
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.34rem 0.68rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.76rem;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+    }
+
+    .pill-success {
+        color: var(--accent);
+        border-color: rgba(113, 240, 193, 0.22);
+        background: rgba(113, 240, 193, 0.08);
+    }
+
+    .pill-warning {
+        color: var(--warm);
+        border-color: rgba(255, 215, 128, 0.22);
+        background: rgba(255, 215, 128, 0.08);
+    }
+
+    .pill-danger {
+        color: var(--danger);
+        border-color: rgba(255, 143, 148, 0.22);
+        background: rgba(255, 143, 148, 0.08);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .stat-card strong {
+        font-size: 2rem;
+        letter-spacing: -0.05em;
+        margin-bottom: 0.25rem;
+    }
+
+    .verification-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .verification-card form {
+        margin-top: 0.95rem;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .seller-status-card {
+        display: grid;
+        gap: 0.65rem;
+    }
+
+    .checklist-card ul {
+        margin: 0.85rem 0 0;
+        padding-left: 1.15rem;
+        color: var(--muted);
+    }
+
+    .checklist-card li + li {
+        margin-top: 0.55rem;
+    }
+
+    .action-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .action-row a,
+    .action-row button {
         flex: 1;
-        min-width: 170px;
-        padding: 0.9rem 1.4rem;
-        border-radius: 8px;
-        border: none;
-        text-decoration: none;
-        text-align: center;
-        font-weight: 700;
-        cursor: pointer;
+        min-width: 180px;
+        justify-content: center;
     }
 
-    .btn-primary {
-        background-color: #1d7ddc;
-        color: white;
+    .logout-form {
+        flex: 1;
+        min-width: 180px;
     }
 
-    .btn-secondary {
-        background-color: #7f8c8d;
-        color: white;
+    .logout-form button {
+        width: 100%;
     }
 
-    .btn-danger {
-        background-color: #d84b3c;
-        color: white;
-    }
-
-    .helper-list {
-        margin: 0.75rem 0 0;
-        padding-left: 1.2rem;
-        color: #5e6e7e;
-    }
-
-    @media (max-width: 640px) {
-        .profile-container {
-            padding: 1.25rem;
+    @media (max-width: 1040px) {
+        .profile-hero,
+        .data-grid,
+        .stats-grid,
+        .verification-grid {
+            grid-template-columns: 1fr;
         }
 
-        .profile-header,
-        .info-row {
+        .data-row {
             flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .info-value {
-            text-align: left;
         }
     }
 </style>
@@ -230,130 +273,183 @@
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{% url 'products:list' %}">Home</a> / Profile
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <a href="{% url 'products:list' %}">Marketplace</a> /
+    <span>Profile</span>
 </div>
 
-<div class="profile-container">
-    <div class="profile-header">
-        <div class="profile-avatar">{{ user.username|first|upper }}</div>
-        <div class="profile-info">
-            <h1>{{ user.first_name|default:user.username }}</h1>
-            <p>@{{ user.username }}</p>
-            <p>{{ user.email }}</p>
-        </div>
-    </div>
-
-    <div class="profile-section">
-        <h2 class="section-title">Account Information</h2>
-
-        <div class="info-row">
-            <span class="info-label">Member Since</span>
-            <span class="info-value">{{ user.date_joined|date:"M d, Y" }}</span>
-        </div>
-
-        <div class="info-row">
-            <span class="info-label">Last Login</span>
-            <span class="info-value">
-                {% if user.last_login %}
-                    {{ user.last_login|date:"M d, Y \a\t H:i" }}
-                {% else %}
-                    Never
-                {% endif %}
-            </span>
-        </div>
-
-        <div class="info-row">
-            <span class="info-label">Account Type</span>
-            <span class="info-value">
-                {% if is_seller %}
-                    Buyer and Seller
-                {% else %}
-                    Buyer
-                {% endif %}
-            </span>
-        </div>
-
-        <div class="info-row">
-            <span class="info-label">Phone Number</span>
-            <span class="info-value">{{ user.phone_number|default:"Not provided" }}</span>
-        </div>
-
-        <div class="info-row">
-            <span class="info-label">Email Verified</span>
-            <span class="info-value">
-                {% if user.email_verified %}
-                    <span class="trust-badge trust-verified">Verified</span>
-                {% else %}
-                    <span class="trust-badge trust-unverified">Not verified</span>
-                {% endif %}
-            </span>
-        </div>
-
-        <div class="info-row">
-            <span class="info-label">Trust Score</span>
-            <span class="info-value">{{ user.trust_score }}/100</span>
-        </div>
-
-        {% if is_trusted %}
-            <div class="info-row">
-                <span class="info-label">Trust Status</span>
-                <span class="info-value"><span class="status-badge status-active">Trusted member</span></span>
-            </div>
-        {% endif %}
-    </div>
-
-    <div class="profile-section">
-        <h2 class="section-title">Activity Statistics</h2>
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number">{{ product_rating_count }}</div>
-                <div class="stat-label">Product Reviews</div>
-            </div>
-            {% if is_seller %}
-                <div class="stat-card">
-                    <div class="stat-number">{{ seller_rating_count }}</div>
-                    <div class="stat-label">Seller Ratings</div>
+<div class="profile-shell">
+    <section class="profile-hero">
+        <div>
+            <div class="profile-header">
+                <div class="profile-avatar">{{ user.username|first|upper }}</div>
+                <div class="profile-title">
+                    <span class="section-kicker">Personal workspace</span>
+                    <h1>{{ user.first_name|default:user.username }}</h1>
+                    <p>@{{ user.username }}{% if user.email %} . {{ user.email }}{% endif %}</p>
                 </div>
-            {% endif %}
-            <div class="stat-card">
-                <div class="stat-number">{{ blocked_users_count }}</div>
-                <div class="stat-label">Blocked Users</div>
+            </div>
+
+            <p class="section-copy" style="margin-top: 1rem;">Your profile is where identity, trust, seller eligibility, and account health come together. Keep this page clean and complete so the marketplace has stronger reasons to trust your activity.</p>
+
+            <div class="pill-row" style="margin-top: 1rem;">
+                {% if user.email_verified %}
+                    <span class="pill pill-success">Email verified</span>
+                {% else %}
+                    <span class="pill pill-danger">Email not verified</span>
+                {% endif %}
+                {% if is_trusted %}
+                    <span class="pill pill-success">Trusted member</span>
+                {% endif %}
+                {% if is_seller %}
+                    {% if seller_approved %}
+                        <span class="pill pill-success">Seller approved</span>
+                    {% else %}
+                        <span class="pill pill-warning">Seller pending</span>
+                    {% endif %}
+                {% else %}
+                    <span class="pill">Buyer account</span>
+                {% endif %}
+                {% if user.is_verified %}
+                    <span class="pill pill-warning">Verified seller badge</span>
+                {% endif %}
             </div>
         </div>
-    </div>
+
+        <aside class="identity-stack">
+            <article class="identity-card">
+                <small>Trust score</small>
+                <strong>{{ user.trust_score }}/100</strong>
+                <p>This score reflects the current trust position of your account inside the platform.</p>
+            </article>
+            <article class="identity-card">
+                <small>Account type</small>
+                <strong>{% if is_seller %}Buyer and seller{% else %}Buyer{% endif %}</strong>
+                <p>{% if is_seller %}You can manage storefront operations, approval steps, and marketplace activity from this profile.{% else %}Upgrade into a seller workflow when you are ready to start listing products.{% endif %}</p>
+            </article>
+            <article class="identity-card">
+                <small>Phone number</small>
+                <strong>{{ user.phone_number|default:"Not provided" }}</strong>
+                <p>Phone details help support contactability, onboarding quality, and marketplace accountability.</p>
+            </article>
+        </aside>
+    </section>
+
+    <section class="section-panel">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Account details</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">A clean operational snapshot of your account.</h2>
+            </div>
+            <p>These details shape how DM4PRICE recognizes your account and how trust accumulates over time.</p>
+        </div>
+
+        <div class="data-grid">
+            <div class="identity-card">
+                <div class="data-row">
+                    <span>Member since</span>
+                    <span>{{ user.date_joined|date:"M d, Y" }}</span>
+                </div>
+                <div class="data-row">
+                    <span>Last login</span>
+                    <span>{% if user.last_login %}{{ user.last_login|date:"M d, Y \a\t H:i" }}{% else %}Never{% endif %}</span>
+                </div>
+                <div class="data-row">
+                    <span>Email address</span>
+                    <span>{{ user.email|default:"Not provided" }}</span>
+                </div>
+            </div>
+            <div class="identity-card">
+                <div class="data-row">
+                    <span>Blocked users</span>
+                    <span>{{ blocked_users_count }}</span>
+                </div>
+                <div class="data-row">
+                    <span>Email verification</span>
+                    <span>{% if user.email_verified %}Complete{% else %}Pending{% endif %}</span>
+                </div>
+                <div class="data-row">
+                    <span>Seller mode</span>
+                    <span>{% if is_seller %}Enabled{% else %}Not enabled{% endif %}</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-panel">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Activity signals</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">The reputation trail your account has already created.</h2>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <article class="stat-card">
+                <small>Product reviews</small>
+                <strong>{{ product_rating_count }}</strong>
+                <p>Reviews you have given on products across the marketplace.</p>
+            </article>
+            <article class="stat-card">
+                <small>Blocked users</small>
+                <strong>{{ blocked_users_count }}</strong>
+                <p>Accounts you have chosen to restrict from your personal marketplace experience.</p>
+            </article>
+            {% if is_seller %}
+                <article class="stat-card">
+                    <small>Seller ratings</small>
+                    <strong>{{ seller_rating_count }}</strong>
+                    <p>Ratings buyers have submitted about your seller behavior and delivery quality.</p>
+                </article>
+            {% else %}
+                <article class="stat-card">
+                    <small>Seller path</small>
+                    <strong>Ready</strong>
+                    <p>Enable seller activity when you want to start building inventory and reputation.</p>
+                </article>
+            {% endif %}
+        </div>
+    </section>
 
     {% if is_seller %}
-        <div class="profile-section">
-            <h2 class="section-title">Seller Information</h2>
+        <section class="seller-status-card">
+            <span class="section-kicker">Seller approval status</span>
+            {% if seller_approved %}
+                <strong>Your seller account is approved and operational.</strong>
+                <p>You can list products, run promotions, and keep improving your storefront from a position of trust.</p>
+            {% elif seller_is_ready_for_approval %}
+                <strong>Your account has completed the required verification steps.</strong>
+                <p>You are now ready for admin approval. Keep your profile stable while the review is completed.</p>
+            {% else %}
+                <strong>Your seller account still needs approval steps.</strong>
+                <p>Complete NIN verification{% if seller_requires_verification_payment %} and the seller verification payment{% endif %} before the platform can approve your storefront.</p>
+            {% endif %}
+        </section>
 
-            <div class="seller-note">
-                {% if seller_approved %}
-                    Your seller account is approved. You can list products and keep growing your storefront.
-                {% elif seller_is_ready_for_approval %}
-                    Your seller account has completed the required checks and is ready for admin approval.
-                {% else %}
-                    Complete your NIN verification{% if seller_requires_verification_payment %} and seller verification payment{% endif %} before admin approval.
-                {% endif %}
-            </div>
-
-            <div class="info-row">
-                <span class="info-label">Seller Status</span>
-                <span class="info-value">
-                    {% if seller_approved %}
-                        <span class="status-badge status-active">Approved</span>
-                    {% else %}
-                        <span class="status-badge status-pending">Pending Review</span>
-                    {% endif %}
-                    {% if user.is_verified %}
-                        <span class="pill pill-warning" style="margin-left: 0.5rem;">Verified Seller</span>
-                    {% endif %}
-                </span>
+        <section class="section-panel">
+            <div class="section-head">
+                <div>
+                    <span class="section-kicker">Verification center</span>
+                    <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Identity, payment readiness, and approval state in one place.</h2>
+                </div>
+                <p>These are the main seller trust controls now tied directly to approval and safer marketplace participation.</p>
             </div>
 
             <div class="verification-grid">
-                <div class="verification-card">
-                    <h3>NIN Verification</h3>
-                    <p>
+                <article class="verification-card">
+                    <small>NIN verification</small>
+                    <strong>
+                        {% if user.nin_verification_status == 'verified' %}
+                            Verified
+                        {% elif user.nin_verification_status == 'pending' %}
+                            Pending review
+                        {% elif user.nin_verification_status == 'failed' %}
+                            Verification failed
+                        {% else %}
+                            Not submitted
+                        {% endif %}
+                    </strong>
+                    <div class="pill-row" style="margin-bottom: 0.65rem;">
                         {% if user.nin_verification_status == 'verified' %}
                             <span class="pill pill-success">Verified</span>
                         {% elif user.nin_verification_status == 'pending' %}
@@ -363,20 +459,20 @@
                         {% else %}
                             <span class="pill pill-danger">Not submitted</span>
                         {% endif %}
-                    </p>
-                    <p class="muted">Stored value: {{ nin_masked }}</p>
+                    </div>
+                    <p>Stored NIN reference: {{ nin_masked }}</p>
                     {% if user.nin_full_name %}
-                        <p>Matched Name: {{ user.nin_full_name }}</p>
+                        <p>Matched identity: {{ user.nin_full_name }}</p>
                     {% endif %}
                     {% if user.nin_verified_at %}
-                        <p>Verified At: {{ user.nin_verified_at|date:"M d, Y \a\t H:i" }}</p>
+                        <p>Verified at: {{ user.nin_verified_at|date:"M d, Y \a\t H:i" }}</p>
                     {% endif %}
                     {% if user.nin_failure_reason %}
                         <p>{{ user.nin_failure_reason }}</p>
                     {% endif %}
 
                     {% if not seller_approved %}
-                        <form method="post" action="{% url 'accounts:verify_nin' %}" class="inline-form">
+                        <form method="post" action="{% url 'accounts:verify_nin' %}">
                             {% csrf_token %}
                             <input
                                 type="text"
@@ -385,16 +481,16 @@
                                 maxlength="11"
                                 placeholder="Enter your 11-digit NIN"
                             >
-                            <button type="submit" class="btn btn-primary" style="width: 100%;">Verify NIN</button>
+                            <button type="submit" class="button">Verify NIN now</button>
                         </form>
                     {% endif %}
-                </div>
+                </article>
 
-                <div class="verification-card">
-                    <h3>Seller Verification Payment</h3>
+                <article class="verification-card">
+                    <small>Seller verification payment</small>
                     {% if seller_requires_verification_payment %}
-                        <p>Required Fee: NGN {{ verification_fee }}</p>
-                        <p>
+                        <strong>NGN {{ verification_fee }}</strong>
+                        <div class="pill-row" style="margin-bottom: 0.65rem;">
                             {% if has_completed_seller_verification_payment %}
                                 <span class="pill pill-success">Payment completed</span>
                             {% elif latest_seller_payment and latest_seller_payment.status == 'processing' %}
@@ -404,49 +500,71 @@
                             {% else %}
                                 <span class="pill pill-danger">Payment not started</span>
                             {% endif %}
-                        </p>
-                        <p class="muted">Supported methods: bank transfer and USSD via Paystack.</p>
+                        </div>
+                        <p>Supported methods: bank transfer and USSD via Paystack.</p>
                         {% if latest_seller_payment %}
                             <p>Reference: {{ latest_seller_payment.payment_reference }}</p>
+                            {% if latest_seller_payment.paid_at %}
+                                <p>Paid at: {{ latest_seller_payment.paid_at|date:"M d, Y \a\t H:i" }}</p>
+                            {% endif %}
                         {% endif %}
+
                         {% if not has_completed_seller_verification_payment and not seller_approved %}
-                            <form method="post" action="{% url 'accounts:start_seller_verification_payment' %}" class="inline-form">
+                            <form method="post" action="{% url 'accounts:start_seller_verification_payment' %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-primary" style="width: 100%;">Pay Verification Fee</button>
+                                <button type="submit" class="button">Pay verification fee</button>
                             </form>
+                            {% if latest_seller_payment and latest_seller_payment.authorization_url %}
+                                <a href="{{ latest_seller_payment.authorization_url }}" class="button-link" style="margin-top: 0.75rem;">Resume payment session</a>
+                            {% endif %}
                         {% endif %}
                     {% else %}
-                        <p><span class="pill pill-success">No fee required</span></p>
-                        <p class="muted">The platform is not charging a seller approval fee right now.</p>
+                        <strong>No fee required</strong>
+                        <div class="pill-row" style="margin-bottom: 0.65rem;">
+                            <span class="pill pill-success">Verification fee disabled</span>
+                        </div>
+                        <p>The platform is not charging a seller verification fee right now.</p>
                     {% endif %}
-                </div>
+                </article>
             </div>
+        </section>
 
-            <div class="verification-card" style="margin-top: 1rem;">
-                <h3>Approval Checklist</h3>
-                <ul class="helper-list">
-                    <li>NIN must be verified before your seller account can be approved.</li>
-                    {% if seller_requires_verification_payment %}
-                        <li>The seller verification fee must be completed with bank transfer or USSD.</li>
-                    {% endif %}
-                    <li>Once both checks are done, the admin team can approve your account.</li>
-                </ul>
-                {% if seller_is_ready_for_approval and not seller_approved %}
-                    <p style="margin-top: 1rem;"><span class="pill pill-success">Ready for admin approval</span></p>
+        <section class="checklist-card">
+            <span class="section-kicker">Approval checklist</span>
+            <strong style="font-size: 1.08rem;">What still matters before the account is fully cleared.</strong>
+            <ul>
+                <li>NIN verification must succeed before a seller account can be approved.</li>
+                {% if seller_requires_verification_payment %}
+                    <li>The seller verification fee must be completed through bank transfer or USSD.</li>
                 {% endif %}
-            </div>
-        </div>
+                <li>After those steps, the DM4PRICE admin team can approve your seller account.</li>
+            </ul>
+            {% if seller_is_ready_for_approval and not seller_approved %}
+                <div class="pill-row" style="margin-top: 1rem;">
+                    <span class="pill pill-success">Ready for admin approval</span>
+                </div>
+            {% endif %}
+        </section>
     {% endif %}
 
-    <div class="button-row">
-        <a href="{% url 'products:list' %}" class="btn btn-primary">Browse Products</a>
-        {% if user.is_seller %}
-            <a href="{% url 'products:seller_dashboard' %}" class="btn btn-secondary">Seller Dashboard</a>
-        {% endif %}
-        <form method="post" action="{% url 'accounts:logout' %}" style="flex: 1; min-width: 170px;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger" style="width: 100%;">Logout</button>
-        </form>
-    </div>
+    <section class="section-panel">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Quick actions</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Move between your buyer, seller, and account workflows quickly.</h2>
+            </div>
+        </div>
+
+        <div class="action-row">
+            <a href="{% url 'products:list' %}" class="button">Browse products</a>
+            {% if user.is_seller %}
+                <a href="{% url 'products:seller_dashboard' %}" class="button-ghost" style="text-decoration: none;">Seller dashboard</a>
+            {% endif %}
+            <form method="post" action="{% url 'accounts:logout' %}" class="logout-form">
+                {% csrf_token %}
+                <button type="submit" class="button-ghost">Logout</button>
+            </form>
+        </div>
+    </section>
 </div>
 {% endblock %}

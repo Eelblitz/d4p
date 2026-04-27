@@ -1,291 +1,322 @@
-﻿{% extends "base.html" %}
+{% extends "base.html" %}
 
-{% block title %}DM4PRICE - Trust & Safety{% endblock %}
+{% block title %}Trust & Safety - DM4PRICE{% endblock %}
 
 {% block extra_styles %}
 <style>
-    .hero {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: #fff;
-        padding: 4rem 0;
-        margin: -2rem 0 3rem 0;
-        text-align: center;
+    .trust-shell {
+        display: grid;
+        gap: 1.25rem;
     }
 
-    .hero .hero-content {
-        max-width: 840px;
-        margin: 0 auto;
-        padding: 0 1rem;
+    .trust-hero,
+    .intel-panel,
+    .pillar-card,
+    .playbook-card,
+    .report-card,
+    .enforcement-card,
+    .closing-note {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
     }
 
-    .hero h1 {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        line-height: 1.2;
+    .trust-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        gap: 1rem;
+        padding: 1.5rem;
     }
 
-    .hero p {
-        font-size: 1.25rem;
-        opacity: 0.95;
-        margin-bottom: 1.4rem;
-        line-height: 1.6;
+    .trust-hero p,
+    .hero-card p,
+    .intel-card p,
+    .pillar-card p,
+    .playbook-card p,
+    .report-card p,
+    .enforcement-card p,
+    .closing-note p {
+        color: var(--muted);
     }
 
-    .btn-primary,
-    .btn-secondary {
-        padding: 1rem 2rem;
-        font-size: 1.05rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background-color: #3498db;
-        color: #fff;
-    }
-
-    .btn-primary:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-    }
-
-    .section-title {
-        font-size: 2rem;
-        color: #2c3e50;
-        text-align: center;
-        margin: 2.5rem 0 1rem;
-        font-weight: 700;
-    }
-
-    .section-desc {
-        text-align: center;
-        color: #7f8c8d;
-        max-width: 820px;
-        margin: 0 auto 2rem;
-        line-height: 1.6;
-    }
-
-    .grid-4,
-    .grid-2 {
+    .hero-stack,
+    .intel-grid,
+    .pillar-grid,
+    .playbook-grid,
+    .report-grid,
+    .enforcement-grid {
         display: grid;
         gap: 1rem;
     }
 
-    .grid-4 {
+    .hero-stack {
+        align-content: start;
+    }
+
+    .hero-card,
+    .intel-card {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .hero-card small,
+    .intel-card small {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--muted);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .hero-card strong,
+    .intel-card strong {
+        display: block;
+        margin-bottom: 0.35rem;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.08rem;
+    }
+
+    .intel-panel,
+    .closing-note {
+        padding: 1.1rem;
+    }
+
+    .intel-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .section-wrap {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .section-head p {
+        max-width: 640px;
+        color: var(--muted);
+    }
+
+    .pillar-grid {
         grid-template-columns: repeat(4, minmax(0, 1fr));
     }
 
-    .grid-2 {
+    .playbook-grid,
+    .report-grid,
+    .enforcement-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .value-prop,
-    .trusted-card,
-    .action-card,
-    .report-card {
-        background-color: #fff;
-        border-radius: 8px;
-        padding: 1.6rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        transition: transform 0.3s, box-shadow 0.3s;
-        border: 1px solid #e0e4e8;
+    .pillar-card,
+    .playbook-card,
+    .report-card,
+    .enforcement-card {
+        padding: 1.2rem;
     }
 
-    .value-prop:hover,
-    .trusted-card:hover,
-    .action-card:hover,
-    .report-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    .pillar-card h3,
+    .playbook-card h3,
+    .report-card h3,
+    .enforcement-card h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        margin-bottom: 0.45rem;
+        font-size: 1.08rem;
     }
 
-    .icon-circle {
-        width: 44px;
-        height: 44px;
-        border-radius: 999px;
-        background: #3498db;
-        color: #fff;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
+    .closing-note {
+        display: grid;
+        gap: 0.7rem;
     }
 
-    .value-prop h3,
-    .trusted-card h3,
-    .action-card h3,
-    .report-card h3 {
-        color: #2c3e50;
-        margin-bottom: 0.6rem;
-        font-size: 1.15rem;
-    }
-
-    .value-prop p,
-    .trusted-card p,
-    .action-card p,
-    .report-card p {
-        color: #6b7d8b;
-        line-height: 1.6;
-        font-size: 0.97rem;
-    }
-
-    .note-block {
-        background: #ecf7fc;
-        border-left: 4px solid #27ae60;
-        padding: 1rem 1.2rem;
-        border-radius: 8px;
-        margin-top: 1.5rem;
-    }
-
-    .note-block p {
-        margin: 0;
-        color: #2c3e50;
-        font-weight: 600;
-    }
-
-    @media (max-width: 1024px) {
-        .grid-4,
-        .grid-2 {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-    }
-
-    @media (max-width: 760px) {
-        .grid-4,
-        .grid-2 {
+    @media (max-width: 1080px) {
+        .trust-hero,
+        .intel-grid,
+        .pillar-grid,
+        .playbook-grid,
+        .report-grid,
+        .enforcement-grid {
             grid-template-columns: 1fr;
-        }
-
-        .hero h1 {
-            font-size: 2.25rem;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="hero">
-    <div class="hero-content">
-        <h1>Stay Safe While You Shop</h1>
-        <p>dm4price safeguards your experience with verified sellers, real reviews, and proactive moderation so you can confidently compare prices and avoid scams.</p>
-        <a href="{% url 'products:list' %}" class="btn-primary">Browse Products</a>
-    </div>
-</section>
+<div class="breadcrumb">
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <a href="{% url 'products:list' %}">Marketplace</a> /
+    <span>Trust & Safety</span>
+</div>
 
-<section>
-    <h2 class="section-title">How dm4price Protects You</h2>
-    <p class="section-desc">Our platform is built with multiple layers of trust to minimize risk and highlight legitimate sellers.</p>
-    <div class="grid-4">
-        <div class="value-prop">
-            <div class="icon-circle"></div>
-            <h3>Verified Sellers</h3>
-            <p>Only approved sellers with verified identity and track records can list on dm4price.</p>
+<div class="trust-shell">
+    <section class="trust-hero">
+        <div>
+            <span class="section-kicker">Trust infrastructure</span>
+            <h1 class="section-heading" style="margin: 1rem 0 0.9rem;">DM4PRICE is designed to make a cleaner market feel like the default, not the exception.</h1>
+            <p class="section-copy">This platform is not trying to maximize volume by tolerating weak trust. It is trying to create a stronger operating environment where legitimate sellers can stand out and buyers can move with more confidence.</p>
+            <div class="button-row" style="margin-top: 1rem;">
+                <a href="{% url 'products:list' %}" class="button">Browse trusted listings</a>
+                <a href="{% url 'accounts:register' %}" class="button-ghost" style="text-decoration: none;">Create an account</a>
+            </div>
         </div>
-        <div class="value-prop">
-            <div class="icon-circle"></div>
-            <h3>Ratings & Reviews</h3>
-            <p>Ratings from real buyers and product reviews expose quality and reliability instantly.</p>
-        </div>
-        <div class="value-prop">
-            <div class="icon-circle"></div>
-            <h3>Reporting System</h3>
-            <p>Report fraudulent or suspicious listings quickly. We act on every report.</p>
-        </div>
-        <div class="value-prop">
-            <div class="icon-circle"></div>
-            <h3>Admin Monitoring</h3>
-            <p>Continuous moderation ensures repeat offenders are blocked and unsafe product listings removed.</p>
-        </div>
-    </div>
-</section>
 
-<section>
-    <h2 class="section-title">How to Avoid Scams</h2>
-    <p class="section-desc">Stay alert with a few simple checks before purchasing.</p>
-    <div class="grid-2">
-        <div class="trusted-card">
-            <h3>Check ratings before buying</h3>
-            <p>Verify seller scores and read multiple recent reviews to ensure credibility.</p>
-        </div>
-        <div class="trusted-card">
-            <h3>Avoid unrealistic prices</h3>
-            <p>If a deal is too good to be true, compare with similar products before committing.</p>
-        </div>
-        <div class="trusted-card">
-            <h3>Communicate clearly with sellers</h3>
-            <p>Ask questions about condition, delivery, and return policies and keep it on-platform.</p>
-        </div>
-        <div class="trusted-card">
-            <h3>Report suspicious activity</h3>
-            <p>Submit reports directly from product or seller pages; fast reporting helps us protect everyone.</p>
-        </div>
-    </div>
-</section>
+        <aside class="hero-stack">
+            <div class="hero-card">
+                <small>Seller access</small>
+                <strong>Approval before advantage</strong>
+                <p>NIN verification and approval gates help serious sellers enter the market with more credibility from day one.</p>
+            </div>
+            <div class="hero-card">
+                <small>Buyer signal layer</small>
+                <strong>Trust is visible in the product</strong>
+                <p>Ratings, reports, verification state, and marketplace behavior all contribute to what buyers see and believe.</p>
+            </div>
+            <div class="hero-card">
+                <small>Moderation stance</small>
+                <strong>Unsafe behavior gets contained</strong>
+                <p>Reports feed into admin action so harmful sellers and misleading products are easier to identify and remove.</p>
+            </div>
+        </aside>
+    </section>
 
-<section>
-    <h2 class="section-title">Reporting System</h2>
-    <p class="section-desc">Here's what happens when you report a concern.</p>
-    <div class="grid-2">
-        <div class="report-card">
-            <h3>How to report</h3>
-            <p>Use the "Report" button on any product or seller page, choose a reason, and add quick details.</p>
+    <section class="intel-panel">
+        <div class="intel-grid">
+            <article class="intel-card">
+                <small>Trust outcome</small>
+                <strong>Lower buyer hesitation</strong>
+                <p>Clear verification and review signals make it easier for buyers to message with intention instead of doubt.</p>
+            </article>
+            <article class="intel-card">
+                <small>Marketplace outcome</small>
+                <strong>Better sellers compound faster</strong>
+                <p>Reliable operators get more room to build reputation when weak actors are harder to sustain.</p>
+            </article>
+            <article class="intel-card">
+                <small>Platform outcome</small>
+                <strong>Moderation becomes strategic</strong>
+                <p>Structured reporting turns marketplace trust into something measurable and operational, not just aspirational.</p>
+            </article>
         </div>
-        <div class="report-card">
-            <h3>After you report</h3>
-            <p>Moderators review cases within 24 hours, often applying temporary restrictions during assessment.</p>
-        </div>
-        <div class="report-card">
-            <h3>Admin review</h3>
-            <p>Our team verifies evidence, interviews involved users, and enforces policies consistently.</p>
-        </div>
-        <div class="report-card">
-            <h3>Outcome communication</h3>
-            <p>Users receive status updates and enforcement summaries when cases are resolved.</p>
-        </div>
-    </div>
-</section>
+    </section>
 
-<section>
-    <h2 class="section-title">Action Against Bad Sellers</h2>
-    <p class="section-desc">Strong enforcement keeps the platform safe for honest buyers and sellers.</p>
-    <div class="grid-2">
-        <div class="action-card">
-            <h3>Sellers can be blocked</h3>
-            <p>Any seller failing policies is blocked and removed from search results instantly.</p>
+    <section class="section-wrap">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Protection layers</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">No single badge protects a marketplace. Layered systems do.</h2>
+            </div>
+            <p>DM4PRICE combines seller checks, community feedback, reporting, and admin action so trust can survive even as the market becomes more competitive.</p>
         </div>
-        <div class="action-card">
-            <h3>Products removed</h3>
-            <p>Fraudulent or misrepresented listings are delisted immediately and cant be republished.</p>
-        </div>
-        <div class="action-card">
-            <h3>Repeat offenders banned</h3>
-            <p>Repeat violations lead to permanent account ban and marketplace exclusion.</p>
-        </div>
-        <div class="action-card">
-            <h3>Trusted platform</h3>
-            <p>We maintain traceable records and provide feedback so you know action was taken.</p>
-        </div>
-    </div>
-</section>
 
-<section class="note-block">
-    <p>dm4price is committed to helping you compare prices, avoid scams, and buy safely.</p>
-</section>
+        <div class="pillar-grid">
+            <article class="pillar-card">
+                <h3>Identity verification</h3>
+                <p>Seller onboarding can require NIN verification before approval, making storefront access more accountable.</p>
+            </article>
+            <article class="pillar-card">
+                <h3>Visible reputation</h3>
+                <p>Buyers can inspect ratings and review counts before deciding whether a listing deserves a conversation.</p>
+            </article>
+            <article class="pillar-card">
+                <h3>Structured reports</h3>
+                <p>Products and sellers can be reported with clear reasons so moderators can assess risk faster.</p>
+            </article>
+            <article class="pillar-card">
+                <h3>Admin enforcement</h3>
+                <p>Unsafe activity can trigger restriction, delisting, blocking, or deeper review depending on the severity.</p>
+            </article>
+        </div>
+    </section>
 
-<section style="text-align:center; margin:2.5rem 0;">
-    <a href="{% url 'products:list' %}" class="btn-primary">Browse Products</a>
-</section>
+    <section class="section-wrap">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Buyer playbook</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Use the marketplace with operator discipline.</h2>
+            </div>
+        </div>
 
+        <div class="playbook-grid">
+            <article class="playbook-card">
+                <h3>Read trust signals before you engage</h3>
+                <p>Check seller ratings, product reviews, and profile credibility before moving into direct contact.</p>
+            </article>
+            <article class="playbook-card">
+                <h3>Treat abnormal pricing as a warning</h3>
+                <p>If a deal looks far cheaper than comparable listings, slow down and ask sharper questions before proceeding.</p>
+            </article>
+            <article class="playbook-card">
+                <h3>Ask specific proof-based questions</h3>
+                <p>Clarify condition, delivery expectation, availability, and any missing details before trusting a seller claim.</p>
+            </article>
+            <article class="playbook-card">
+                <h3>Report early, not only after damage</h3>
+                <p>Fast reports help moderators respond before risky behavior spreads through more listings and conversations.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Reporting flow</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">A report should lead to action, not disappear into a void.</h2>
+            </div>
+        </div>
+
+        <div class="report-grid">
+            <article class="report-card">
+                <h3>1. Submit with context</h3>
+                <p>Choose the closest report reason and include enough detail for a moderator to understand the actual risk.</p>
+            </article>
+            <article class="report-card">
+                <h3>2. Review the account history</h3>
+                <p>Admins can inspect patterns across listings, prior reports, and seller signals before deciding what to do.</p>
+            </article>
+            <article class="report-card">
+                <h3>3. Contain the threat</h3>
+                <p>Listings can be hidden, sellers can be blocked, and suspicious activity can be interrupted before it escalates.</p>
+            </article>
+            <article class="report-card">
+                <h3>4. Improve future trust</h3>
+                <p>The goal is not only discipline. It is making the average marketplace experience safer over time.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Enforcement</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Strong sellers benefit when abuse becomes harder to repeat.</h2>
+            </div>
+        </div>
+
+        <div class="enforcement-grid">
+            <article class="enforcement-card">
+                <h3>Bad sellers can lose access</h3>
+                <p>Repeat scams, harmful listings, and abusive conduct can lead to blocked or suspended marketplace accounts.</p>
+            </article>
+            <article class="enforcement-card">
+                <h3>Unsafe products can be removed</h3>
+                <p>Products that mislead buyers, violate standards, or create harm can be delisted as part of platform moderation.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="closing-note">
+        <span class="section-kicker">Operating principle</span>
+        <p>DM4PRICE is trying to build a market where trust compounds. That means helping good sellers win more often by making bad behavior easier to spot and less profitable to sustain.</p>
+    </section>
+</div>
 {% endblock %}

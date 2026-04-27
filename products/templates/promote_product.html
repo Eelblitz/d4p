@@ -1,482 +1,410 @@
 {% extends "base.html" %}
 
-{% block title %}Promote Your Product - DM4PRICE{% endblock %}
+{% block title %}Promote Products - DM4PRICE{% endblock %}
 
 {% block extra_styles %}
 <style>
-    .hero {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: #fff;
-        padding: 4rem 0;
-        margin: -2rem 0 3rem 0;
-        text-align: center;
-    }
-
-    .hero .hero-content {
-        max-width: 840px;
-        margin: 0 auto;
-        padding: 0 1rem;
-    }
-
-    .hero h1 {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        line-height: 1.2;
-    }
-
-    .hero p {
-        font-size: 1.25rem;
-        opacity: 0.95;
-        margin-bottom: 1.4rem;
-        line-height: 1.6;
-    }
-
-    .btn-primary,
-    .btn-secondary {
-        padding: 1rem 2rem;
-        font-size: 1.05rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background-color: #3498db;
-        color: #fff;
-    }
-
-    .btn-primary:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-    }
-
-    .section-title {
-        font-size: 2rem;
-        color: #2c3e50;
-        text-align: center;
-        margin: 2.5rem 0 1rem;
-        font-weight: 700;
-    }
-
-    .section-desc {
-        text-align: center;
-        color: #7f8c8d;
-        max-width: 820px;
-        margin: 0 auto 2rem;
-        line-height: 1.6;
-    }
-
-    .grid-3,
-    .grid-2 {
+    .promote-shell {
         display: grid;
-        gap: 1.5rem;
+        gap: 1.25rem;
     }
 
-    .grid-3 {
+    .promote-hero,
+    .signal-strip,
+    .plan-card,
+    .playbook-card,
+    .faq-card,
+    .empty-state {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+    }
+
+    .promote-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        gap: 1rem;
+        padding: 1.5rem;
+    }
+
+    .hero-copy p,
+    .hero-side p,
+    .signal-card p,
+    .plan-card p,
+    .playbook-card p,
+    .faq-card p,
+    .empty-state p {
+        color: var(--muted);
+    }
+
+    .hero-side {
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .hero-note {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(180deg, rgba(68, 163, 255, 0.11), rgba(255, 255, 255, 0.03));
+        border: 1px solid rgba(68, 163, 255, 0.18);
+    }
+
+    .hero-note small,
+    .signal-card small,
+    .micro-label {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.74rem;
+    }
+
+    .hero-note strong,
+    .signal-card strong {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.08rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .signal-strip {
+        padding: 1rem;
+    }
+
+    .signal-grid,
+    .plans-grid,
+    .playbook-grid,
+    .faq-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .signal-grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
-    .grid-2 {
+    .signal-card {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+    }
+
+    .plans-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        align-items: stretch;
+    }
+
+    .plan-card {
+        position: relative;
+        padding: 1.35rem;
+        display: grid;
+        gap: 1rem;
+    }
+
+    .plan-card.is-featured {
+        background:
+            radial-gradient(circle at top right, rgba(113, 240, 193, 0.16), transparent 34%),
+            var(--panel);
+        border-color: rgba(113, 240, 193, 0.22);
+        transform: translateY(-8px);
+    }
+
+    .plan-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        padding: 0.4rem 0.72rem;
+        border-radius: 999px;
+        background: rgba(255, 215, 128, 0.12);
+        border: 1px solid rgba(255, 215, 128, 0.28);
+        color: var(--warm);
+        font-size: 0.74rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .plan-head h2 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.35rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .plan-price {
+        display: flex;
+        align-items: baseline;
+        gap: 0.35rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .plan-price strong {
+        font-size: clamp(2rem, 4vw, 2.6rem);
+        letter-spacing: -0.05em;
+    }
+
+    .plan-price span {
+        color: var(--muted);
+        font-size: 0.95rem;
+    }
+
+    .plan-meta {
+        display: grid;
+        gap: 0.4rem;
+        padding: 0.95rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+    }
+
+    .feature-list {
+        list-style: none;
+        display: grid;
+        gap: 0.7rem;
+    }
+
+    .feature-list li {
+        display: flex;
+        gap: 0.75rem;
+        align-items: start;
+        color: var(--muted);
+    }
+
+    .feature-list li::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        margin-top: 0.45rem;
+        border-radius: 999px;
+        background: linear-gradient(135deg, var(--accent), #9ae2ff);
+        box-shadow: 0 0 0 5px rgba(113, 240, 193, 0.1);
+        flex-shrink: 0;
+    }
+
+    .section-wrap {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: end;
+        flex-wrap: wrap;
+    }
+
+    .section-head p {
+        max-width: 620px;
+        color: var(--muted);
+    }
+
+    .playbook-grid,
+    .faq-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .benefit-card,
-    .pricing-card,
-    .step-card {
-        background-color: #fff;
-        border-radius: 8px;
-        padding: 1.8rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-        transition: transform 0.3s, box-shadow 0.3s;
-        border: 1px solid #e0e4e8;
+    .playbook-card,
+    .faq-card,
+    .empty-state {
+        padding: 1.2rem;
     }
 
-    .benefit-card:hover,
-    .pricing-card:hover,
-    .step-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    .playbook-card h3,
+    .faq-card h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        margin-bottom: 0.45rem;
+        font-size: 1.05rem;
     }
 
-    .pricing-card {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        border: 2px solid #e0e4e8;
-    }
-
-    .pricing-card.featured {
-        border: 2px solid #3498db;
-        background: linear-gradient(135deg, #f8fbfe 0%, #f0f7ff 100%);
-        transform: scale(1.05);
-    }
-
-    .pricing-card.featured:hover {
-        transform: scale(1.05) translateY(-4px);
-    }
-
-    .pricing-header {
-        margin-bottom: 1rem;
-    }
-
-    .pricing-plan {
-        font-size: 1.4rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-    }
-
-    .pricing-price {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #3498db;
-        margin: 0;
-    }
-
-    .pricing-price small {
-        font-size: 0.6rem;
-        font-weight: normal;
-        color: #7f8c8d;
-    }
-
-    .pricing-duration {
-        font-size: 0.9rem;
-        color: #7f8c8d;
-        margin-top: 0.25rem;
-    }
-
-    .pricing-features {
-        list-style: none;
-        padding: 1.5rem 0;
-        margin: 1.5rem 0;
-        border-top: 1px solid #e0e4e8;
-        border-bottom: 1px solid #e0e4e8;
-    }
-
-    .pricing-features li {
-        padding: 0.6rem 0;
-        color: #555;
-        font-size: 0.95rem;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-    }
-
-    .pricing-features li:before {
-        content: "✓";
-        color: #27ae60;
-        font-weight: 700;
-        font-size: 1.1rem;
-    }
-
-    .pricing-cta {
-        margin-top: 1.5rem;
-    }
-
-    .pricing-cta a,
-    .pricing-cta button {
-        width: 100%;
-        padding: 0.85rem 1rem;
-        background-color: #3498db;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        display: block;
+    .empty-state {
         text-align: center;
-        transition: background 0.3s;
     }
 
-    .pricing-cta a:hover,
-    .pricing-cta button:hover {
-        background-color: #2980b9;
-    }
-
-    .benefit-icon {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-    }
-
-    .benefit-card h3,
-    .step-card h3,
-    .pricing-card h3 {
-        color: #2c3e50;
-        margin-bottom: 0.6rem;
-        font-size: 1.15rem;
-    }
-
-    .benefit-card p,
-    .step-card p {
-        color: #6b7d8b;
-        line-height: 1.6;
-        font-size: 0.97rem;
-    }
-
-    .step-number {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background-color: #3498db;
-        color: #fff;
-        border-radius: 50%;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        font-size: 1.1rem;
-    }
-
-    .highlight-section {
-        background: linear-gradient(135deg, #ecf7fc 0%, #def2fc 100%);
-        border-left: 4px solid #3498db;
-        padding: 2rem;
-        border-radius: 8px;
-        margin: 2.5rem 0;
-    }
-
-    .highlight-section h2 {
-        color: #2c3e50;
-        margin-bottom: 1rem;
-    }
-
-    .highlight-section ul {
-        list-style: none;
-        padding: 0;
-    }
-
-    .highlight-section ul li {
-        padding: 0.6rem 0;
-        color: #2c3e50;
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        font-size: 0.95rem;
-    }
-
-    .highlight-section ul li:before {
-        content: "⭐";
-        font-size: 1rem;
-    }
-
-    .faq-item {
-        background-color: #fff;
-        border: 1px solid #e0e4e8;
-        border-radius: 8px;
-        padding: 1.5rem;
-        margin-bottom: 1rem;
-    }
-
-    .faq-question {
-        font-weight: 600;
-        color: #2c3e50;
-        cursor: pointer;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .faq-question:hover {
-        color: #3498db;
-    }
-
-    .faq-answer {
-        color: #6b7d8b;
-        line-height: 1.6;
-        margin-top: 0.8rem;
-        font-size: 0.95rem;
-    }
-
-    @media (max-width: 1024px) {
-        .grid-3,
-        .grid-2 {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-
-        .pricing-card.featured {
-            transform: scale(1);
-        }
-
-        .pricing-card.featured:hover {
-            transform: translateY(-4px);
-        }
-    }
-
-    @media (max-width: 760px) {
-        .grid-3,
-        .grid-2 {
+    @media (max-width: 1080px) {
+        .promote-hero,
+        .signal-grid,
+        .plans-grid,
+        .playbook-grid,
+        .faq-grid {
             grid-template-columns: 1fr;
         }
 
-        .hero h1 {
-            font-size: 2.25rem;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-        }
-
-        .section-title {
-            font-size: 1.6rem;
-        }
-
-        .pricing-plan {
-            font-size: 1.2rem;
-        }
-
-        .pricing-price {
-            font-size: 1.6rem;
+        .plan-card.is-featured {
+            transform: none;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<section class="hero">
-    <div class="hero-content">
-        <h1>Boost Your Sales with Product Promotion</h1>
-        <p>Get your products in front of more buyers. Promote directly from dm4price and watch your visibility soar.</p>
-        <a href="#pricing" class="btn-primary">See Promotion Plans</a>
-    </div>
-</section>
+<div class="breadcrumb">
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <a href="{% url 'products:list' %}">Marketplace</a> /
+    <span>Promotions</span>
+</div>
 
-<section>
-    <h2 class="section-title">Why Promote Your Products?</h2>
-    <p class="section-desc">Reach more buyers and accelerate your sales with targeted product promotion.</p>
-    <div class="grid-3">
-        <div class="benefit-card">
-            <div class="benefit-icon">👥</div>
-            <h3>Increased Visibility</h3>
-            <p>Featured promotions place your products at the top of search results and category pages.</p>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon">📈</div>
-            <h3>Higher Conversion</h3>
-            <p>More eyeballs mean more inquiries. Attract serious buyers actively looking for your products.</p>
-        </div>
-        <div class="benefit-card">
-            <div class="benefit-icon">⏱️</div>
-            <h3>Flexible Duration</h3>
-            <p>Choose how long to promote—3 days, 7 days, or 30 days. Stop or renew anytime.</p>
-        </div>
-    </div>
-</section>
-
-<section id="pricing">
-    <h2 class="section-title">Promotion Plans</h2>
-    <p class="section-desc">Simple, transparent pricing. No hidden fees.</p>
-    <div class="grid-3">
-        {% for plan in plans %}
-        <div class="pricing-card {% if plan.is_featured %}featured{% endif %}">
-            <div class="pricing-header">
-                <div class="pricing-plan">{{ plan.name }}</div>
-                <div class="pricing-price">₦{{ plan.price }} <small>/ {{ plan.duration_days }} days</small></div>
-                {% if plan.is_featured %}
-                <div style="color: #3498db; font-size: 0.85rem; font-weight: 600; margin-top: 0.5rem;">BEST VALUE</div>
-                {% endif %}
+<div class="promote-shell">
+    <section class="promote-hero">
+        <div class="hero-copy">
+            <span class="section-kicker">Revenue acceleration</span>
+            <h1 class="section-heading" style="margin: 1rem 0 0.85rem;">Buy visibility only when it helps the right listing win faster.</h1>
+            <p class="section-copy">DM4PRICE promotions are built for serious sellers who want more qualified discovery, not vanity impressions. Boosts lift your product in key discovery surfaces while the platform still respects relevance, trust, and buyer intent.</p>
+            <div class="button-row" style="margin-top: 1rem;">
+                <a href="{% url 'products:promotion_checkout' %}" class="button">Launch a promotion</a>
+                <a href="{% url 'products:seller_dashboard' %}" class="button-ghost" style="text-decoration: none;">View seller analytics</a>
             </div>
-            <ul class="pricing-features">
-                {% for feature in plan.features_list %}
-                <li>{{ feature }}</li>
-                {% empty %}
-                <li>No features listed</li>
+        </div>
+
+        <aside class="hero-side">
+            <div class="hero-note">
+                <small>Why this matters</small>
+                <strong>Promotion is now measurable.</strong>
+                <p>Views, contact clicks, and promoted CTR are already tracked in your seller dashboard, so boosts can prove value instead of just feeling active.</p>
+            </div>
+            <div class="hero-note">
+                <small>Payment rails</small>
+                <strong>Built for Nigeria-first checkout.</strong>
+                <p>Promotion payments already support bank transfer and USSD through Paystack so sellers can complete upgrades using familiar local rails.</p>
+            </div>
+            <div class="hero-note">
+                <small>Marketplace rule</small>
+                <strong>Trust still matters.</strong>
+                <p>Boosted listings gain placement power, but relevance, ratings, and seller trust signals still shape discovery quality.</p>
+            </div>
+        </aside>
+    </section>
+
+    <section class="signal-strip">
+        <div class="signal-grid">
+            <article class="signal-card">
+                <small>Use case</small>
+                <strong>Launch a new product</strong>
+                <p>Get early discovery for listings that need their first serious round of buyer attention.</p>
+            </article>
+            <article class="signal-card">
+                <small>Use case</small>
+                <strong>Push proven inventory</strong>
+                <p>Scale the products that already convert well and use promotion to compound what is working.</p>
+            </article>
+            <article class="signal-card">
+                <small>Use case</small>
+                <strong>Recover hidden gems</strong>
+                <p>Give strong listings a second chance when they deserve better placement than the default feed gives them.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section-wrap">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Promotion plans</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Choose the level of exposure that fits the product, the margin, and the urgency.</h2>
+            </div>
+            <p>Each plan is best treated like an operator decision. Promote products that already have strong photos, a clear description, and a trustworthy seller profile.</p>
+        </div>
+
+        {% if plans %}
+            <div class="plans-grid">
+                {% for plan in plans %}
+                    <article class="plan-card{% if plan.is_featured %} is-featured{% endif %}">
+                        {% if plan.is_featured %}
+                            <span class="plan-badge">Best value</span>
+                        {% endif %}
+
+                        <div class="plan-head">
+                            <span class="micro-label">Plan {{ forloop.counter }}</span>
+                            <h2>{{ plan.name }}</h2>
+                            <p>{{ plan.description|default:"Designed for sellers who want a sharper visibility advantage." }}</p>
+                        </div>
+
+                        <div class="plan-price">
+                            <strong>NGN {{ plan.price }}</strong>
+                            <span>for {{ plan.duration_days }} day{{ plan.duration_days|pluralize }}</span>
+                        </div>
+
+                        <div class="plan-meta">
+                            <small>Promotion frame</small>
+                            <span>Runs for {{ plan.duration_days }} day{{ plan.duration_days|pluralize }} and feeds into your existing listing analytics.</span>
+                        </div>
+
+                        <ul class="feature-list">
+                            {% for feature in plan.features_list %}
+                                <li>{{ feature }}</li>
+                            {% empty %}
+                                <li>Priority placement on DM4PRICE discovery surfaces.</li>
+                                <li>Paystack-powered local payment support for USSD and bank transfer.</li>
+                            {% endfor %}
+                        </ul>
+
+                        <a href="{% url 'products:promotion_checkout' %}?plan={{ plan.id }}" class="button" style="text-decoration: none; justify-content: center;">Choose {{ plan.name }}</a>
+                    </article>
                 {% endfor %}
-            </ul>
-            <div class="pricing-cta">
-                <button onclick="handlePromote('{{ plan.id }}')">Promote Now</button>
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <p style="margin-bottom: 0.55rem;">No promotion plans are active right now.</p>
+                <p>Once plans are configured again, this page will immediately become your visibility control center.</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <section class="section-wrap">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Promotion playbook</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">The best promoted listings usually win before the boost even starts.</h2>
             </div>
         </div>
-        {% empty %}
-        <div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: #7f8c8d;">
-            <p>No promotion plans available at the moment. Please check back soon!</p>
-        </div>
-        {% endfor %}
-    </div>
-</section>
 
-<section class="highlight-section">
-    <h2>What You Get with Promotion</h2>
-    <ul>
-        <li>Premium badge on your product listing</li>
-        <li>Top placement in relevant search results</li>
-        <li>Featured slot on category pages</li>
-        <li>Homepage rotation (7-day and 30-day plans)</li>
-        <li>Real-time analytics dashboard</li>
-        <li>Click and impression tracking</li>
-        <li>ROI calculator to measure success</li>
-    </ul>
-</section>
+        <div class="playbook-grid">
+            <article class="playbook-card">
+                <h3>Fix the listing fundamentals first</h3>
+                <p>Use strong cover images, a credible description, and a clean price story before you spend to amplify it.</p>
+            </article>
+            <article class="playbook-card">
+                <h3>Promote based on likely contact intent</h3>
+                <p>Listings with clear demand and quick response workflows convert promotion much better than vague inventory.</p>
+            </article>
+            <article class="playbook-card">
+                <h3>Watch promoted CTR, not just views</h3>
+                <p>More traffic only matters when contact clicks rise. DM4PRICE already shows whether promoted attention is becoming outreach.</p>
+            </article>
+            <article class="playbook-card">
+                <h3>Use short tests before big bets</h3>
+                <p>Try smaller plans to learn what product types respond best, then scale into the plans that actually outperform.</p>
+            </article>
+        </div>
+    </section>
 
-<section>
-    <h2 class="section-title">How It Works</h2>
-    <p class="section-desc">Promote your product in three simple steps.</p>
-    <div class="grid-3">
-        <div class="step-card">
-            <div class="step-number">1</div>
-            <h3>Select Your Product</h3>
-            <p>Choose which product from your inventory you want to promote to reach more buyers.</p>
+    <section class="section-wrap">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">FAQ</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">What sellers usually want to know before buying visibility.</h2>
+            </div>
         </div>
-        <div class="step-card">
-            <div class="step-number">2</div>
-            <h3>Pick Your Plan</h3>
-            <p>Choose a promotion duration and budget that fits your sales goals and timeline.</p>
-        </div>
-        <div class="step-card">
-            <div class="step-number">3</div>
-            <h3>Watch It Grow</h3>
-            <p>Your product goes live and starts getting premium exposure immediately. Monitor results in real-time.</p>
-        </div>
-    </div>
-</section>
 
-<section>
-    <h2 class="section-title">Frequently Asked Questions</h2>
-    <div class="grid-2">
-        <div class="faq-item">
-            <div class="faq-question">Can I promote multiple products?</div>
-            <div class="faq-answer">Yes! You can promote as many products as you want simultaneously. Each promotion is independent and tracked separately.</div>
+        <div class="faq-grid">
+            <article class="faq-card">
+                <h3>How do I pay for a promotion?</h3>
+                <p>During checkout, DM4PRICE initializes a Paystack payment and supports local methods such as bank transfer and USSD.</p>
+            </article>
+            <article class="faq-card">
+                <h3>When does the promotion start?</h3>
+                <p>The boost activates after Paystack confirms the transaction, then the plan duration begins automatically.</p>
+            </article>
+            <article class="faq-card">
+                <h3>Can promoted products still be outranked?</h3>
+                <p>Yes. Promotion helps, but the marketplace still values listing quality, seller verification, and relevance to the buyer query.</p>
+            </article>
+            <article class="faq-card">
+                <h3>Where do I measure results?</h3>
+                <p>Your seller dashboard shows promoted views, contact clicks, promoted CTR, and the top-performing listing signal.</p>
+            </article>
         </div>
-        <div class="faq-item">
-            <div class="faq-question">When does my promotion start?</div>
-            <div class="faq-answer">Promotions go live instantly after payment. Your product will be visible in featured slots within minutes.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question">Can I renew or extend my promotion?</div>
-            <div class="faq-answer">Absolutely! You can extend your promotion anytime before it expires. Simply purchase another plan for the same product.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question">What if I'm not satisfied?</div>
-            <div class="faq-answer">We offer a 24-hour satisfaction guarantee. If you're not seeing results, we'll refund your promotion cost.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question">Do I get analytics?</div>
-            <div class="faq-answer">Yes! Track impressions, clicks, and estimated conversion value in your seller dashboard. Real-time insights help you optimize.</div>
-        </div>
-        <div class="faq-item">
-            <div class="faq-question">Is there a minimum rating for promotion?</div>
-            <div class="faq-answer">Products must have a 3.5+ star rating and no active policy violations. We maintain quality for all promotions.</div>
-        </div>
-    </div>
-</section>
-
-<section style="text-align: center; margin: 2.5rem 0; padding: 2rem; background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%); border-radius: 8px;">
-    <h2 style="color: #2c3e50; margin-bottom: 1rem;">Ready to Boost Your Sales?</h2>
-    <p style="color: #7f8c8d; margin-bottom: 1.5rem;">Start promoting your products today and reach thousands of active buyers on dm4price.</p>
-    <a href="#pricing" class="btn-primary">View Promotion Plans</a>
-</section>
-
-<script>
-    function handlePromote(plan) {
-        window.location.href = '{% url "products:promotion_checkout" %}?plan=' + plan;
-    }
-</script>
-
+    </section>
+</div>
 {% endblock %}

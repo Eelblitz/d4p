@@ -4,223 +4,245 @@
 
 {% block extra_styles %}
 <style>
-    .dashboard-container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .dashboard-header,
-    .analytics-section,
-    .products-section {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .dashboard-header h2,
-    .analytics-section h3,
-    .products-section h3 {
-        color: #2c3e50;
-        margin-bottom: 1.5rem;
-    }
-
-    .stats-grid,
-    .analytics-grid {
+    .dashboard-shell {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
+        gap: 1.25rem;
     }
 
-    .stat-card {
-        color: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        text-align: center;
-        background: linear-gradient(135deg, #3498db, #2980b9);
-    }
-
-    .stat-active {
-        background: linear-gradient(135deg, #27ae60, #229954);
-    }
-
-    .stat-inactive {
-        background: linear-gradient(135deg, #e74c3c, #c0392b);
-    }
-
-    .stat-rating {
-        background: linear-gradient(135deg, #f39c12, #d68910);
-    }
-
-    .analytics-card {
-        background: #f8f9fa;
-        border: 1px solid #ecf0f1;
-        border-radius: 8px;
-        padding: 1.25rem;
-    }
-
-    .analytics-card strong,
-    .stat-value {
-        display: block;
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 0.35rem;
-        color: inherit;
-    }
-
-    .analytics-card strong {
-        color: #2c3e50;
-    }
-
-    .stat-label,
-    .analytics-card span {
-        font-size: 0.95rem;
-        opacity: 0.95;
-        color: #566573;
-    }
-
-    .analytics-highlight {
-        background: linear-gradient(135deg, #fff8e1, #fef3c7);
-        border-left: 4px solid #f39c12;
-        padding: 1rem 1.25rem;
-        border-radius: 8px;
-        color: #5d4037;
-    }
-
-    .analytics-highlight strong {
-        color: #2c3e50;
-    }
-
-    .action-buttons,
-    .action-links {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .btn,
-    .action-links a {
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        text-decoration: none;
-        font-size: 0.95rem;
-        font-weight: 600;
-        display: inline-block;
-        transition: all 0.3s;
-    }
-
-    .btn-primary,
-    .edit-link {
-        background-color: #3498db;
-        color: white;
-    }
-
-    .btn-secondary {
-        background-color: #95a5a6;
-        color: white;
-    }
-
-    .image-link {
-        background-color: #f39c12;
-        color: white;
-    }
-
-    .delete-link {
-        background-color: #e74c3c;
-        color: white;
-    }
-
-    .products-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .products-table thead {
-        background-color: #ecf0f1;
-        border-bottom: 2px solid #bdc3c7;
-    }
-
-    .products-table th,
-    .products-table td {
-        padding: 1rem;
-        text-align: left;
-        border-bottom: 1px solid #ecf0f1;
-        vertical-align: top;
-    }
-
-    .products-table tbody tr:hover {
-        background-color: #f8f9fa;
-    }
-
-    .product-name {
-        font-weight: 600;
-        color: #2c3e50;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 0.35rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-    }
-
-    .status-active {
-        background-color: #d5f4e6;
-        color: #27ae60;
-    }
-
-    .status-inactive {
-        background-color: #fadbd8;
-        color: #c0392b;
-    }
-
-    .status-promoted {
-        background-color: #fff3cd;
-        color: #8a5a00;
-    }
-
-    .rating-display {
-        color: #f39c12;
-        font-weight: 600;
-    }
-
-    .metric-stack {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-        color: #566573;
-    }
-
+    .dashboard-hero,
+    .metrics-panel,
+    .spotlight-panel,
+    .inventory-panel,
+    .metric-card,
+    .spotlight-card,
+    .inventory-row,
     .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #7f8c8d;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
     }
 
+    .dashboard-hero,
+    .metrics-panel,
+    .spotlight-panel,
+    .inventory-panel {
+        padding: 1.35rem;
+    }
+
+    .dashboard-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+        gap: 1rem;
+    }
+
+    .dashboard-hero p,
+    .metric-card p,
+    .spotlight-card p,
+    .inventory-row p,
     .empty-state p {
+        color: var(--muted);
+    }
+
+    .hero-actions {
+        display: grid;
+        gap: 0.9rem;
+        align-content: start;
+    }
+
+    .hero-card {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .hero-card small,
+    .metric-card small,
+    .mini-label {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.74rem;
+    }
+
+    .hero-card strong,
+    .metric-card strong,
+    .spotlight-card strong {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .hero-card strong {
+        margin-bottom: 0.35rem;
+        font-size: 1.08rem;
+    }
+
+    .verified-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.42rem 0.74rem;
+        border-radius: 999px;
+        border: 1px solid rgba(113, 240, 193, 0.22);
+        background: rgba(113, 240, 193, 0.08);
+        color: var(--accent);
+        font-size: 0.78rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .section-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: end;
+        flex-wrap: wrap;
         margin-bottom: 1rem;
     }
 
-    @media (max-width: 768px) {
-        .stats-grid,
-        .analytics-grid {
+    .section-head p {
+        max-width: 640px;
+        color: var(--muted);
+    }
+
+    .metrics-grid,
+    .analytics-grid,
+    .spotlight-grid,
+    .inventory-stack {
+        display: grid;
+        gap: 0.9rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .analytics-grid,
+    .spotlight-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metric-card,
+    .spotlight-card {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        box-shadow: none;
+    }
+
+    .metric-card strong {
+        font-size: 1.95rem;
+        letter-spacing: -0.05em;
+        margin-bottom: 0.25rem;
+    }
+
+    .spotlight-card strong {
+        margin-bottom: 0.3rem;
+        font-size: 1.1rem;
+    }
+
+    .inventory-stack {
+        grid-template-columns: 1fr;
+    }
+
+    .inventory-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(220px, 0.8fr) minmax(220px, 0.8fr) auto;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        box-shadow: none;
+        align-items: start;
+    }
+
+    .inventory-row h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.08rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .pill-row {
+        display: flex;
+        gap: 0.45rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.65rem;
+    }
+
+    .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.32rem 0.62rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .pill.active {
+        color: var(--accent);
+        border-color: rgba(113, 240, 193, 0.22);
+        background: rgba(113, 240, 193, 0.08);
+    }
+
+    .pill.inactive {
+        color: var(--danger);
+        border-color: rgba(255, 143, 148, 0.22);
+        background: rgba(255, 143, 148, 0.08);
+    }
+
+    .pill.promoted {
+        color: var(--warm);
+        border-color: rgba(255, 215, 128, 0.22);
+        background: rgba(255, 215, 128, 0.08);
+    }
+
+    .meta-cluster {
+        display: grid;
+        gap: 0.35rem;
+    }
+
+    .meta-cluster strong {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 0.98rem;
+    }
+
+    .product-actions {
+        display: grid;
+        gap: 0.55rem;
+    }
+
+    .product-actions a {
+        text-decoration: none;
+        justify-content: center;
+    }
+
+    .empty-state {
+        padding: 2rem;
+        text-align: center;
+        border-style: dashed;
+        border-color: var(--line-strong);
+        background: rgba(255, 255, 255, 0.03);
+        box-shadow: none;
+    }
+
+    @media (max-width: 1120px) {
+        .dashboard-hero,
+        .metrics-grid,
+        .analytics-grid,
+        .spotlight-grid,
+        .inventory-row {
             grid-template-columns: 1fr;
-        }
-
-        .products-table {
-            display: block;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        .action-buttons,
-        .action-links {
-            flex-direction: column;
         }
     }
 </style>
@@ -228,150 +250,221 @@
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{% url 'products:list' %}">Products</a> / Seller Dashboard
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <a href="{% url 'accounts:profile' %}">Profile</a> /
+    <span>Seller dashboard</span>
 </div>
 
-<div class="dashboard-container">
-    <div class="dashboard-header">
-        <h2>Seller Dashboard
+<div class="dashboard-shell">
+    <section class="dashboard-hero">
+        <div>
+            <span class="section-kicker">Seller command center</span>
+            <h1 class="section-heading" style="margin: 1rem 0 0.85rem;">See which listings earn attention, which ones create contact, and where promotion is actually paying off.</h1>
+            <p class="section-copy">This is the operator view for your storefront. Use it to compare inventory quality, monitor buyer intent, and decide which products deserve more effort or more budget.</p>
+            <div class="button-row" style="margin-top: 1rem;">
+                <a href="{% url 'products:add_product' %}" class="button">Add new product</a>
+                <a href="{% url 'products:promote_product' %}" class="button-ghost" style="text-decoration: none;">Promote inventory</a>
+                <a href="{% url 'accounts:profile' %}" class="button-ghost" style="text-decoration: none;">Profile settings</a>
+            </div>
+        </div>
+
+        <aside class="hero-actions">
             {% if user.is_verified %}
-                <span style="color: #f39c12; font-size: 0.7em; margin-left: 1rem;">Verified Seller</span>
+                <span class="verified-pill">Verified seller</span>
             {% endif %}
-        </h2>
+            <div class="hero-card">
+                <small>Storefront signal</small>
+                <strong>{{ seller_avg_rating|floatformat:1 }}/5 average seller rating</strong>
+                <p>{{ seller_rating_count }} seller rating{{ seller_rating_count|pluralize }} currently shape how buyers perceive your account.</p>
+            </div>
+            <div class="hero-card">
+                <small>Contact efficiency</small>
+                <strong>{{ overall_ctr }}% listing-to-contact rate</strong>
+                <p>Use CTR to spot whether views are just visibility or are actually turning into real buyer conversations.</p>
+            </div>
+            <div class="hero-card">
+                <small>Promotion visibility</small>
+                <strong>{{ promoted_product_count }} promoted product{{ promoted_product_count|pluralize }}</strong>
+                <p>Track whether paid discovery is outperforming the rest of your inventory instead of guessing.</p>
+            </div>
+        </aside>
+    </section>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">{{ total_products }}</div>
-                <div class="stat-label">Total Products</div>
+    <section class="metrics-panel">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Inventory health</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">A quick read on how your storefront is currently positioned.</h2>
             </div>
-            <div class="stat-card stat-active">
-                <div class="stat-value">{{ active_products }}</div>
-                <div class="stat-label">Active Listings</div>
-            </div>
-            <div class="stat-card stat-inactive">
-                <div class="stat-value">{{ inactive_products }}</div>
-                <div class="stat-label">Inactive Listings</div>
-            </div>
-            <div class="stat-card stat-rating">
-                <div class="stat-value">{{ seller_avg_rating }}</div>
-                <div class="stat-label">Seller Rating ({{ seller_rating_count }})</div>
-            </div>
+            <p>Healthy stores usually balance active inventory, clear pricing, strong images, and enough trust signals to turn discovery into outreach.</p>
         </div>
 
-        <div class="action-buttons">
-            <a href="{% url 'products:add_product' %}" class="btn btn-primary">+ Add New Product</a>
-            <a href="{% url 'accounts:profile' %}" class="btn btn-secondary">View Profile</a>
+        <div class="metrics-grid">
+            <article class="metric-card">
+                <small>Total products</small>
+                <strong>{{ total_products }}</strong>
+                <p>Every product you have created under this seller account.</p>
+            </article>
+            <article class="metric-card">
+                <small>Active listings</small>
+                <strong>{{ active_products }}</strong>
+                <p>Products currently visible to buyers across the marketplace.</p>
+            </article>
+            <article class="metric-card">
+                <small>Inactive listings</small>
+                <strong>{{ inactive_products }}</strong>
+                <p>Products paused, hidden, or not contributing to discovery right now.</p>
+            </article>
+            <article class="metric-card">
+                <small>Seller rating</small>
+                <strong>{{ seller_avg_rating|floatformat:1 }}</strong>
+                <p>Built from {{ seller_rating_count }} seller rating{{ seller_rating_count|pluralize }}.</p>
+            </article>
         </div>
-    </div>
+    </section>
 
-    <div class="analytics-section">
-        <h3>Engagement Analytics</h3>
+    <section class="metrics-panel">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Engagement analytics</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Measure what attention becomes after buyers land on a product.</h2>
+            </div>
+            <p>The strongest signal here is not raw visibility. It is whether listing views consistently turn into high-intent contact clicks.</p>
+        </div>
+
         <div class="analytics-grid">
-            <div class="analytics-card">
+            <article class="metric-card">
+                <small>Total views</small>
                 <strong>{{ total_views }}</strong>
-                <span>Total product views</span>
-            </div>
-            <div class="analytics-card">
+                <p>Listing page sessions captured across your active and inactive inventory.</p>
+            </article>
+            <article class="metric-card">
+                <small>Contact clicks</small>
                 <strong>{{ total_contact_clicks }}</strong>
-                <span>WhatsApp contact clicks</span>
-            </div>
-            <div class="analytics-card">
+                <p>WhatsApp or direct outreach events generated by interested buyers.</p>
+            </article>
+            <article class="metric-card">
+                <small>Overall CTR</small>
                 <strong>{{ overall_ctr }}%</strong>
-                <span>Overall click-through rate</span>
-            </div>
-            <div class="analytics-card">
+                <p>The share of listing views that become immediate buyer contact.</p>
+            </article>
+            <article class="metric-card">
+                <small>Promoted products</small>
                 <strong>{{ promoted_product_count }}</strong>
-                <span>Currently promoted products</span>
-            </div>
-            <div class="analytics-card">
+                <p>The number of listings currently benefiting from paid placement.</p>
+            </article>
+            <article class="metric-card">
+                <small>Promoted views</small>
                 <strong>{{ promoted_views }}</strong>
-                <span>Views on promoted listings</span>
-            </div>
-            <div class="analytics-card">
+                <p>Visibility accumulated specifically by boosted inventory.</p>
+            </article>
+            <article class="metric-card">
+                <small>Promoted CTR</small>
                 <strong>{{ promoted_ctr }}%</strong>
-                <span>Promoted listing CTR</span>
+                <p>How well promoted discovery converts into direct buyer action.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="spotlight-panel">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Performance spotlight</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Read the signals behind your top listing first.</h2>
             </div>
         </div>
 
-        {% if top_performing_product %}
-            <div class="analytics-highlight">
-                <strong>Top performer:</strong> {{ top_performing_product.name }} generated {{ top_performing_product.contact_click_count }} contact click{{ top_performing_product.contact_click_count|pluralize }} from {{ top_performing_product.view_count }} view{{ top_performing_product.view_count|pluralize }}.
-            </div>
-        {% else %}
-            <div class="analytics-highlight">
-                <strong>No engagement data yet.</strong> Share listings and start collecting product views and contact clicks to measure which items convert best.
-            </div>
-        {% endif %}
-    </div>
+        <div class="spotlight-grid">
+            <article class="spotlight-card">
+                <span class="mini-label">Best current product</span>
+                {% if top_performing_product %}
+                    <strong>{{ top_performing_product.name }}</strong>
+                    <p>This listing currently leads your portfolio on buyer action and should shape how you improve the rest of your catalog.</p>
+                {% else %}
+                    <strong>No leader yet</strong>
+                    <p>Once traffic begins to build, this card will highlight the listing buyers respond to most.</p>
+                {% endif %}
+            </article>
+            <article class="spotlight-card">
+                <span class="mini-label">Action signal</span>
+                {% if top_performing_product %}
+                    <strong>{{ top_performing_product.contact_click_count }} contact click{{ top_performing_product.contact_click_count|pluralize }}</strong>
+                    <p>That came from {{ top_performing_product.view_count }} view{{ top_performing_product.view_count|pluralize }}, which gives you a direct read on demand quality.</p>
+                {% else %}
+                    <strong>0 tracked contact clicks</strong>
+                    <p>Share listings and improve product presentation to start building usable performance history.</p>
+                {% endif %}
+            </article>
+            <article class="spotlight-card">
+                <span class="mini-label">Operator cue</span>
+                {% if top_performing_product %}
+                    <strong>Double down on what is working</strong>
+                    <p>Review the images, title, description, price story, and trust signals on this listing before optimizing weaker products.</p>
+                {% else %}
+                    <strong>Build the first benchmark</strong>
+                    <p>Start with one strong listing, measure it, and use that baseline to guide promotion and merchandising decisions.</p>
+                {% endif %}
+            </article>
+        </div>
+    </section>
 
-    <div class="products-section">
-        <h3>Your Products</h3>
+    <section class="inventory-panel">
+        <div class="section-head">
+            <div>
+                <span class="section-kicker">Inventory breakdown</span>
+                <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Every product, its trust state, and how it is earning attention.</h2>
+            </div>
+            <p>Use this list to compare product quality and decide what deserves editing, promotion, or retirement.</p>
+        </div>
 
         {% if seller_products %}
-            <table class="products-table">
-                <thead>
-                    <tr>
-                        <th>Product</th>
-                        <th>Status</th>
-                        <th>Rating</th>
-                        <th>Images</th>
-                        <th>Analytics</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in seller_products %}
-                        <tr>
-                            <td>
-                                <div class="product-name">{{ product.name }}</div>
-                                <div style="color: #7f8c8d; margin-top: 0.35rem;">{{ product.get_category_display }}</div>
-                            </td>
-                            <td>
-                                <span class="status-badge {% if product.is_active %}status-active{% else %}status-inactive{% endif %}">
-                                    {% if product.is_active %}Active{% else %}Inactive{% endif %}
-                                </span>
-                                {% if product.is_promoted %}
-                                    <div style="margin-top: 0.5rem;">
-                                        <span class="status-badge status-promoted">Boosted</span>
-                                    </div>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if product.rating_count > 0 %}
-                                    <span class="rating-display">Star {{ product.avg_rating }}/5 ({{ product.rating_count }})</span>
+            <div class="inventory-stack">
+                {% for product in seller_products %}
+                    <article class="inventory-row">
+                        <div>
+                            <div class="pill-row">
+                                {% if product.is_active %}
+                                    <span class="pill active">Active</span>
                                 {% else %}
-                                    <span style="color: #7f8c8d;">No ratings</span>
+                                    <span class="pill inactive">Inactive</span>
                                 {% endif %}
-                            </td>
-                            <td>
-                                <span style="background-color: #ecf0f1; padding: 0.35rem 0.75rem; border-radius: 20px; font-size: 0.9rem;">
-                                    {{ product.image_count }} image{{ product.image_count|pluralize }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="metric-stack">
-                                    <span>{{ product.view_count }} view{{ product.view_count|pluralize }}</span>
-                                    <span>{{ product.contact_click_count }} contact click{{ product.contact_click_count|pluralize }}</span>
-                                    <span>CTR {{ product.ctr }}%</span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="action-links">
-                                    <a href="{% url 'products:edit_product' product.id %}" class="edit-link">Edit</a>
-                                    <a href="{% url 'products:product_images' product.id %}" class="image-link">Images</a>
-                                    <a href="{% url 'products:delete_product' product.id %}" class="delete-link">Delete</a>
-                                </div>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                                {% if product.is_promoted %}
+                                    <span class="pill promoted">Promoted</span>
+                                {% endif %}
+                                <span class="pill">{{ product.get_category_display }}</span>
+                            </div>
+                            <h3>{{ product.name }}</h3>
+                            <p>{{ product.description|truncatewords:20 }}</p>
+                        </div>
+
+                        <div class="meta-cluster">
+                            <small class="mini-label">Performance</small>
+                            <strong>{{ product.contact_click_count }} contact click{{ product.contact_click_count|pluralize }}</strong>
+                            <p>{{ product.view_count }} view{{ product.view_count|pluralize }} tracked so far.</p>
+                            <p>{{ product.ctr }}% CTR on this listing.</p>
+                        </div>
+
+                        <div class="meta-cluster">
+                            <small class="mini-label">Listing quality</small>
+                            <strong>{{ product.avg_rating|default:0|floatformat:1 }}/5 average rating</strong>
+                            <p>{{ product.rating_count }} review{{ product.rating_count|pluralize }} and {{ product.image_count }} image{{ product.image_count|pluralize }} uploaded.</p>
+                        </div>
+
+                        <div class="product-actions">
+                            <a href="{% url 'products:detail' product.id %}" class="button-ghost">View</a>
+                            <a href="{% url 'products:edit_product' product.id %}" class="button-ghost">Edit</a>
+                            <a href="{% url 'products:product_images' product.id %}" class="button-ghost">Images</a>
+                            <a href="{% url 'products:delete_product' product.id %}" class="button-ghost">Delete</a>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
         {% else %}
             <div class="empty-state">
-                <p>You haven't added any products yet.</p>
-                <a href="{% url 'products:add_product' %}" class="btn btn-primary">Create Your First Product</a>
+                <p style="margin-bottom: 0.55rem;">No products yet.</p>
+                <p>Your dashboard becomes strategic once your first live listing starts collecting views, clicks, and trust signals.</p>
             </div>
         {% endif %}
-    </div>
+    </section>
 </div>
 {% endblock %}
