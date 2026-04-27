@@ -4,344 +4,242 @@
 
 {% block extra_styles %}
 <style>
-    .detail-container {
-        background-color: white;
-        border-radius: 8px;
-        padding: 2rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        margin-bottom: 2rem;
-    }
-    
-    .detail-grid {
+    .detail-shell {
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        margin-bottom: 2rem;
-    }
-    
-    .product-images {
-        display: flex;
-        flex-direction: column;
         gap: 1rem;
     }
-    
+
+    .detail-hero {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        gap: 1rem;
+        align-items: start;
+    }
+
+    .gallery-panel,
+    .info-panel,
+    .description-panel,
+    .reviews-panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+    }
+
+    .gallery-panel,
+    .info-panel {
+        padding: 1.2rem;
+    }
+
     .main-image {
         width: 100%;
-        max-height: 400px;
-        background-color: #f0f0f0;
-        border-radius: 8px;
+        aspect-ratio: 1.1 / 1;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
+        border: 1px solid rgba(167, 193, 255, 0.08);
     }
-    
+
     .main-image img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
+
     .thumbnails {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-        gap: 0.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+        gap: 0.7rem;
+        margin-top: 0.9rem;
     }
-    
+
     .thumbnail {
-        width: 100%;
-        height: 80px;
-        background-color: #f0f0f0;
-        border-radius: 4px;
-        cursor: pointer;
+        aspect-ratio: 1 / 1;
+        border-radius: var(--radius-md);
         overflow: hidden;
+        cursor: pointer;
         border: 2px solid transparent;
-        transition: border-color 0.3s;
+        background: rgba(255, 255, 255, 0.03);
+        transition: border-color 180ms ease, transform 180ms ease;
     }
-    
+
+    .thumbnail:hover {
+        transform: translateY(-1px);
+        border-color: rgba(113, 240, 193, 0.35);
+    }
+
     .thumbnail img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
-    .thumbnail:hover {
-        border-color: #3498db;
-    }
-    
-    .product-details {
+
+    .product-kicker {
         display: flex;
-        flex-direction: column;
-    }
-    
-    .product-header {
-        margin-bottom: 1.5rem;
-    }
-    
-    .product-name {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-    }
-    
-    .product-category {
-        display: inline-block;
-        background-color: #ecf0f1;
-        color: #7f8c8d;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        margin-bottom: 1rem;
-    }
-    
-    .rating-section {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1.5rem;
-    }
-    
-    .rating-display {
-        font-size: 1.2rem;
-        color: #f39c12;
-        margin-bottom: 0.5rem;
-    }
-    
-    .rating-count {
-        font-size: 0.9rem;
-        color: #7f8c8d;
-    }
-    
-    .seller-info {
-        background-color: #ecf7fc;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1.5rem;
-        border-left: 4px solid #3498db;
-    }
-    
-    .seller-name {
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-    }
-    
-    .seller-rating {
-        font-size: 0.9rem;
-        color: #7f8c8d;
-        margin-bottom: 0.5rem;
-    }
-    
-    .seller-contact {
-        font-size: 0.9rem;
-        color: #7f8c8d;
-    }
-    
-    .seller-contact a {
-        color: #3498db;
-        text-decoration: none;
-    }
-    
-    .seller-contact a:hover {
-        text-decoration: underline;
-    }
-    
-    .contact-btn {
-        background-color: #27ae60;
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 1rem;
-        text-decoration: none;
-        display: inline-block;
-        margin-top: 1rem;
-        transition: background-color 0.3s;
-    }
-    
-    .contact-btn:hover {
-        background-color: #229954;
-    }
-    
-    .description-section {
-        margin-bottom: 2rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid #ecf0f1;
-    }
-    
-    .section-title {
-        font-size: 1.3rem;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 1rem;
-    }
-    
-    .description-text {
-        color: #555;
-        line-height: 1.6;
-    }
-    
-    .ratings-section {
-        padding-top: 1.5rem;
-        border-top: 1px solid #ecf0f1;
-    }
-    
-    .review {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-    }
-    
-    .review-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-    }
-    
-    .review-user {
-        font-weight: 600;
-        color: #2c3e50;
-    }
-    
-    .review-date {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-    }
-    
-    .review-rating {
-        color: #f39c12;
-        margin-bottom: 0.5rem;
-    }
-    
-    .no-reviews {
-        color: #7f8c8d;
-        font-style: italic;
-    }
-    
-    .rating-form-container {
-        background-color: #f0f8ff;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-        border-left: 4px solid #3498db;
-    }
-    
-    .your-rating-info {
-        background-color: white;
-        padding: 0.75rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-        color: #2c3e50;
-        font-size: 0.95rem;
-    }
-    
-    .rating-form {
-        display: flex;
-        gap: 1rem;
-        align-items: flex-end;
-    }
-    
-    .rating-form .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .rating-form .form-group label {
-        font-size: 0.9rem;
-        color: #555;
-        margin-bottom: 0.25rem;
-    }
-    
-    .rating-form .form-group input[type="radio"] {
-        cursor: pointer;
-    }
-    
-    .rating-form .form-group ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        display: flex;
-        gap: 0.5rem;
+        gap: 0.45rem;
         flex-wrap: wrap;
+        margin-bottom: 0.85rem;
     }
-    
-    .rating-form .form-group li {
-        margin: 0;
+
+    .meta-pill {
+        padding: 0.32rem 0.62rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.78rem;
+        font-weight: 700;
     }
-    
-    .rating-form .form-group li label {
+
+    .meta-pill.verified {
+        color: var(--accent);
+        border-color: rgba(113, 240, 193, 0.22);
+        background: rgba(113, 240, 193, 0.08);
+    }
+
+    .product-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: clamp(2rem, 3vw, 2.9rem);
+        line-height: 1.02;
+        letter-spacing: -0.04em;
+        margin-bottom: 0.75rem;
+    }
+
+    .price-line {
+        font-size: 1.1rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+    }
+
+    .signal-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.8rem;
+        margin-bottom: 1rem;
+    }
+
+    .signal-card,
+    .seller-card {
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        padding: 1rem;
+    }
+
+    .signal-card small,
+    .seller-card small {
+        display: block;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.35rem;
+    }
+
+    .signal-card strong,
+    .seller-card strong {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.2rem;
+    }
+
+    .seller-card {
+        margin-top: 1rem;
+    }
+
+    .seller-card p {
+        color: var(--muted);
+        margin-top: 0.55rem;
+    }
+
+    .seller-links {
         display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+    }
+
+    .description-panel,
+    .reviews-panel {
+        padding: 1.35rem;
+    }
+
+    .panel-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.35rem;
+        margin-bottom: 0.7rem;
+    }
+
+    .panel-copy,
+    .review-comment {
+        color: var(--muted);
+    }
+
+    .rating-form-shell,
+    .review-card,
+    .login-prompt {
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        padding: 1rem;
+    }
+
+    .rating-form-shell {
+        margin-bottom: 1rem;
+    }
+
+    .rating-form {
+        display: grid;
+        grid-template-columns: 220px 1fr auto;
+        gap: 0.8rem;
+        align-items: end;
+    }
+
+    .rating-form ul {
+        display: flex;
+        gap: 0.55rem;
+        flex-wrap: wrap;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .rating-form li label {
+        margin: 0;
+        display: inline-flex;
         align-items: center;
         gap: 0.25rem;
         cursor: pointer;
-        margin: 0;
-        font-size: 1.1rem;
     }
-    
-    .rating-submit {
-        background-color: #3498db;
-        color: white;
-        padding: 0.75rem 1rem;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        font-size: 0.95rem;
-        font-weight: 500;
-        transition: background-color 0.3s;
-        white-space: nowrap;
+
+    .review-stack {
+        display: grid;
+        gap: 0.85rem;
+        margin-top: 1rem;
     }
-    
-    .rating-submit:hover {
-        background-color: #2980b9;
+
+    .review-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.55rem;
     }
-    
-    .login-to-rate {
-        background-color: #fff3cd;
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-        border-left: 4px solid #ffc107;
-        color: #856404;
+
+    .review-date {
+        color: var(--muted);
+        font-size: 0.88rem;
     }
-    
-    .login-to-rate p {
-        margin: 0;
+
+    .review-score {
+        margin-bottom: 0.4rem;
     }
-    
-    .login-to-rate a {
-        color: #be6800;
-        font-weight: 600;
-        text-decoration: none;
-    }
-    
-    .login-to-rate a:hover {
-        text-decoration: underline;
-    }
-    
-    @media (max-width: 768px) {
-        .detail-grid {
+
+    @media (max-width: 1040px) {
+        .detail-hero,
+        .rating-form,
+        .signal-grid {
             grid-template-columns: 1fr;
-        }
-        
-        .product-name {
-            font-size: 1.5rem;
-        }
-        
-        .main-image {
-            max-height: 300px;
-        }
-        
-        .rating-form {
-            flex-direction: column;
-            align-items: stretch;
-        }
-        
-        .rating-submit {
-            align-self: start;
         }
     }
 </style>
@@ -349,18 +247,19 @@
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{% url 'products:list' %}">Products</a> / {{ product.name }}
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <a href="{% url 'products:list' %}">Marketplace</a> /
+    <span>{{ product.name }}</span>
 </div>
 
-<div class="detail-container">
-    <div class="detail-grid">
-        <!-- Images Section -->
-        <div class="product-images">
+<div class="detail-shell">
+    <section class="detail-hero">
+        <div class="gallery-panel">
             <div class="main-image" id="mainImage">
                 {% if primary_image %}
                     <img src="{{ primary_image.image.url }}" alt="{{ product.name }}" id="mainImg">
                 {% else %}
-                    <span style="color: #bbb;">No image available</span>
+                    <span style="color: var(--muted);">No image uploaded</span>
                 {% endif %}
             </div>
             {% if images.count > 1 %}
@@ -373,152 +272,145 @@
                 </div>
             {% endif %}
         </div>
-        
-        <!-- Product Details Section -->
-        <div class="product-details">
-            <div class="product-header">
-                <h1 class="product-name">{{ product.name }}</h1>
-                <span class="product-category">{{ product.get_category_display }}</span>
-                <div style="margin-top: 1rem; font-size: 1.2rem; color: #2c3e50; font-weight: 600;">
-                    {% if product.price %}
-                        ₦{{ product.price|floatformat:2 }}
-                        {% if product.is_negotiable %}• Negotiable{% endif %}
-                    {% else %}
-                        Contact for price
-                    {% endif %}
-                </div>
-            </div>
-            
-            <!-- Rating Section -->
-            <div class="rating-section">
-                <div class="rating-display">
-                    {% if avg_rating > 0 %}
-                        ⭐ {{ avg_rating }}/5
-                    {% else %}
-                        No ratings yet
-                    {% endif %}
-                </div>
-                <div class="rating-count">
-                    {{ rating_count }} review{{ rating_count|pluralize }}
-                </div>
-                {% if user.is_authenticated %}
-                    <a href="{% url 'products:report_product' product.id %}" style="font-size: 0.85rem; color: #e74c3c; text-decoration: none; margin-top: 0.5rem; display: inline-block;">🚨 Report Product</a>
+
+        <div class="info-panel">
+            <div class="product-kicker">
+                <span class="meta-pill">{{ product.get_category_display }}</span>
+                {% if seller.is_verified %}
+                    <span class="meta-pill verified">Verified seller</span>
+                {% endif %}
+                {% if product.is_negotiable %}
+                    <span class="meta-pill">Negotiable</span>
                 {% endif %}
             </div>
-            
-            <!-- Seller Info Section -->
-            <div class="seller-info">
-                <div class="seller-name">📦 Seller: {{ seller.username }}
-                    {% if seller.is_verified %}
-                        <span style="color: #f39c12; font-size: 0.9rem; margin-left: 0.5rem;">✨ Verified</span>
-                    {% endif %}
-                </div>
-                {% if seller_avg_rating > 0 %}
-                    <div class="seller-rating">
-                        ⭐ Seller Rating: {{ seller_avg_rating }}/5 ({{ seller_rating_count }} ratings)
-                    </div>
-                {% endif %}
-                <div class="seller-contact">
-                    WhatsApp: <a href="{% url 'products:track_contact_click' product.id %}?source=product_detail">{{ product.whatsapp_number }}</a>
-                </div>
-                <a href="{% url 'products:track_contact_click' product.id %}?source=product_detail" class="contact-btn">
-                    📞 Contact Seller via WhatsApp
-                </a>
-                {% if user.is_authenticated and user != seller %}
-                    <a href="{% url 'products:report_seller' seller.id %}" style="font-size: 0.85rem; color: #e74c3c; text-decoration: none; margin-top: 1rem; display: inline-block;">🚨 Report Seller</a>
+
+            <h1 class="product-title">{{ product.name }}</h1>
+
+            <div class="price-line">
+                {% if product.price %}
+                    NGN {{ product.price|floatformat:2 }}
+                {% else %}
+                    Contact seller for price
                 {% endif %}
             </div>
-        </div>
-    </div>
-    
-    <!-- Description Section -->
-    <div class="description-section">
-        <h2 class="section-title">Description</h2>
-        <div class="description-text">
-            {{ product.description|linebreaks }}
-        </div>
-    </div>
-    
-    <!-- Ratings Section -->
-    <div class="ratings-section">
-        <h2 class="section-title">Reviews</h2>
-        
-        <!-- Rating Form -->
-        {% if user.is_authenticated %}
-            <div class="rating-form-container">
-                {% if user_rating %}
-                    <div class="your-rating-info">
-                        <strong>Your Rating:</strong> {% for i in "x"|rjust:user_rating.score %}⭐{% endfor %} {{ user_rating.score }}/5
-                        {% if user_rating.comment %}
-                            <div style="margin-top: 0.5rem; color: #555;">“{{ user_rating.comment }}”</div>
+
+            <div class="signal-grid">
+                <div class="signal-card">
+                    <small>Product rating</small>
+                    <strong>
+                        {% if avg_rating > 0 %}
+                            {{ avg_rating }}/5
+                        {% else %}
+                            No ratings yet
                         {% endif %}
-                    </div>
+                    </strong>
+                    <p style="margin-top: 0.45rem; color: var(--muted);">{{ rating_count }} review{{ rating_count|pluralize }}</p>
+                </div>
+                <div class="signal-card">
+                    <small>Seller rating</small>
+                    <strong>
+                        {% if seller_avg_rating > 0 %}
+                            {{ seller_avg_rating }}/5
+                        {% else %}
+                            Not rated yet
+                        {% endif %}
+                    </strong>
+                    <p style="margin-top: 0.45rem; color: var(--muted);">{{ seller_rating_count }} seller rating{{ seller_rating_count|pluralize }}</p>
+                </div>
+            </div>
+
+            <div class="seller-card">
+                <small>Seller channel</small>
+                <strong>{{ seller.username }}</strong>
+                <p>Talk directly with the seller on WhatsApp after reviewing the trust signals and listing details.</p>
+                <p>WhatsApp: {{ product.whatsapp_number }}</p>
+                <div class="seller-links">
+                    <a href="{% url 'products:track_contact_click' product.id %}?source=product_detail" class="button" style="text-decoration: none;">Contact on WhatsApp</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'products:report_product' product.id %}" class="button-ghost" style="text-decoration: none;">Report product</a>
+                    {% endif %}
+                    {% if user.is_authenticated and user != seller %}
+                        <a href="{% url 'products:report_seller' seller.id %}" class="button-ghost" style="text-decoration: none;">Report seller</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="description-panel">
+        <h2 class="panel-title">Listing description</h2>
+        <div class="panel-copy">{{ product.description|linebreaks }}</div>
+    </section>
+
+    <section class="reviews-panel">
+        <h2 class="panel-title">Buyer reviews</h2>
+
+        {% if user.is_authenticated %}
+            <div class="rating-form-shell">
+                {% if user_rating %}
+                    <p style="margin-bottom: 0.9rem; color: var(--muted);">Your current rating: {{ user_rating.score }}/5{% if user_rating.comment %} - "{{ user_rating.comment }}"{% endif %}</p>
                 {% endif %}
                 <form method="post" action="{% url 'products:rate_product' product.id %}" class="rating-form">
                     {% csrf_token %}
-                    <div class="form-group">
+                    <div>
+                        <label>Score</label>
                         {{ rating_form.score }}
                     </div>
-                    <div class="form-group" style="width: 100%;">
+                    <div>
+                        <label>Comment</label>
                         {{ rating_form.comment }}
                     </div>
-                    <button type="submit" class="rating-submit">
-                        {% if user_rating %}
-                            Update Rating
-                        {% else %}
-                            Submit Rating
-                        {% endif %}
-                    </button>
+                    <button type="submit">{% if user_rating %}Update rating{% else %}Submit rating{% endif %}</button>
                 </form>
             </div>
         {% else %}
-            <div class="login-to-rate">
-                <p><a href="{% url 'accounts:login' %}">Login</a> to rate this product</p>
+            <div class="login-prompt">
+                <p><a href="{% url 'accounts:login' %}" style="color: var(--accent); text-decoration: none;">Login</a> to rate this product and help other buyers judge the listing quality.</p>
             </div>
         {% endif %}
-        
-        <hr style="margin: 1.5rem 0;">
-        
-        <!-- Reviews List -->
-        {% if ratings %}
-            {% for rating in ratings %}
-                <div class="review">
-                    <div class="review-header">
-                        <span class="review-user">{{ rating.user.username }}</span>
-                        <span class="review-date">{{ rating.created_at|date:"M d, Y" }}</span>
-                    </div>
-                    <div class="review-rating">
-                        {% for i in "x"|rjust:rating.score %}⭐{% endfor %} {{ rating.score }}/5
-                    </div>
-                    {% if rating.comment %}
-                        <div class="review-comment">{{ rating.comment|linebreaksbr }}</div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        {% else %}
-            <p class="no-reviews">No reviews yet. Be the first to review this product!</p>
-        {% endif %}
-    </div>
-</div>
 
+        {% if ratings %}
+            <div class="review-stack">
+                {% for rating in ratings %}
+                    <article class="review-card">
+                        <div class="review-head">
+                            <strong>{{ rating.user.username }}</strong>
+                            <span class="review-date">{{ rating.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="review-score">{{ rating.score }}/5</div>
+                        {% if rating.comment %}
+                            <div class="review-comment">{{ rating.comment|linebreaksbr }}</div>
+                        {% endif %}
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="panel-copy" style="margin-top: 1rem;">No reviews yet. The first buyer review will shape how trustworthy this listing looks to everyone else.</p>
+        {% endif %}
+    </section>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
 function changeImage(thumbnail) {
     const img = thumbnail.querySelector('img');
     const mainImg = document.getElementById('mainImg');
+    if (!img || !mainImg) {
+        return;
+    }
+
     mainImg.src = img.src;
-    
-    // Update thumbnail border
-    document.querySelectorAll('.thumbnail').forEach(t => {
-        t.style.borderColor = 'transparent';
+    document.querySelectorAll('.thumbnail').forEach((item) => {
+        item.style.borderColor = 'transparent';
     });
-    thumbnail.style.borderColor = '#3498db';
+    thumbnail.style.borderColor = 'rgba(113, 240, 193, 0.45)';
 }
 
-// Highlight first thumbnail on page load
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const firstThumbnail = document.querySelector('.thumbnail');
     if (firstThumbnail) {
-        firstThumbnail.style.borderColor = '#3498db';
+        firstThumbnail.style.borderColor = 'rgba(113, 240, 193, 0.45)';
     }
 });
 </script>

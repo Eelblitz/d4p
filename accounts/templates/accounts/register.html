@@ -4,284 +4,257 @@
 
 {% block extra_styles %}
 <style>
-    .auth-container {
-        max-width: 500px;
-        margin: 3rem auto;
-        background-color: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .auth-shell {
+        max-width: 1160px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 1rem;
     }
-    
-    .auth-form h2 {
-        text-align: center;
-        color: #2c3e50;
-        margin-bottom: 1.5rem;
+
+    .auth-panel,
+    .auth-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
     }
-    
+
+    .auth-panel {
+        padding: 1.6rem;
+        display: grid;
+        gap: 1.2rem;
+        align-content: start;
+    }
+
+    .auth-panel p,
+    .auth-card p,
+    .auth-bullet p,
+    .checkbox-help,
+    .helptext {
+        color: var(--muted);
+    }
+
+    .auth-bullets {
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .auth-bullet {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+    }
+
+    .auth-bullet h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.02rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .auth-card {
+        padding: 1.6rem;
+    }
+
+    .auth-card h2 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .auth-form {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.2rem;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
     .form-group {
-        margin-bottom: 1.5rem;
-    }
-    
-    label {
-        display: block;
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-    }
-    
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-        box-sizing: border-box;
-    }
-    
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="password"]:focus {
-        outline: none;
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-    }
-    
-    .password-help {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-top: 0.25rem;
-        display: block;
-    }
-    
-    .checkbox-group {
-        display: flex;
-        align-items: flex-start;
+        display: grid;
         gap: 0.5rem;
     }
-    
-    input[type="checkbox"] {
-        width: auto;
-        margin-top: 0.5rem;
-        cursor: pointer;
+
+    .checkbox-group {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 0.8rem;
+        align-items: start;
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
     }
-    
-    .checkbox-group label {
-        margin-bottom: 0;
-        font-weight: normal;
-        cursor: pointer;
-    }
-    
-    .checkbox-help {
-        font-size: 0.85rem;
-        color: #7f8c8d;
+
+    .checkbox-group input[type="checkbox"] {
         margin-top: 0.25rem;
-        display: block;
     }
-    
-    .submit-btn {
-        width: 100%;
-        padding: 0.75rem;
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    
-    .submit-btn:hover {
-        background-color: #2980b9;
-    }
-    
-    .auth-links {
-        text-align: center;
-        margin-top: 1.5rem;
-        font-size: 0.95rem;
-    }
-    
-    .auth-links a {
-        color: #3498db;
-        text-decoration: none;
-    }
-    
-    .auth-links a:hover {
-        text-decoration: underline;
-    }
-    
+
     .errorlist {
         list-style: none;
-        padding: 0;
-        margin: 0.5rem 0;
+        display: grid;
+        gap: 0.45rem;
+        color: var(--danger);
+        font-size: 0.92rem;
     }
-    
-    .errorlist li {
-        background-color: #fadbd8;
-        color: #c0392b;
-        padding: 0.5rem;
-        border-radius: 4px;
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
+
+    .auth-links {
+        margin-top: 1rem;
+        color: var(--muted);
     }
-    
-    .messages {
-        margin-bottom: 1.5rem;
+
+    .auth-links a {
+        color: var(--accent);
+        text-decoration: none;
     }
-    
-    .message {
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-    }
-    
-    .message.success {
-        background-color: #d5f4e6;
-        color: #27ae60;
-        border: 1px solid #27ae60;
-    }
-    
-    .message.error {
-        background-color: #fadbd8;
-        color: #c0392b;
-        border: 1px solid #c0392b;
-    }
-    
-    .helptext {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-top: 0.25rem;
-        display: block;
-    }
-    
-    ul {
-        margin-left: 1.5rem;
-        margin-top: 0.5rem;
-    }
-    
-    ul li {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-bottom: 0.25rem;
+
+    @media (max-width: 920px) {
+        .auth-shell,
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{% url 'products:list' %}">Home</a> / Register
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <span>Create account</span>
 </div>
 
-<div class="auth-container">
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="message {{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-    
-    <form method="post" class="auth-form">
-        {% csrf_token %}
-        <h2>Create Account</h2>
-        
-        {% if form.non_field_errors %}
-            <div class="errorlist">
-                {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </div>
-        {% endif %}
-        
-        <div class="form-group">
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="errorlist">
-                    {% for error in form.username.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {% if form.username.help_text %}
-                <span class="helptext">{{ form.username.help_text|safe }}</span>
-            {% endif %}
-        </div>
-        
-        <div class="form-group">
-            {{ form.email.label_tag }}
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div class="errorlist">
-                    {% for error in form.email.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
+<div class="auth-shell">
+    <section class="auth-panel">
+        <span class="section-kicker">New account</span>
+        <h1 class="section-heading">Enter DM4PRICE with a stronger buyer and seller identity.</h1>
+        <p>Create an account to browse with more trust context, rate listings, and unlock the seller approval path when you are ready to list products.</p>
 
-        <div class="form-group">
-            {{ form.phone_number.label_tag }}
-            {{ form.phone_number }}
-            {% if form.phone_number.errors %}
-                <div class="errorlist">
-                    {% for error in form.phone_number.errors %}
+        <div class="auth-bullets">
+            <article class="auth-bullet">
+                <h3>Buyer-first immediately</h3>
+                <p>Start tracking products, comparing seller quality, and contributing trustworthy reviews to the marketplace.</p>
+            </article>
+            <article class="auth-bullet">
+                <h3>Seller path when you want it</h3>
+                <p>Choose the seller option during signup, then complete verification and approval before publishing serious listings.</p>
+            </article>
+            <article class="auth-bullet">
+                <h3>Built for a safer market</h3>
+                <p>Verification, ratings, reporting, and promotion analytics now work together as one operational loop.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="auth-card">
+        <span class="section-kicker">Account setup</span>
+        <h2>Create account</h2>
+        <p>Fill in your details to join the platform.</p>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
                         <li>{{ error }}</li>
                     {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.username.label_tag }}
+                    {{ form.username }}
+                    {% if form.username.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.username.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if form.username.help_text %}
+                        <span class="helptext">{{ form.username.help_text|safe }}</span>
+                    {% endif %}
                 </div>
-            {% endif %}
-        </div>
-        
-        <div class="form-group">
-            {{ form.password1.label_tag }}
-            {{ form.password1 }}
-            {% if form.password1.errors %}
-                <div class="errorlist">
-                    {% for error in form.password1.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
+
+                <div class="form-group">
+                    {{ form.email.label_tag }}
+                    {{ form.email }}
+                    {% if form.email.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.email.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 </div>
-            {% endif %}
-            {% if form.password1.help_text %}
-                <span class="helptext">{{ form.password1.help_text|safe }}</span>
-            {% endif %}
-        </div>
-        
-        <div class="form-group">
-            {{ form.password2.label_tag }}
-            {{ form.password2 }}
-            {% if form.password2.errors %}
-                <div class="errorlist">
-                    {% for error in form.password2.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {% if form.password2.help_text %}
-                <span class="helptext">{{ form.password2.help_text|safe }}</span>
-            {% endif %}
-        </div>
-        
-        <div class="form-group checkbox-group">
-            {{ form.is_seller }}
-            <div>
-                {{ form.is_seller.label_tag }}
-                {% if form.is_seller.help_text %}
-                    <span class="checkbox-help">{{ form.is_seller.help_text|safe }}</span>
+            </div>
+
+            <div class="form-group">
+                {{ form.phone_number.label_tag }}
+                {{ form.phone_number }}
+                {% if form.phone_number.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.phone_number.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
                 {% endif %}
             </div>
-        </div>
-        
-        <button type="submit" class="submit-btn">Create Account</button>
-        
-        <div class="auth-links">
-            Already have an account? <a href="{% url 'accounts:login' %}">Login here</a>
-        </div>
-    </form>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form.password1.label_tag }}
+                    {{ form.password1 }}
+                    {% if form.password1.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.password1.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if form.password1.help_text %}
+                        <span class="helptext">{{ form.password1.help_text|safe }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.password2.label_tag }}
+                    {{ form.password2 }}
+                    {% if form.password2.errors %}
+                        <ul class="errorlist">
+                            {% for error in form.password2.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if form.password2.help_text %}
+                        <span class="helptext">{{ form.password2.help_text|safe }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="checkbox-group">
+                {{ form.is_seller }}
+                <div>
+                    {{ form.is_seller.label_tag }}
+                    {% if form.is_seller.help_text %}
+                        <span class="checkbox-help">{{ form.is_seller.help_text|safe }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <button type="submit">Create DM4PRICE account</button>
+
+            <div class="auth-links">
+                Already have an account? <a href="{% url 'accounts:login' %}">Login here</a>
+            </div>
+        </form>
+    </section>
 </div>
 {% endblock %}

@@ -1,694 +1,603 @@
 {% extends "base.html" %}
 
-{% block title %}DM4PRICE - Trusted Marketplace for Smart Shoppers{% endblock %}
+{% block title %}DM4PRICE - High-Trust Price Discovery{% endblock %}
 
 {% block extra_styles %}
 <style>
-    /* Hero Section */
     .hero {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: white;
-        padding: 4rem 0;
-        margin: -2rem 0 3rem 0;
-        text-align: center;
-    }
-    
-    .hero-content {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 0 1rem;
-    }
-    
-    .hero h1 {
-        font-size: 3rem;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        line-height: 1.2;
-    }
-    
-    .hero p {
-        font-size: 1.3rem;
-        margin-bottom: 2rem;
-        opacity: 0.95;
-        line-height: 1.6;
-    }
-    
-    .hero-ctas {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-    
-    .btn-primary, .btn-secondary {
-        padding: 1rem 2rem;
-        font-size: 1.05rem;
-        font-weight: 600;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        text-decoration: none;
-        display: inline-block;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-primary {
-        background-color: #3498db;
-        color: white;
-    }
-    
-    .btn-primary:hover {
-        background-color: #2980b9;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
-    }
-    
-    .btn-secondary {
-        background-color: white;
-        color: #2c3e50;
-    }
-    
-    .btn-secondary:hover {
-        background-color: #ecf0f1;
-        transform: translateY(-2px);
-    }
-    
-    /* Value Proposition Section */
-    .value-props {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 2rem;
-        margin: 3rem 0;
-    }
-    
-    .value-prop {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        text-align: center;
-        transition: transform 0.3s, box-shadow 0.3s;
-    }
-    
-    .value-prop:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    }
-    
-    .value-prop-icon {
-        font-size: 2.5rem;
-        margin-bottom: 1rem;
-    }
-    
-    .value-prop h3 {
-        color: #2c3e50;
-        font-size: 1.3rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .value-prop p {
-        color: #7f8c8d;
-        line-height: 1.6;
-    }
-    
-    /* Section Title */
-    .section-title {
-        font-size: 2rem;
-        color: #2c3e50;
-        text-align: center;
-        margin: 3rem 0 2rem 0;
-        font-weight: 700;
-    }
-    
-    /* Features Section */
-    .features {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
-        margin: 2rem 0;
-    }
-    
-    .feature-card {
-        background-color: #f8f9fa;
-        padding: 1.5rem;
-        border-radius: 8px;
-        border-left: 4px solid #3498db;
-    }
-    
-    .feature-card h4 {
-        color: #2c3e50;
-        margin-bottom: 0.75rem;
-        font-size: 1.1rem;
-    }
-    
-    .feature-card p {
-        color: #555;
-        line-height: 1.6;
-        font-size: 0.95rem;
-    }
-    
-    /* How It Works */
-    .how-it-works {
-        background-color: #ecf7fc;
-        padding: 2rem;
-        border-radius: 8px;
-        margin: 2rem 0;
-    }
-    
-    .steps {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: 1.2fr 0.8fr;
         gap: 1.5rem;
-        margin-top: 1.5rem;
+        align-items: stretch;
+        margin-bottom: 1.75rem;
     }
-    
-    .step {
-        background-color: white;
-        padding: 1.5rem;
-        border-radius: 6px;
-        text-align: center;
-        box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+
+    .hero-copy,
+    .hero-panel,
+    .metrics-band,
+    .showcase-card,
+    .pillar-card,
+    .signal-card,
+    .featured-card,
+    .cta-strip {
+        position: relative;
+        overflow: hidden;
     }
-    
-    .step-number {
+
+    .hero-copy,
+    .hero-panel {
+        padding: 2rem;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--line);
+        background:
+            linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+            var(--panel);
+        box-shadow: var(--shadow);
+    }
+
+    .hero-copy::before,
+    .hero-panel::before,
+    .cta-strip::before {
+        content: "";
+        position: absolute;
+        inset: -25% auto auto -10%;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle, rgba(68, 163, 255, 0.2), transparent 68%);
+        pointer-events: none;
+    }
+
+    .hero-copy {
+        min-height: 520px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 1.5rem;
+    }
+
+    .hero-copy p {
+        max-width: 620px;
+        color: var(--muted);
+        font-size: 1.05rem;
+    }
+
+    .hero-proof {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .hero-proof span,
+    .metric-chip {
         display: inline-flex;
         align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background-color: #3498db;
-        color: white;
-        border-radius: 50%;
-        font-weight: 700;
-        margin-bottom: 1rem;
-        font-size: 1.2rem;
+        gap: 0.45rem;
+        padding: 0.72rem 0.9rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+        font-size: 0.92rem;
     }
-    
-    .step h4 {
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
+
+    .hero-panel {
+        display: grid;
+        gap: 1rem;
+        align-content: start;
     }
-    
-    .step p {
-        color: #7f8c8d;
-        font-size: 0.9rem;
-        line-height: 1.5;
+
+    .terminal-card,
+    .status-card {
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        padding: 1.1rem;
     }
-    
-    /* Trust Section */
-    .trust-section {
-        background: linear-gradient(135deg, #e8f8f5 0%, #d5f4e6 100%);
-        padding: 2rem;
-        border-radius: 8px;
-        margin: 2rem 0;
-        border-left: 4px solid #27ae60;
+
+    .terminal-card {
+        min-height: 230px;
+        background:
+            linear-gradient(180deg, rgba(113, 240, 193, 0.05), transparent),
+            rgba(5, 13, 22, 0.72);
     }
-    
-    .trust-item {
-        margin-bottom: 1.5rem;
-        padding-left: 2rem;
-        position: relative;
+
+    .terminal-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.9rem;
+        color: var(--muted);
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
-    
-    .trust-item:before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        top: 0;
-        color: #27ae60;
-        font-weight: 700;
-        font-size: 1.2rem;
-    }
-    
-    .trust-item h4 {
-        color: #2c3e50;
-        margin-bottom: 0.25rem;
-    }
-    
-    .trust-item p {
-        color: #555;
-        line-height: 1.5;
+
+    .terminal-line {
+        display: grid;
+        grid-template-columns: 88px 1fr;
+        gap: 0.8rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid rgba(167, 193, 255, 0.08);
         font-size: 0.95rem;
     }
-    
-    /* Sellers Section */
-    .sellers-section {
-        background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
-        padding: 2rem;
-        border-radius: 8px;
-        margin: 2rem 0;
+
+    .terminal-line:last-child {
+        border-bottom: none;
     }
-    
-    .sellers-content {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 2rem;
-        align-items: center;
-    }
-    
-    .sellers-benefits h3 {
-        color: #2c3e50;
-        font-size: 1.5rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .benefit-list {
-        list-style: none;
-        padding: 0;
-    }
-    
-    .benefit-list li {
-        color: #555;
-        padding: 0.75rem 0;
-        padding-left: 2rem;
-        position: relative;
-        line-height: 1.6;
-    }
-    
-    .benefit-list li:before {
-        content: "→";
-        position: absolute;
-        left: 0;
-        color: #e67e22;
+
+    .terminal-line strong {
+        color: var(--accent);
         font-weight: 700;
     }
-    
-    .seller-cta {
-        margin-top: 1.5rem;
+
+    .terminal-line span {
+        color: var(--text);
     }
-    
-    /* Featured Products */
-    .featured-products {
-        margin: 3rem 0;
-    }
-    
-    .products-grid {
+
+    .status-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 1.5rem;
-        margin-top: 2rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
     }
-    
-    .product-card {
-        background-color: white;
-        border-radius: 8px;
+
+    .status-card small {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .status-card strong {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.6rem;
+    }
+
+    .metrics-band {
+        margin-bottom: 1.75rem;
+        padding: 1.15rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.8rem;
+    }
+
+    .metric-block {
+        padding: 0.8rem 0.95rem;
+        border-radius: var(--radius-md);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+    }
+
+    .metric-block strong {
+        display: block;
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.7rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .metric-block span {
+        color: var(--muted);
+        font-size: 0.92rem;
+    }
+
+    .section-block {
+        margin: 0 0 1.75rem;
+    }
+
+    .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.15rem;
+    }
+
+    .section-head p {
+        max-width: 560px;
+        color: var(--muted);
+    }
+
+    .pillars,
+    .signals,
+    .featured-grid {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .pillars {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .pillar-card,
+    .signal-card,
+    .featured-card,
+    .showcase-card,
+    .cta-strip {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+    }
+
+    .pillar-card,
+    .signal-card,
+    .showcase-card {
+        padding: 1.4rem;
+    }
+
+    .pillar-card h3,
+    .signal-card h3,
+    .showcase-card h3,
+    .featured-copy h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.2rem;
+        margin-bottom: 0.55rem;
+    }
+
+    .pillar-card p,
+    .signal-card p,
+    .showcase-card p,
+    .featured-copy p {
+        color: var(--muted);
+    }
+
+    .signal-card small,
+    .showcase-card small {
+        display: inline-block;
+        margin-bottom: 0.9rem;
+        color: var(--accent);
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+
+    .signals {
+        grid-template-columns: 1.2fr 0.8fr;
+    }
+
+    .signal-list {
+        display: grid;
+        gap: 0.85rem;
+        margin-top: 1rem;
+    }
+
+    .signal-row {
+        display: grid;
+        grid-template-columns: 120px 1fr;
+        gap: 1rem;
+        padding-top: 0.85rem;
+        border-top: 1px solid rgba(167, 193, 255, 0.08);
+    }
+
+    .signal-row strong {
+        color: var(--text);
+    }
+
+    .featured-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .featured-card {
         overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
     }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    }
-    
-    .product-image {
-        width: 100%;
-        height: 180px;
-        background-color: #f0f0f0;
-        overflow: hidden;
+
+    .featured-media {
+        aspect-ratio: 1.15 / 1;
+        background:
+            linear-gradient(180deg, transparent, rgba(7, 17, 31, 0.3)),
+            rgba(255, 255, 255, 0.04);
         display: flex;
         align-items: center;
         justify-content: center;
     }
-    
-    .product-image img {
+
+    .featured-media img {
         width: 100%;
         height: 100%;
         object-fit: cover;
     }
-    
-    .product-info {
-        padding: 1rem;
+
+    .featured-copy {
+        padding: 1.2rem;
     }
-    
-    .product-name {
-        font-weight: 600;
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-        font-size: 0.95rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-    
-    .product-rating {
-        color: #27ae60;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
-    }
-    
-    .seller-verified {
-        color: #27ae60;
-        font-size: 0.9rem;
-        margin-left: 0.5rem;
-    }
-    
-    .product-seller {
-        color: #7f8c8d;
-        font-size: 0.8rem;
-        margin-bottom: 1rem;
-    }
-    
-    .product-link {
-        display: inline-block;
-        background-color: #3498db;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        text-decoration: none;
-        font-size: 0.9rem;
-        transition: background-color 0.3s;
-    }
-    
-    .product-link:hover {
-        background-color: #2980b9;
-    }
-    
-    /* Stats Section */
-    .stats-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 2rem;
-        margin: 3rem 0;
-        text-align: center;
-    }
-    
-    .stat {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    
-    .stat-number {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: #3498db;
-        line-height: 1;
-    }
-    
-    .stat-label {
-        color: #7f8c8d;
-        margin-top: 0.5rem;
-        font-size: 0.95rem;
-    }
-    
-    /* Roadmap Section */
-    .roadmap {
-        background-color: #f8f9fa;
-        padding: 2rem;
-        border-radius: 8px;
-        margin: 2rem 0;
-    }
-    
-    .roadmap-items {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1.5rem;
-        margin-top: 1.5rem;
-    }
-    
-    .roadmap-item {
-        background-color: white;
-        padding: 1.5rem;
-        border-radius: 6px;
-        border-top: 3px solid #3498db;
-    }
-    
-    .roadmap-item h4 {
-        color: #2c3e50;
-        margin-bottom: 0.5rem;
-    }
-    
-    .roadmap-item p {
-        color: #7f8c8d;
-        font-size: 0.9rem;
-        line-height: 1.5;
-    }
-    
-    /* CTA Bar */
-    .final-cta {
-        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-        color: white;
-        padding: 2.5rem;
-        border-radius: 8px;
-        text-align: center;
-        margin: 3rem 0;
-    }
-    
-    .final-cta h2 {
-        font-size: 1.8rem;
-        margin-bottom: 1rem;
-    }
-    
-    .final-cta p {
-        font-size: 1.1rem;
-        margin-bottom: 1.5rem;
-        opacity: 0.95;
-    }
-    
-    .final-cta-buttons {
+
+    .featured-meta,
+    .featured-trust {
         display: flex;
-        gap: 1rem;
-        justify-content: center;
+        gap: 0.55rem;
         flex-wrap: wrap;
+        margin-bottom: 0.8rem;
     }
-    
-    @media (max-width: 768px) {
-        .hero h1 {
-            font-size: 2rem;
-        }
-        
-        .hero p {
-            font-size: 1rem;
-        }
-        
-        .sellers-content {
+
+    .meta-pill {
+        padding: 0.34rem 0.66rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 700;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
+    }
+
+    .meta-pill.is-boosted {
+        color: var(--warm);
+        border-color: rgba(255, 215, 128, 0.22);
+        background: rgba(255, 215, 128, 0.08);
+    }
+
+    .meta-pill.is-verified {
+        color: var(--accent);
+        border-color: rgba(113, 240, 193, 0.22);
+        background: rgba(113, 240, 193, 0.08);
+    }
+
+    .featured-price {
+        margin: 0.85rem 0 0.4rem;
+        font-size: 1.08rem;
+        font-weight: 800;
+    }
+
+    .cta-strip {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        align-items: center;
+        padding: 1.6rem 1.7rem;
+        margin-top: 1.2rem;
+    }
+
+    .cta-strip p {
+        color: var(--muted);
+        max-width: 640px;
+    }
+
+    @media (max-width: 1040px) {
+        .hero,
+        .signals,
+        .pillars,
+        .featured-grid,
+        .metrics-band {
             grid-template-columns: 1fr;
         }
-        
-        .section-title {
-            font-size: 1.5rem;
+
+        .cta-strip {
+            grid-template-columns: 1fr;
         }
-        
-        .hero-ctas, .final-cta-buttons {
-            flex-direction: column;
+    }
+
+    @media (max-width: 640px) {
+        .hero-copy,
+        .hero-panel,
+        .pillar-card,
+        .signal-card,
+        .showcase-card,
+        .cta-strip {
+            padding: 1.2rem;
         }
-        
-        .btn-primary, .btn-secondary {
-            width: 100%;
+
+        .status-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .signal-row {
+            grid-template-columns: 1fr;
+            gap: 0.35rem;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<div class="hero">
-    <div class="hero-content">
-        <h1>🛒 The Trusted Marketplace Layer for Smarter Buying Decisions</h1>
-        <p>Compare prices, discover verified sellers, and shop with confidence on a platform built for trust, transparency, and simplicity</p>
-        <div class="hero-ctas">
-            <a href="{% url 'products:list' %}" class="btn-primary">Browse Products</a>
-            <a href="{% url 'accounts:register' %}" class="btn-secondary">Become a Verified Seller</a>
+<section class="hero">
+    <div class="hero-copy">
+        <div>
+            <span class="section-kicker">Marketplace intelligence for Nigeria</span>
+            <h1 class="section-heading" style="margin: 1rem 0 1.1rem;">A sharper trust layer for price discovery, seller verification, and faster buying decisions.</h1>
+            <p>DM4PRICE is built for buyers who want signal, not noise. Compare listings, spot verified sellers, review product quality, and move into direct conversations with more confidence.</p>
         </div>
-    </div>
-</div>
 
-<!-- Stats Section -->
-<div class="stats-section">
-    <div class="stat">
-        <div class="stat-number">{{ total_products }}+</div>
-        <div class="stat-label">Active Products</div>
-    </div>
-    <div class="stat">
-        <div class="stat-number">{{ total_sellers }}+</div>
-        <div class="stat-label">Verified Sellers</div>
-    </div>
-    <div class="stat">
-        <div class="stat-number">100%</div>
-        <div class="stat-label">Moderated</div>
-    </div>
-</div>
-
-<!-- Value Proposition Section -->
-<h2 class="section-title">Why Choose DM4PRICE?</h2>
-<div class="value-props">
-    <div class="value-prop">
-        <div class="value-prop-icon">💰</div>
-        <h3>Real-Time Price Discovery</h3>
-        <p>Effortlessly compare product prices to ensure you are getting the best deal from multiple verified sellers.</p>
-    </div>
-    <div class="value-prop">
-        <div class="value-prop-icon">🛡️</div>
-        <h3>Anti-Scam Protection</h3>
-        <p>Shop securely with a robust system designed to help users avoid fraud through active ratings and reporting.</p>
-    </div>
-    <div class="value-prop">
-        <div class="value-prop-icon">💬</div>
-        <h3>Direct Connectivity</h3>
-        <p>Connect directly with sellers via WhatsApp to finalize your purchase quickly and safely.</p>
-    </div>
-</div>
-
-<!-- Key Features Section -->
-<h2 class="section-title">Platform Features</h2>
-<div class="features">
-    <div class="feature-card">
-        <h4>✅ Verified Seller Network</h4>
-        <p>Every seller undergoes an admin-controlled approval process before they can list products</p>
-    </div>
-    <div class="feature-card">
-        <h4>⭐ Transparent Rating System</h4>
-        <p>Make informed decisions by viewing 1–5 star ratings for both specific products and individual sellers</p>
-    </div>
-    <div class="feature-card">
-        <h4>🚨 Comprehensive Reporting</h4>
-        <p>Help keep the community safe by reporting suspicious products or sellers directly to our moderation team</p>
-    </div>
-    <div class="feature-card">
-        <h4>📸 Detailed Listings</h4>
-        <p>View high-quality images, clear descriptions, and categorized items to find exactly what you need</p>
-    </div>
-</div>
-
-<!-- How It Works Section -->
-<div class="how-it-works">
-    <h2 class="section-title">How It Works</h2>
-    <div class="steps">
-        <div class="step">
-            <div class="step-number">1</div>
-            <h4>Search & Compare</h4>
-            <p>Browse various categories to find products and compare prices from different vendors</p>
-        </div>
-        <div class="step">
-            <div class="step-number">2</div>
-            <h4>Verify Credibility</h4>
-            <p>Check the seller and product ratings provided by other community members</p>
-        </div>
-        <div class="step">
-            <div class="step-number">3</div>
-            <h4>Connect via WhatsApp</h4>
-            <p>Click the direct contact link on any product to message the seller and complete your transaction</p>
-        </div>
-        <div class="step">
-            <div class="step-number">4</div>
-            <h4>Rate Your Experience</h4>
-            <p>After your purchase, leave a rating to help other buyers stay informed</p>
-        </div>
-    </div>
-</div>
-
-<!-- Trust & Security Section -->
-<h2 class="section-title">Trust & Security</h2>
-<div class="trust-section">
-    <div class="trust-item">
-        <h4>🔐 Admin Moderation</h4>
-        <p>Our team actively manages users, approves sellers, and handles all reports to maintain a clean marketplace</p>
-    </div>
-    <div class="trust-item">
-        <h4>🛡️ Safety Safeguards</h4>
-        <p>We implement auto-block logic for sellers with multiple unresolved reports and provide verified seller badges for extra peace of mind</p>
-    </div>
-    <div class="trust-item">
-        <h4>🚫 Abuse Control</h4>
-        <p>A dedicated reporting system allows for the deactivation of fraudulent products and the blocking of malicious actors</p>
-    </div>
-</div>
-
-<!-- Featured Products Section -->
-{% if featured_products %}
-<div class="featured-products">
-    <h2 class="section-title">Featured Products</h2>
-    <div class="products-grid">
-        {% for product in featured_products %}
-        <div class="product-card">
-            <div class="product-image">
-                {% if product.first_image %}
-                    <img src="{{ product.first_image.image.url }}" alt="{{ product.name }}">
-                {% else %}
-                    <span style="color: #bbb;">No image</span>
-                {% endif %}
+        <div style="display: grid; gap: 1rem;">
+            <div class="button-row">
+                <a href="{% url 'products:list' %}" class="button">Explore marketplace</a>
+                <a href="{% url 'accounts:register' %}" class="button-ghost">Apply to sell</a>
             </div>
-            <div class="product-info">
-                <div class="product-name" title="{{ product.name }}">{{ product.name }}</div>
-                {% if product.avg_rating > 0 %}
-                    <div class="product-rating">⭐ {{ product.avg_rating }}/5 ({{ product.rating_count }})</div>
-                {% else %}
-                    <div class="product-rating">No ratings yet</div>
-                {% endif %}
-                <div class="product-seller">By {{ product.seller.username }}
-                    {% if product.seller.is_verified %}
-                        <span class="seller-verified">✳️ Verified</span>
+            <div class="hero-proof">
+                <span>Verified seller approvals</span>
+                <span>Promotion analytics ready</span>
+                <span>Transfer and USSD enabled</span>
+            </div>
+        </div>
+    </div>
+
+    <aside class="hero-panel">
+        <div class="terminal-card">
+            <div class="terminal-head">
+                <span>Live operating model</span>
+                <span>DM4PRICE / vNext</span>
+            </div>
+            <div class="terminal-line">
+                <strong>Trust</strong>
+                <span>NIN-based seller approval with admin review before listings go live.</span>
+            </div>
+            <div class="terminal-line">
+                <strong>Commerce</strong>
+                <span>Boost listings with local-first payment support through bank transfer and USSD.</span>
+            </div>
+            <div class="terminal-line">
+                <strong>Signal</strong>
+                <span>Ratings, engagement tracking, and promoted placement give buyers and sellers clearer feedback loops.</span>
+            </div>
+        </div>
+
+        <div class="status-grid">
+            <div class="status-card">
+                <small>Active Listings</small>
+                <strong>{{ total_products }}+</strong>
+            </div>
+            <div class="status-card">
+                <small>Sellers Live</small>
+                <strong>{{ total_sellers }}+</strong>
+            </div>
+            <div class="status-card">
+                <small>Checkout Rails</small>
+                <strong>2</strong>
+            </div>
+            <div class="status-card">
+                <small>Trust Focus</small>
+                <strong>High</strong>
+            </div>
+        </div>
+    </aside>
+</section>
+
+<section class="metrics-band">
+    <div class="metric-block">
+        <strong>{{ total_products }}+</strong>
+        <span>Products actively discoverable across key categories.</span>
+    </div>
+    <div class="metric-block">
+        <strong>{{ total_sellers }}+</strong>
+        <span>Sellers building reputation through approval, ratings, and response quality.</span>
+    </div>
+    <div class="metric-block">
+        <strong>24/7</strong>
+        <span>Buyer research flow across search, filters, reviews, and direct contact.</span>
+    </div>
+    <div class="metric-block">
+        <strong>Zero fluff</strong>
+        <span>A marketplace experience designed around clarity, legitimacy, and conversion.</span>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="section-head">
+        <div>
+            <span class="section-kicker">Why this platform works</span>
+            <h2 class="eyebrow-title" style="margin-top: 0.75rem;">DM4PRICE behaves more like a decision engine than a generic classifieds board.</h2>
+        </div>
+        <p>That means every part of the experience is trying to reduce buyer hesitation, surface stronger sellers, and create better outcomes for serious merchants.</p>
+    </div>
+
+    <div class="pillars">
+        <article class="pillar-card">
+            <h3>Trust-first seller onboarding</h3>
+            <p>Seller access is gated by approval, and your new NIN verification flow raises the floor for credibility before a storefront can scale.</p>
+        </article>
+        <article class="pillar-card">
+            <h3>Better visibility economics</h3>
+            <p>Promotion is no longer cosmetic. It connects to local payment methods, analytics, and a marketplace ranking model that actually influences discovery.</p>
+        </article>
+        <article class="pillar-card">
+            <h3>Direct buyer momentum</h3>
+            <p>The product flow is optimized to move users from browsing into WhatsApp contact with more context, more confidence, and less friction.</p>
+        </article>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="signals">
+        <article class="signal-card">
+            <small>Operator view</small>
+            <h3>What buyers and sellers need is not more listings. It is better signal density.</h3>
+            <p>That is the design logic behind DM4PRICE: make product cards, seller trust, and promotion performance feel measurable and immediate.</p>
+            <div class="signal-list">
+                <div class="signal-row">
+                    <strong>Buyer signal</strong>
+                    <span>Price context, ratings, seller verification, and fewer ambiguous product pages.</span>
+                </div>
+                <div class="signal-row">
+                    <strong>Seller signal</strong>
+                    <span>Promotion ROI, listing analytics, and cleaner trust markers that improve response quality.</span>
+                </div>
+                <div class="signal-row">
+                    <strong>Platform signal</strong>
+                    <span>Moderation, reporting, and approval workflows that support a healthier marketplace brand.</span>
+                </div>
+            </div>
+        </article>
+
+        <article class="showcase-card">
+            <small>Current product edge</small>
+            <h3>Built for a more serious marketplace loop</h3>
+            <p>DM4PRICE now blends seller verification, local-first payments, and engagement analytics in one operating layer.</p>
+            <div style="display: grid; gap: 0.8rem; margin-top: 1rem;">
+                <span class="metric-chip">NIN verification before approval</span>
+                <span class="metric-chip">Transfer and USSD for paid boosts</span>
+                <span class="metric-chip">Engagement visibility for promoted listings</span>
+            </div>
+        </article>
+    </div>
+</section>
+
+{% if featured_products %}
+<section class="section-block">
+    <div class="section-head">
+        <div>
+            <span class="section-kicker">Discovery feed</span>
+            <h2 class="eyebrow-title" style="margin-top: 0.75rem;">Featured listings with stronger trust and ranking signals.</h2>
+        </div>
+        <p>These products surface using your improved marketplace ranking logic, so boosted placement and quality signals both matter.</p>
+    </div>
+
+    <div class="featured-grid">
+        {% for product in featured_products %}
+            <article class="featured-card">
+                <div class="featured-media">
+                    {% if product.first_image %}
+                        <img src="{{ product.first_image.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <span style="color: var(--muted);">No image uploaded</span>
                     {% endif %}
                 </div>
-                <a href="{% url 'products:detail' product.id %}" class="product-link">View Details →</a>
-            </div>
-        </div>
+                <div class="featured-copy">
+                    <div class="featured-meta">
+                        <span class="meta-pill">{{ product.get_category_display }}</span>
+                        {% if product.is_promoted %}
+                            <span class="meta-pill is-boosted">Boosted</span>
+                        {% endif %}
+                        {% if product.seller.is_verified %}
+                            <span class="meta-pill is-verified">Verified seller</span>
+                        {% endif %}
+                    </div>
+                    <h3>{{ product.name }}</h3>
+                    <p>
+                        {% if product.avg_rating > 0 %}
+                            Rated {{ product.avg_rating }}/5 from {{ product.rating_count }} review{{ product.rating_count|pluralize }}.
+                        {% else %}
+                            Newly listed and ready for first buyer feedback.
+                        {% endif %}
+                    </p>
+                    <div class="featured-price">
+                        {% if product.price %}
+                            NGN {{ product.price|floatformat:2 }}
+                            {% if product.is_negotiable %} / negotiable{% endif %}
+                        {% else %}
+                            Contact for price
+                        {% endif %}
+                    </div>
+                    <div class="featured-trust">
+                        <span class="meta-pill">Seller: {{ product.seller.username }}</span>
+                    </div>
+                    <a href="{% url 'products:detail' product.id %}" class="button-ghost" style="display: inline-flex; text-decoration: none;">View listing</a>
+                </div>
+            </article>
         {% endfor %}
     </div>
-    <div style="text-align: center; margin-top: 2rem;">
-        <a href="{% url 'products:list' %}" class="btn-primary">Browse All Products</a>
-    </div>
-</div>
+</section>
 {% endif %}
 
-<!-- For Sellers Section -->
-<div class="sellers-section">
-    <div class="sellers-content">
-        <div class="sellers-benefits">
-            <h3>📈 Ready to Start Selling?</h3>
-            <ul class="benefit-list">
-                <li>Reach more buyers with a growing audience of smart shoppers</li>
-                <li>Build your brand and earn credibility through our rating system</li>
-                <li>Get a "Verified Seller" badge as a competitive advantage</li>
-                <li>Receive inquiries directly to your WhatsApp</li>
-                <li>Simple listing process with image uploads</li>
-                <li>Direct leads that streamline your sales process</li>
-            </ul>
-            <div class="seller-cta">
-                <a href="{% url 'accounts:register' %}" class="btn-primary">Register as Seller</a>
-            </div>
-        </div>
-        <div style="text-align: center;">
-            <div style="font-size: 4rem; margin-bottom: 1rem;">💼</div>
-            <p style="color: #555; line-height: 1.8;">Join hundreds of verified sellers creating amazing opportunities on DM4PRICE. Your success is our success.</p>
-        </div>
+<section class="cta-strip">
+    <div>
+        <span class="section-kicker">Next move</span>
+        <h2 class="eyebrow-title" style="margin: 0.75rem 0 0.4rem;">Use the marketplace like an informed operator, not a random buyer.</h2>
+        <p>Browse current listings, create a seller account, or start building visibility with a promoted placement that now supports local payment behavior.</p>
     </div>
-</div>
-
-<!-- Roadmap Section -->
-<h2 class="section-title">Our Vision for the Future</h2>
-<div class="roadmap">
-    <div class="roadmap-items">
-        <div class="roadmap-item">
-            <h4>📍 Location-Based Discovery</h4>
-            <p>Soon, you'll be able to find the best deals specifically in your local area for faster transactions</p>
-        </div>
-        <div class="roadmap-item">
-            <h4>🤖 AI Scam Detection</h4>
-            <p>Advanced AI technology in development to automatically identify and flag potential fraudulent listings</p>
-        </div>
-        <div class="roadmap-item">
-            <h4>📱 Mobile Experience</h4>
-            <p>A dedicated mobile app and REST API in development to make price discovery even faster on the go</p>
-        </div>
+    <div class="button-row">
+        <a href="{% url 'products:list' %}" class="button">Start browsing</a>
+        <a href="{% url 'accounts:register' %}" class="button-ghost">Create seller account</a>
     </div>
-</div>
-
-<!-- Final CTA Section -->
-<div class="final-cta">
-    <h2>Ready to Shop Smart?</h2>
-    <p>Join thousands of users finding the best deals with confidence. Start browsing today!</p>
-    <div class="final-cta-buttons">
-        <a href="{% url 'products:list' %}" class="btn-primary">Browse Products Now</a>
-        <a href="{% url 'accounts:register' %}" class="btn-secondary">Create Account</a>
-    </div>
-</div>
-
-<div style="background-color: #ecf7fc; padding: 1.5rem; border-radius: 8px; margin: 2rem 0; text-align: center; color: #2c3e50;">
-    <strong style="font-size: 1.1rem;">dm4price: Reducing fraud, one smart decision at a time. 🔒</strong>
-</div>
-
+</section>
 {% endblock %}

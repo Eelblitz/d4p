@@ -1,59 +1,140 @@
 {% extends "base.html" %}
 
-{% block title %}Products - DM4PRICE{% endblock %}
+{% block title %}Marketplace - DM4PRICE{% endblock %}
 
 {% block extra_styles %}
 <style>
-    .filters {
-        background-color: white;
-        padding: 1.5rem;
-        border-radius: 8px;
-        margin-bottom: 2rem;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    .market-hero {
+        margin-bottom: 1.25rem;
+        padding: 1.6rem;
+        border-radius: var(--radius-xl);
+        border: 1px solid var(--line);
+        background:
+            radial-gradient(circle at top right, rgba(68, 163, 255, 0.18), transparent 28%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+            var(--panel);
+        box-shadow: var(--shadow);
     }
 
-    .search-bar {
+    .market-hero p {
+        max-width: 700px;
+        color: var(--muted);
+        margin-top: 0.8rem;
+    }
+
+    .layout-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 0.75rem;
-        align-items: center;
+        grid-template-columns: 320px 1fr;
+        gap: 1rem;
     }
 
-    .search-bar input,
-    .search-bar select,
-    .search-bar button {
-        min-height: 42px;
+    .filters-panel,
+    .results-panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
+    }
+
+    .filters-panel {
+        padding: 1.25rem;
+        position: sticky;
+        top: 92px;
+        height: fit-content;
+    }
+
+    .filters-panel h3,
+    .results-head h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.25rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .filters-panel p,
+    .results-head p {
+        color: var(--muted);
+        font-size: 0.95rem;
+    }
+
+    .filter-form {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.2rem;
+    }
+
+    .filter-group {
+        display: grid;
+        gap: 0.55rem;
+    }
+
+    .price-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.8rem;
+    }
+
+    .filters-actions {
+        display: flex;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+    }
+
+    .results-panel {
+        padding: 1.25rem;
+    }
+
+    .results-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: end;
+        flex-wrap: wrap;
+        margin-bottom: 1rem;
+    }
+
+    .results-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.7rem;
+    }
+
+    .results-meta span {
+        padding: 0.45rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
+        font-size: 0.85rem;
     }
 
     .products-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 2rem;
-        margin-bottom: 3rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
     }
 
     .product-card {
-        background-color: white;
-        border-radius: 8px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
         overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        transition: transform 0.3s, box-shadow 0.3s;
-        cursor: pointer;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
     }
 
     .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transform: translateY(-2px);
+        border-color: rgba(113, 240, 193, 0.24);
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .product-image {
-        width: 100%;
-        height: 200px;
-        background-color: #f0f0f0;
+        aspect-ratio: 1.25 / 1;
+        background:
+            linear-gradient(180deg, transparent, rgba(7, 17, 31, 0.2)),
+            rgba(255, 255, 255, 0.03);
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: hidden;
     }
 
     .product-image img {
@@ -62,177 +143,249 @@
         object-fit: cover;
     }
 
-    .product-info {
-        padding: 1rem;
+    .product-copy {
+        padding: 1.05rem;
     }
 
-    .product-name {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #2c3e50;
-    }
-
-    .product-meta {
+    .product-head {
         display: flex;
-        gap: 0.5rem;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: start;
+        margin-bottom: 0.7rem;
+    }
+
+    .product-head h4 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.08rem;
+        line-height: 1.15;
+    }
+
+    .price-badge {
+        text-align: right;
+        font-size: 0.95rem;
+        font-weight: 800;
+        white-space: nowrap;
+    }
+
+    .product-meta,
+    .product-signals {
+        display: flex;
+        gap: 0.45rem;
         flex-wrap: wrap;
-        margin-bottom: 0.75rem;
+        margin-bottom: 0.7rem;
     }
 
-    .product-category {
-        display: inline-block;
-        background-color: #ecf0f1;
-        color: #7f8c8d;
-        padding: 0.25rem 0.75rem;
-        border-radius: 20px;
-        font-size: 0.8rem;
-    }
-
-    .product-badge {
-        display: inline-block;
-        padding: 0.25rem 0.65rem;
+    .meta-pill {
+        padding: 0.3rem 0.6rem;
         border-radius: 999px;
-        font-size: 0.75rem;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 0.78rem;
         font-weight: 700;
     }
 
-    .product-badge.promoted {
-        background-color: #fff3cd;
-        color: #8a5a00;
+    .meta-pill.promoted {
+        color: var(--warm);
+        border-color: rgba(255, 215, 128, 0.22);
+        background: rgba(255, 215, 128, 0.08);
     }
 
-    .product-badge.verified {
-        background-color: #e8f8f5;
-        color: #1e8449;
+    .meta-pill.verified {
+        color: var(--accent);
+        border-color: rgba(113, 240, 193, 0.22);
+        background: rgba(113, 240, 193, 0.08);
     }
 
-    .product-rating {
-        color: #f39c12;
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
+    .product-description {
+        color: var(--muted);
+        font-size: 0.92rem;
+        margin-bottom: 0.9rem;
     }
 
-    .product-price {
-        color: #2c3e50;
-        font-size: 1rem;
-        font-weight: 700;
-        margin-bottom: 0.75rem;
+    .product-footer {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        align-items: center;
+        flex-wrap: wrap;
     }
 
     .product-seller {
-        font-size: 0.9rem;
-        color: #7f8c8d;
-        margin-bottom: 0.75rem;
-    }
-
-    .product-link {
-        display: inline-block;
-        background-color: #3498db;
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        text-decoration: none;
-        transition: background-color 0.3s;
-    }
-
-    .product-link:hover {
-        background-color: #2980b9;
+        color: var(--muted);
+        font-size: 0.88rem;
     }
 
     .no-products {
+        padding: 2rem;
+        border-radius: var(--radius-lg);
+        border: 1px dashed var(--line-strong);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--muted);
         text-align: center;
-        padding: 3rem;
-        color: #7f8c8d;
     }
 
-    .no-products p {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
+    @media (max-width: 1100px) {
+        .layout-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .filters-panel {
+            position: static;
+        }
+    }
+
+    @media (max-width: 760px) {
+        .products-grid,
+        .price-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .market-hero,
+        .filters-panel,
+        .results-panel {
+            padding: 1rem;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{% url 'products:list' %}">Products</a>
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <span>Marketplace</span>
 </div>
 
-<h2>Browse Products</h2>
+<section class="market-hero">
+    <span class="section-kicker">Buyer workspace</span>
+    <h1 class="eyebrow-title" style="margin-top: 0.75rem;">Browse verified marketplace supply with stronger filters, ranking signals, and trust context.</h1>
+    <p>Search for products, sort by quality or freshness, and use seller verification plus listing boosts as part of your decision process instead of guessing who looks legitimate.</p>
+</section>
 
-<div class="filters">
-    <form method="get" class="search-bar">
-        <input type="text" name="q" placeholder="Search products..." value="{{ search_query }}">
-        <select name="category">
-            {% for value, label in categories %}
-                <option value="{{ value }}" {% if value == selected_category %}selected{% endif %}>{{ label }}</option>
-            {% endfor %}
-        </select>
-        <input type="number" name="min_price" placeholder="Min price" min="0" step="0.01" value="{{ min_price }}">
-        <input type="number" name="max_price" placeholder="Max price" min="0" step="0.01" value="{{ max_price }}">
-        <select name="sort">
-            {% for value, label in sort_options %}
-                <option value="{{ value }}" {% if value == selected_sort %}selected{% endif %}>{{ label }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Search</button>
-        {% if search_query or selected_category or min_price or max_price or selected_sort != 'best' %}
-            <a href="{% url 'products:list' %}" class="clear-link">Clear filters</a>
-        {% endif %}
-    </form>
-</div>
+<div class="layout-grid">
+    <aside class="filters-panel">
+        <h3>Refine your search</h3>
+        <p>Dial in category, price range, and ranking preference before you reach out to a seller.</p>
 
-{% if products %}
-    <div class="products-grid">
-        {% for product in products %}
-            <div class="product-card">
-                <div class="product-image">
-                    {% if product.first_image %}
-                        <img src="{{ product.first_image.image.url }}" alt="{{ product.name }}">
-                    {% else %}
-                        <span style="color: #bbb;">No image</span>
-                    {% endif %}
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label for="id_q">Search query</label>
+                <input id="id_q" type="text" name="q" placeholder="Phone, fashion, electronics..." value="{{ search_query }}">
+            </div>
+
+            <div class="filter-group">
+                <label for="id_category">Category</label>
+                <select id="id_category" name="category">
+                    {% for value, label in categories %}
+                        <option value="{{ value }}" {% if value == selected_category %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="price-grid">
+                <div class="filter-group">
+                    <label for="id_min_price">Min price</label>
+                    <input id="id_min_price" type="number" name="min_price" placeholder="0" min="0" step="0.01" value="{{ min_price }}">
                 </div>
-                <div class="product-info">
-                    <div class="product-name">{{ product.name|truncatewords:5 }}</div>
-                    <div class="product-meta">
-                        <div class="product-category">{{ product.get_category_display }}</div>
-                        {% if product.is_promoted %}
-                            <span class="product-badge promoted">Boosted</span>
-                        {% endif %}
-                        {% if product.seller.is_verified %}
-                            <span class="product-badge verified">Verified seller</span>
-                        {% endif %}
-                    </div>
-                    {% if product.avg_rating > 0 %}
-                        <div class="product-rating">
-                            Star {{ product.avg_rating }}/5 ({{ product.rating_count }} reviews)
-                        </div>
-                    {% else %}
-                        <div class="product-rating">No ratings yet</div>
-                    {% endif %}
-                    <div class="product-price">
-                        {% if product.price %}
-                            NGN {{ product.price|floatformat:2 }}
-                            {% if product.is_negotiable %}- Negotiable{% endif %}
-                        {% else %}
-                            Contact for price
-                        {% endif %}
-                    </div>
-                    <div class="product-seller">
-                        Seller: <strong>{{ product.seller.username }}</strong>
-                    </div>
-                    <a href="{% url 'products:detail' product.id %}" class="product-link">View Details</a>
+                <div class="filter-group">
+                    <label for="id_max_price">Max price</label>
+                    <input id="id_max_price" type="number" name="max_price" placeholder="200000" min="0" step="0.01" value="{{ max_price }}">
                 </div>
             </div>
-        {% endfor %}
-    </div>
-{% else %}
-    <div class="no-products">
-        <p>No products found.</p>
-        {% if search_query or selected_category or min_price or max_price or selected_sort != 'best' %}
-            <a href="{% url 'products:list' %}" class="clear-link">Clear filters and browse all</a>
+
+            <div class="filter-group">
+                <label for="id_sort">Sort listings</label>
+                <select id="id_sort" name="sort">
+                    {% for value, label in sort_options %}
+                        <option value="{{ value }}" {% if value == selected_sort %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="filters-actions">
+                <button type="submit">Apply filters</button>
+                {% if search_query or selected_category or min_price or max_price or selected_sort != 'best' %}
+                    <a href="{% url 'products:list' %}" class="button-ghost" style="text-decoration: none;">Reset</a>
+                {% endif %}
+            </div>
+        </form>
+    </aside>
+
+    <section class="results-panel">
+        <div class="results-head">
+            <div>
+                <h3>Listings in view</h3>
+                <p>Your discovery feed prioritizes promoted products, seller trust, ratings, and freshness depending on the sort mode.</p>
+            </div>
+            <div class="results-meta">
+                <span>{{ products|length }} result{{ products|length|pluralize }}</span>
+                <span>Sort: {{ selected_sort|default:"best" }}</span>
+                {% if search_query %}
+                    <span>Query: "{{ search_query }}"</span>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if products %}
+            <div class="products-grid">
+                {% for product in products %}
+                    <article class="product-card">
+                        <div class="product-image">
+                            {% if product.first_image %}
+                                <img src="{{ product.first_image.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <span style="color: var(--muted);">No image</span>
+                            {% endif %}
+                        </div>
+                        <div class="product-copy">
+                            <div class="product-head">
+                                <h4>{{ product.name }}</h4>
+                                <div class="price-badge">
+                                    {% if product.price %}
+                                        NGN {{ product.price|floatformat:2 }}
+                                    {% else %}
+                                        Contact
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="product-meta">
+                                <span class="meta-pill">{{ product.get_category_display }}</span>
+                                {% if product.is_promoted %}
+                                    <span class="meta-pill promoted">Boosted</span>
+                                {% endif %}
+                                {% if product.seller.is_verified %}
+                                    <span class="meta-pill verified">Verified seller</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="product-signals">
+                                {% if product.avg_rating > 0 %}
+                                    <span class="meta-pill">{{ product.avg_rating }}/5 from {{ product.rating_count }}</span>
+                                {% else %}
+                                    <span class="meta-pill">No ratings yet</span>
+                                {% endif %}
+                                {% if product.is_negotiable %}
+                                    <span class="meta-pill">Negotiable</span>
+                                {% endif %}
+                            </div>
+
+                            <p class="product-description">{{ product.description|truncatewords:18 }}</p>
+
+                            <div class="product-footer">
+                                <span class="product-seller">Seller: {{ product.seller.username }}</span>
+                                <a href="{% url 'products:detail' product.id %}" class="button-ghost" style="display: inline-flex; text-decoration: none;">Open listing</a>
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-products">
+                <p style="margin-bottom: 0.6rem;">No listings match the current filters.</p>
+                <p>Clear the filters or widen the price range to keep exploring the marketplace.</p>
+            </div>
         {% endif %}
-    </div>
-{% endif %}
+    </section>
+</div>
 {% endblock %}

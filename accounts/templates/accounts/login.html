@@ -4,217 +4,185 @@
 
 {% block extra_styles %}
 <style>
-    .auth-container {
-        max-width: 400px;
-        margin: 3rem auto;
-        background-color: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .auth-shell {
+        max-width: 1120px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 0.95fr 1.05fr;
+        gap: 1rem;
     }
-    
-    .auth-form h2 {
-        text-align: center;
-        color: #2c3e50;
-        margin-bottom: 1.5rem;
+
+    .auth-panel,
+    .auth-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius-xl);
+        background: var(--panel);
+        box-shadow: var(--shadow);
     }
-    
-    .form-group {
-        margin-bottom: 1.5rem;
+
+    .auth-panel {
+        padding: 1.6rem;
+        display: grid;
+        align-content: space-between;
+        gap: 1.5rem;
+        min-height: 620px;
     }
-    
-    label {
-        display: block;
-        font-weight: 600;
-        color: #2c3e50;
+
+    .auth-panel p,
+    .auth-point p,
+    .auth-card p,
+    .helptext {
+        color: var(--muted);
+    }
+
+    .auth-points {
+        display: grid;
+        gap: 0.85rem;
+    }
+
+    .auth-point {
+        padding: 1rem;
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(167, 193, 255, 0.08);
+    }
+
+    .auth-point h3 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.02rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .auth-card {
+        padding: 1.6rem;
+    }
+
+    .auth-card h2 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 2rem;
         margin-bottom: 0.5rem;
     }
-    
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-        width: 100%;
-        padding: 0.75rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-        font-size: 1rem;
-        box-sizing: border-box;
+
+    .auth-form {
+        display: grid;
+        gap: 1rem;
+        margin-top: 1.3rem;
     }
-    
-    input[type="text"]:focus,
-    input[type="email"]:focus,
-    input[type="password"]:focus {
-        outline: none;
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-    }
-    
-    .password-help {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-top: 0.25rem;
-    }
-    
-    .checkbox-group {
-        display: flex;
-        align-items: center;
+
+    .form-group {
+        display: grid;
         gap: 0.5rem;
     }
-    
-    input[type="checkbox"] {
-        width: auto;
-    }
-    
-    .checkbox-group label {
-        margin-bottom: 0;
-        font-weight: normal;
-    }
-    
-    .checkbox-group .help-text {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-left: 1.5rem;
-        display: block;
-        margin-top: 0.25rem;
-    }
-    
-    .submit-btn {
-        width: 100%;
-        padding: 0.75rem;
-        background-color: #3498db;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    
-    .submit-btn:hover {
-        background-color: #2980b9;
-    }
-    
-    .auth-links {
-        text-align: center;
-        margin-top: 1.5rem;
-        font-size: 0.95rem;
-    }
-    
-    .auth-links a {
-        color: #3498db;
-        text-decoration: none;
-    }
-    
-    .auth-links a:hover {
-        text-decoration: underline;
-    }
-    
+
     .errorlist {
         list-style: none;
-        padding: 0;
-        margin: 0.5rem 0;
+        display: grid;
+        gap: 0.45rem;
+        color: var(--danger);
+        font-size: 0.92rem;
     }
-    
-    .errorlist li {
-        background-color: #fadbd8;
-        color: #c0392b;
-        padding: 0.5rem;
-        border-radius: 4px;
-        margin-bottom: 0.5rem;
-        font-size: 0.9rem;
+
+    .auth-links {
+        display: grid;
+        gap: 0.55rem;
+        margin-top: 1rem;
+        color: var(--muted);
     }
-    
-    .messages {
-        margin-bottom: 1.5rem;
+
+    .auth-links a {
+        color: var(--accent);
+        text-decoration: none;
     }
-    
-    .message {
-        padding: 1rem;
-        border-radius: 4px;
-        margin-bottom: 1rem;
-    }
-    
-    .message.success {
-        background-color: #d5f4e6;
-        color: #27ae60;
-        border: 1px solid #27ae60;
-    }
-    
-    .message.error {
-        background-color: #fadbd8;
-        color: #c0392b;
-        border: 1px solid #c0392b;
-    }
-    
-    .helptext {
-        font-size: 0.85rem;
-        color: #7f8c8d;
-        margin-top: 0.25rem;
-        display: block;
+
+    @media (max-width: 900px) {
+        .auth-shell {
+            grid-template-columns: 1fr;
+        }
+
+        .auth-panel {
+            min-height: auto;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="breadcrumb">
-    <a href="{% url 'products:list' %}">Home</a> / Login
+    <a href="{% url 'homepage' %}">Overview</a> /
+    <span>Login</span>
 </div>
 
-<div class="auth-container">
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="message {{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+<div class="auth-shell">
+    <section class="auth-panel">
+        <div>
+            <span class="section-kicker">Account access</span>
+            <h1 class="section-heading" style="margin: 1rem 0 0.9rem;">Return to your buyer or seller workspace.</h1>
+            <p>Log in to manage listings, view seller analytics, continue NIN verification, or keep browsing the marketplace with your account identity.</p>
         </div>
-    {% endif %}
-    
-    <form method="post" class="auth-form">
-        {% csrf_token %}
+
+        <div class="auth-points">
+            <article class="auth-point">
+                <h3>Seller console access</h3>
+                <p>Manage products, track engagement, and monitor promoted listing performance.</p>
+            </article>
+            <article class="auth-point">
+                <h3>Trust workflow continuity</h3>
+                <p>Resume email verification, NIN submission, and seller approval steps without losing progress.</p>
+            </article>
+            <article class="auth-point">
+                <h3>Direct marketplace participation</h3>
+                <p>Rate listings, report suspicious activity, and move faster between research and seller contact.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="auth-card">
+        <span class="section-kicker">Secure sign in</span>
         <h2>Login</h2>
-        
-        {% if form.non_field_errors %}
-            <div class="errorlist">
-                {% for error in form.non_field_errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
+        <p>Enter your account credentials to continue.</p>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.username.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
             </div>
-        {% endif %}
-        
-        <div class="form-group">
-            {{ form.username.label_tag }}
-            {{ form.username }}
-            {% if form.username.errors %}
-                <div class="errorlist">
-                    {% for error in form.username.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-        
-        <div class="form-group">
-            {{ form.password.label_tag }}
-            {{ form.password }}
-            {% if form.password.errors %}
-                <div class="errorlist">
-                    {% for error in form.password.errors %}
-                        <li>{{ error }}</li>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        </div>
-        
-        <button type="submit" class="submit-btn">Login</button>
-        
-        <div class="auth-links">
-            Don't have an account? <a href="{% url 'accounts:register' %}">Register here</a><br>
-            <br>
-            Didn't receive verification email? <a href="{% url 'accounts:resend_verification' %}">Resend it here</a>
-        </div>
-    </form>
+
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <ul class="errorlist">
+                        {% for error in form.password.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <button type="submit">Login to DM4PRICE</button>
+
+            <div class="auth-links">
+                <span>Do not have an account yet? <a href="{% url 'accounts:register' %}">Create one here</a></span>
+                <span>Did not receive your verification email? <a href="{% url 'accounts:resend_verification' %}">Resend it here</a></span>
+            </div>
+        </form>
+    </section>
 </div>
 {% endblock %}
