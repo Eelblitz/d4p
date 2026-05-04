@@ -68,7 +68,7 @@
 
     .thumbnail:hover {
         transform: translateY(-1px);
-        border-color: rgba(113, 240, 193, 0.35);
+        border-color: rgba(var(--accent-2-rgb), 0.4);
     }
 
     .thumbnail img {
@@ -95,12 +95,12 @@
 
     .meta-pill.verified {
         color: var(--accent);
-        border-color: rgba(113, 240, 193, 0.22);
-        background: rgba(113, 240, 193, 0.08);
+        border-color: rgba(var(--accent-rgb), 0.24);
+        background: rgba(var(--accent-rgb), 0.09);
     }
 
     .product-title {
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: clamp(2rem, 3vw, 2.9rem);
         line-height: 1.02;
         letter-spacing: -0.04em;
@@ -139,7 +139,7 @@
 
     .signal-card strong,
     .seller-card strong {
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: 1.2rem;
     }
 
@@ -165,7 +165,7 @@
     }
 
     .panel-title {
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: 1.35rem;
         margin-bottom: 0.7rem;
     }
@@ -404,13 +404,13 @@ function changeImage(thumbnail) {
     document.querySelectorAll('.thumbnail').forEach((item) => {
         item.style.borderColor = 'transparent';
     });
-    thumbnail.style.borderColor = 'rgba(113, 240, 193, 0.45)';
+    thumbnail.style.borderColor = 'rgba(243, 199, 66, 0.45)';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
     const firstThumbnail = document.querySelector('.thumbnail');
     if (firstThumbnail) {
-        firstThumbnail.style.borderColor = 'rgba(113, 240, 193, 0.45)';
+        firstThumbnail.style.borderColor = 'rgba(243, 199, 66, 0.45)';
     }
 });
 </script>

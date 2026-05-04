@@ -43,7 +43,7 @@
         inset: -25% auto auto -10%;
         width: 220px;
         height: 220px;
-        background: radial-gradient(circle, rgba(68, 163, 255, 0.2), transparent 68%);
+        background: radial-gradient(circle, rgba(var(--accent-rgb), 0.22), transparent 68%);
         pointer-events: none;
     }
 
@@ -97,8 +97,8 @@
     .terminal-card {
         min-height: 230px;
         background:
-            linear-gradient(180deg, rgba(113, 240, 193, 0.05), transparent),
-            rgba(5, 13, 22, 0.72);
+            linear-gradient(180deg, rgba(var(--accent-2-rgb), 0.07), transparent),
+            rgba(6, 9, 14, 0.78);
     }
 
     .terminal-head {
@@ -150,7 +150,7 @@
 
     .status-card strong {
         display: block;
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: 1.6rem;
     }
 
@@ -174,7 +174,7 @@
 
     .metric-block strong {
         display: block;
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: 1.7rem;
         margin-bottom: 0.2rem;
     }
@@ -233,7 +233,7 @@
     .signal-card h3,
     .showcase-card h3,
     .featured-copy h3 {
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: 1.2rem;
         margin-bottom: 0.55rem;
     }
@@ -287,7 +287,7 @@
     .featured-media {
         aspect-ratio: 1.15 / 1;
         background:
-            linear-gradient(180deg, transparent, rgba(7, 17, 31, 0.3)),
+            linear-gradient(180deg, transparent, rgba(5, 7, 10, 0.34)),
             rgba(255, 255, 255, 0.04);
         display: flex;
         align-items: center;
@@ -324,14 +324,14 @@
 
     .meta-pill.is-boosted {
         color: var(--warm);
-        border-color: rgba(255, 215, 128, 0.22);
-        background: rgba(255, 215, 128, 0.08);
+        border-color: rgba(var(--accent-2-rgb), 0.26);
+        background: rgba(var(--accent-2-rgb), 0.09);
     }
 
     .meta-pill.is-verified {
         color: var(--accent);
-        border-color: rgba(113, 240, 193, 0.22);
-        background: rgba(113, 240, 193, 0.08);
+        border-color: rgba(var(--accent-rgb), 0.24);
+        background: rgba(var(--accent-rgb), 0.09);
     }
 
     .featured-price {

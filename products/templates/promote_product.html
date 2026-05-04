@@ -46,8 +46,8 @@
     .hero-note {
         padding: 1rem;
         border-radius: var(--radius-lg);
-        background: linear-gradient(180deg, rgba(68, 163, 255, 0.11), rgba(255, 255, 255, 0.03));
-        border: 1px solid rgba(68, 163, 255, 0.18);
+        background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.12), rgba(255, 255, 255, 0.03));
+        border: 1px solid rgba(var(--accent-rgb), 0.22);
     }
 
     .hero-note small,
@@ -64,7 +64,7 @@
     .hero-note strong,
     .signal-card strong {
         display: block;
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: 1.08rem;
         margin-bottom: 0.35rem;
     }
@@ -106,9 +106,9 @@
 
     .plan-card.is-featured {
         background:
-            radial-gradient(circle at top right, rgba(113, 240, 193, 0.16), transparent 34%),
+            radial-gradient(circle at top right, rgba(var(--accent-2-rgb), 0.18), transparent 34%),
             var(--panel);
-        border-color: rgba(113, 240, 193, 0.22);
+        border-color: rgba(var(--accent-2-rgb), 0.24);
         transform: translateY(-8px);
     }
 
@@ -118,8 +118,8 @@
         right: 1rem;
         padding: 0.4rem 0.72rem;
         border-radius: 999px;
-        background: rgba(255, 215, 128, 0.12);
-        border: 1px solid rgba(255, 215, 128, 0.28);
+        background: rgba(var(--accent-2-rgb), 0.14);
+        border: 1px solid rgba(var(--accent-2-rgb), 0.3);
         color: var(--warm);
         font-size: 0.74rem;
         font-weight: 800;
@@ -128,7 +128,7 @@
     }
 
     .plan-head h2 {
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         font-size: 1.35rem;
         margin-bottom: 0.35rem;
     }
@@ -137,7 +137,7 @@
         display: flex;
         align-items: baseline;
         gap: 0.35rem;
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
     }
 
     .plan-price strong {
@@ -178,8 +178,8 @@
         height: 9px;
         margin-top: 0.45rem;
         border-radius: 999px;
-        background: linear-gradient(135deg, var(--accent), #9ae2ff);
-        box-shadow: 0 0 0 5px rgba(113, 240, 193, 0.1);
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        box-shadow: 0 0 0 5px rgba(var(--accent-rgb), 0.1);
         flex-shrink: 0;
     }
 
@@ -214,7 +214,7 @@
 
     .playbook-card h3,
     .faq-card h3 {
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: var(--font-display);
         margin-bottom: 0.45rem;
         font-size: 1.05rem;
     }
