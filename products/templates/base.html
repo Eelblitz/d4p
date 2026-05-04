@@ -4,35 +4,67 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}DM4PRICE - Marketplace{% endblock %}</title>
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('dm4price-theme');
+            const theme = savedTheme === 'dark' ? 'dark' : 'light';
+            document.documentElement.dataset.theme = theme;
+        })();
+    </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap');
 
         :root {
-            --bg: #040608;
-            --bg-soft: #0b1016;
-            --panel: rgba(12, 17, 24, 0.84);
-            --panel-solid: #101720;
-            --panel-elevated: #151e2b;
-            --line: rgba(55, 125, 255, 0.18);
-            --line-strong: rgba(243, 199, 66, 0.28);
-            --text: #f5f7fb;
-            --muted: #9ba7b8;
-            --accent: #377dff;
-            --accent-2: #f3c742;
-            --warm: #f3c742;
-            --danger: #ff7d7d;
-            --accent-rgb: 55, 125, 255;
-            --accent-2-rgb: 243, 199, 66;
-            --danger-rgb: 255, 125, 125;
+            --bg: #f8f8f5;
+            --bg-soft: #ffffff;
+            --panel: rgba(255, 255, 255, 0.94);
+            --panel-solid: #ffffff;
+            --panel-elevated: #fbfbf8;
+            --line: rgba(13, 18, 28, 0.1);
+            --line-strong: rgba(13, 18, 28, 0.18);
+            --text: #111317;
+            --muted: #5f6773;
+            --accent: #2563eb;
+            --accent-2: #f0c341;
+            --warm: #f0c341;
+            --danger: #d95c5c;
+            --accent-rgb: 37, 99, 235;
+            --accent-2-rgb: 240, 195, 65;
+            --danger-rgb: 217, 92, 92;
             --contrast-dark: #05070a;
             --font-body: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
             --font-display: 'Sora', 'Segoe UI', sans-serif;
-            --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+            --surface-subtle: rgba(17, 19, 23, 0.035);
+            --surface-subtle-strong: rgba(17, 19, 23, 0.05);
+            --surface-subtle-hover: rgba(17, 19, 23, 0.075);
+            --page-glow-a: rgba(var(--accent-rgb), 0.12);
+            --page-glow-b: rgba(var(--accent-2-rgb), 0.12);
+            --page-glow-c: rgba(var(--accent-rgb), 0.05);
+            --shadow: 0 20px 54px rgba(20, 27, 44, 0.08);
             --radius-xl: 28px;
             --radius-lg: 22px;
             --radius-md: 16px;
             --radius-sm: 12px;
             --max-width: 1240px;
+        }
+
+        html[data-theme="dark"] {
+            --bg: #05070b;
+            --bg-soft: #0b1016;
+            --panel: rgba(12, 17, 24, 0.88);
+            --panel-solid: #101720;
+            --panel-elevated: #151e2b;
+            --line: rgba(var(--accent-rgb), 0.18);
+            --line-strong: rgba(var(--accent-2-rgb), 0.28);
+            --text: #f5f7fb;
+            --muted: #9ba7b8;
+            --surface-subtle: rgba(255, 255, 255, 0.03);
+            --surface-subtle-strong: rgba(255, 255, 255, 0.04);
+            --surface-subtle-hover: rgba(255, 255, 255, 0.07);
+            --page-glow-a: rgba(var(--accent-rgb), 0.24);
+            --page-glow-b: rgba(var(--accent-2-rgb), 0.16);
+            --page-glow-c: rgba(var(--accent-rgb), 0.09);
+            --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
         }
 
         * {
@@ -49,10 +81,10 @@
             min-height: 100vh;
             font-family: var(--font-body);
             background:
-                radial-gradient(circle at top left, rgba(var(--accent-rgb), 0.24), transparent 28%),
-                radial-gradient(circle at top right, rgba(var(--accent-2-rgb), 0.18), transparent 22%),
-                radial-gradient(circle at bottom center, rgba(var(--accent-rgb), 0.09), transparent 34%),
-                linear-gradient(180deg, #05070a 0%, #070b11 42%, #040608 100%);
+                radial-gradient(circle at top left, var(--page-glow-a), transparent 28%),
+                radial-gradient(circle at top right, var(--page-glow-b), transparent 22%),
+                radial-gradient(circle at bottom center, var(--page-glow-c), transparent 34%),
+                linear-gradient(180deg, var(--bg-soft) 0%, var(--bg) 100%);
             color: var(--text);
             line-height: 1.6;
         }
@@ -102,7 +134,7 @@
             top: 0;
             z-index: 30;
             backdrop-filter: blur(18px);
-            background: rgba(5, 7, 10, 0.82);
+            background: color-mix(in srgb, var(--bg-soft) 88%, transparent);
             border-bottom: 1px solid var(--line);
         }
 
@@ -183,7 +215,7 @@
         .nav-link-button:hover {
             color: var(--text);
             border-color: var(--line);
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--surface-subtle);
         }
 
         .nav-link.is-accent {
@@ -201,6 +233,13 @@
         .nav-link-button {
             border: none;
             cursor: pointer;
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--line-strong);
+            color: var(--text);
+            background: var(--surface-subtle);
+            font-weight: 700;
         }
 
         .nav-separator {
@@ -313,13 +352,13 @@
         }
 
         .button-ghost {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--surface-subtle);
             color: var(--text);
             border-color: var(--line-strong);
         }
 
         .button-ghost:hover {
-            background: rgba(255, 255, 255, 0.06);
+            background: var(--surface-subtle-hover);
         }
 
         .button-link {
@@ -343,7 +382,7 @@
             padding: 0.95rem 1rem;
             border-radius: var(--radius-sm);
             border: 1px solid var(--line);
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--surface-subtle);
             color: var(--text);
         }
 
@@ -378,14 +417,14 @@
             min-height: 48px;
             border-radius: 14px;
             border: 1px solid var(--line);
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--panel-solid);
             color: var(--text);
             padding: 0.9rem 1rem;
         }
 
         input::placeholder,
         textarea::placeholder {
-            color: rgba(147, 169, 198, 0.75);
+            color: color-mix(in srgb, var(--muted) 78%, transparent);
         }
 
         input:focus,
@@ -409,7 +448,7 @@
 
         .site-footer {
             border-top: 1px solid var(--line);
-            background: rgba(5, 7, 10, 0.86);
+            background: color-mix(in srgb, var(--bg-soft) 92%, transparent);
             backdrop-filter: blur(12px);
         }
 
@@ -493,6 +532,9 @@
                     <a href="{% url 'products:list' %}" class="nav-link">Marketplace</a>
                     <a href="{% url 'products:promote_product' %}" class="nav-link">Boost Listings</a>
                     <a href="{% url 'products:trust_safety' %}" class="nav-link">Trust Layer</a>
+                    <button type="button" class="nav-link-button theme-toggle" id="themeToggle" aria-pressed="false">
+                        <span data-theme-label>Dark mode</span>
+                    </button>
                     {% if user.is_authenticated %}
                         <span class="nav-separator"></span>
                         {% if user.is_seller %}
@@ -540,6 +582,32 @@
             </div>
         </footer>
     </div>
+    <script>
+        (function () {
+            const root = document.documentElement;
+            const toggle = document.getElementById('themeToggle');
+            if (!toggle) {
+                return;
+            }
+
+            const label = toggle.querySelector('[data-theme-label]');
+            const applyTheme = (theme) => {
+                root.dataset.theme = theme;
+                toggle.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+                if (label) {
+                    label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+                }
+            };
+
+            applyTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
+
+            toggle.addEventListener('click', function () {
+                const nextTheme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+                localStorage.setItem('dm4price-theme', nextTheme);
+                applyTheme(nextTheme);
+            });
+        })();
+    </script>
     {% block extra_scripts %}{% endblock %}
 </body>
 </html>

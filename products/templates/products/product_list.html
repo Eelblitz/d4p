@@ -11,7 +11,7 @@
         border: 1px solid var(--line);
         background:
             radial-gradient(circle at top right, rgba(var(--accent-rgb), 0.2), transparent 28%),
-            linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent),
+            linear-gradient(180deg, var(--surface-subtle-strong), transparent),
             var(--panel);
         box-shadow: var(--shadow);
     }
@@ -102,7 +102,7 @@
         padding: 0.45rem 0.75rem;
         border-radius: 999px;
         border: 1px solid var(--line);
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--surface-subtle);
         color: var(--muted);
         font-size: 0.85rem;
     }
@@ -116,7 +116,7 @@
     .product-card {
         border: 1px solid var(--line);
         border-radius: var(--radius-lg);
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--surface-subtle);
         overflow: hidden;
         transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
     }
@@ -124,14 +124,14 @@
     .product-card:hover {
         transform: translateY(-2px);
         border-color: rgba(var(--accent-rgb), 0.26);
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--surface-subtle-hover);
     }
 
     .product-image {
         aspect-ratio: 1.25 / 1;
         background:
             linear-gradient(180deg, transparent, rgba(5, 7, 10, 0.22)),
-            rgba(255, 255, 255, 0.03);
+            var(--surface-subtle);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -220,7 +220,7 @@
         padding: 2rem;
         border-radius: var(--radius-lg);
         border: 1px dashed var(--line-strong);
-        background: rgba(255, 255, 255, 0.03);
+        background: var(--surface-subtle);
         color: var(--muted);
         text-align: center;
     }
